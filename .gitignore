@@ -1,0 +1,52 @@
+# Data — kalau besar, jangan push langsung; pakai DVC/git-lfs/HF nanti
+data/raw/
+data/intermediate/
+data/labeled/*.parquet
+data/labeled/*.jsonl
+data/golden/*.parquet
+
+# LLM API responses + logs (bisa berisi PII / hate content sebelum anonimisasi)
+logs/raw/
+logs/llm_responses/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Model checkpoints
+*.pt
+*.pth
+*.bin
+*.safetensors
+checkpoints/
+runs/
+wandb/
+
+# Secrets (CRITICAL — NEVER commit)
+.env
+.env.*
+*.key
+api_keys.json
+credentials.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
