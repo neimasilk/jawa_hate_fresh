@@ -37,10 +37,13 @@ wandb/
 
 # Secrets (CRITICAL — NEVER commit)
 .env
-.env.*
+.env.local
+.env.production
 *.key
 api_keys.json
 credentials.json
+# .env.example DI-COMMIT sebagai template (tidak berisi rahasia)
+!.env.example
 
 # OS
 .DS_Store

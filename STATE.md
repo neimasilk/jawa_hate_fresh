@@ -68,3 +68,4 @@ User time budget: ~5-15 jam/bulan, weekend only. Bottleneck = paper writing revi
 | Tgl | Sesi | Output |
 |-----|------|--------|
 | 2026-05-07 | Konsep + decision pivot | PRD §0 Decisions Log added; CLAUDE.md HARD RULES updated; STATE.md created; memory seeded |
+| 2026-05-07 | Setup repo + pilot #1 prep | Repo init + push GitHub (`neimasilk/jawa_hate_fresh`); requirements.txt + .env.example; src/llm_clients.py + cultural_prompt.py; prompts/cultural_classification_v0.md (5 few-shot); experiments/pilot01_llm_characterization/{run_pilot.py, analyze.py, README.md}. Sumber data: OSCAR-2301 jv subset (streaming, 100 sampel dengan light keyword pre-filter). **Blocker eksekusi: API keys belum ada (lihat .env.example).** |
