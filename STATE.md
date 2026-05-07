@@ -22,17 +22,18 @@ Lihat [PRD.md §0 Decisions Log](PRD.md). Ringkas:
 
 ## Next milestones
 
-1. **Setup repo Git + struktur folder** (zero user effort, Claude execute)
+1. **Setup repo Git + struktur folder** ✅ (done 2026-05-07)
 2. **Pilot #1 — LLM characterization** (zero user effort, automated)
-   - Sample ~100 candidate Jawa text dari existing dump
-   - Run Claude + GPT-4o + DeepSeek dengan cultural prompt
-   - Measure: refusal rate per LLM, inter-LLM agreement, output quality
-   - Output: pilot report → decide go/no-go fully-LLM framing
+   - Sample ~100 candidate Jawa text dari OSCAR-2301 jv subset
+   - Run **DeepSeek V4 Pro + Grok 4.3 + Kimi K2.6** dengan cultural prompt v0
+   - Measure: refusal rate per LLM, inter-LLM agreement (Krippendorff's α), JSON validity, output quality, cost
+   - Output: pilot report + decision gate GREEN/YELLOW/RED
 3. **Pilot #2 — LLM-as-Jawa-filter** (zero user effort)
    - Test LLM accuracy untuk filter Jawa-vs-non-Jawa pada dump
    - Compare vs langid baseline
 4. **Codebook v0 draft** (user effort ~3-5 jam, weekend session) — paralel dengan pilot
-5. **Pilot #3 — Cultural prompt engineering iteration** berdasarkan hasil #1+#2
+5. **Pilot #3 — Cultural prompt manual iteration** v1, v2 (~5-10 manual iter) untuk baseline experience + finalize composite metric weights
+6. **Pilot #4 — AutoResearch loop (Karpathy pattern)** — automate pilot #3, scale ke 50+ variants overnight via agent autonomous loop. Bounded budget ~$12.5/run. Folder `experiments/pilot04_autoresearch_prompts/` sudah ada README + plan. Ref: `~/Documents/autoresearch/` (cloned). Potential paper angle: "AutoResearch Pattern for Cultural Prompt Engineering in Low-Resource NLP".
 
 ## Challenges Log
 
@@ -71,3 +72,4 @@ User time budget: ~5-15 jam/bulan, weekend only. Bottleneck = paper writing revi
 | 2026-05-07 | Setup repo + pilot #1 prep | Repo init + push GitHub (`neimasilk/jawa_hate_fresh`); requirements.txt + .env.example; src/llm_clients.py + cultural_prompt.py; prompts/cultural_classification_v0.md (5 few-shot); experiments/pilot01_llm_characterization/{run_pilot.py, analyze.py, README.md}. Sumber data: OSCAR-2301 jv subset (streaming, 100 sampel dengan light keyword pre-filter). **Blocker eksekusi: API keys belum ada (lihat .env.example).** |
 | 2026-05-07 | HANDOFF.md created | Dokumen pickup untuk sesi baru: TL;DR, read order, konteks penting (mahasiswa cheating story, framing pivot), status, blocker, user comm notes, gotchas. CLAUDE.md daily protocol updated untuk reference HANDOFF.md. |
 | 2026-05-07 | Vendor pivot + connectivity test | User pilih 3 LLM baru: **DeepSeek V4 Pro + Grok 4.3 + Kimi K2.6** (semua OpenAI-compat). Drop Claude+GPT-4o. Update llm_clients.py + .env.example + requirements.txt (drop anthropic). `.env.txt` Bapak gunakan (Windows-style); load_dotenv try .env then .env.txt. Created scripts/test_apis.py. **Test result: 3/3 ✅** — semua paham Jawa krama. Kimi force `temperature=1.0` (fixed via override). venv `.venv/` dibuat dengan openai 2.35.1 + python-dotenv + tqdm. **Pilot #1 ready to run** — tinggal install `datasets` package + jalankan `run_pilot.py`. |
+| 2026-05-07 | Karpathy autoresearch reference + Pilot #4 planned | Cloned `karpathy/autoresearch` ke `~/Documents/autoresearch/` (sister dir). Pattern review: single-file edit + fixed eval budget + composite metric + autonomous loop overnight + git commit/reset per iter. **Adopsi sebagai Pilot #4** ("AutoResearch Loop untuk Cultural Prompt Engineering"). Adaptasi: edit `prompts/cultural_classification_vN.md` (bukan train.py), eval 50-sample × 3 LLM (bukan train 5min), composite metric (refusal+validity+α+entropy, bukan val_bpb), bounded loop ~$12.5/run (bukan NEVER STOP), `program_prompt_research.md` dengan kearifan lokal injection. Folder `experiments/pilot04_autoresearch_prompts/` + README dibuat dengan plan + risk + paper angle. Eksekusi setelah Pilot #1-3 baseline jelas. |

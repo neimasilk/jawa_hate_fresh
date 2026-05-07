@@ -18,7 +18,9 @@ Riset deteksi ujaran kebencian Bahasa Jawa, framing **fully automated LLM pipeli
 3. **`STATE.md`** — Status, milestones, **Challenges Log** (C1-C7 sudah teridentifikasi sebelum eksperimen), sesi log.
 4. **`prompts/cultural_classification_v0.md`** — Prompt template untuk pilot #1, dengan few-shot Jawa.
 5. **`experiments/pilot01_llm_characterization/README.md`** — Spec pilot pertama + decision gate.
-6. **`Ujaran Kebencian Jawa_ Riset Mendalam_.md`** — Background riset (pre-pivot, baca kalau butuh konteks taksonomi 7-kategori atau survei pre-trained models).
+6. **`experiments/pilot04_autoresearch_prompts/README.md`** — Plan untuk autoresearch loop (Karpathy pattern adaptation), eksekusi setelah Pilot #1-3.
+7. **`Ujaran Kebencian Jawa_ Riset Mendalam_.md`** — Background riset (pre-pivot, baca kalau butuh konteks taksonomi 7-kategori atau survei pre-trained models).
+8. **External ref:** `~/Documents/autoresearch/` (Karpathy repo, cloned sebagai design reference Pilot #4).
 
 Memory di `~/.claude/projects/.../memory/MEMORY.md` auto-loaded — berisi feedback tentang user preferences + project context.
 
