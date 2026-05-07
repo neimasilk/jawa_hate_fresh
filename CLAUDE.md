@@ -107,10 +107,18 @@ Project lain di KB yang related (sister projects, untuk awareness saja, bukan un
 Saat user buka sesi Claude Code di folder ini:
 1. Baca CLAUDE.md (otomatis)
 2. Baca **HANDOFF.md** (quick context untuk fresh session — TL;DR + decisions + gotchas + user comm notes)
-3. Baca PRD.md §0 Decisions Log (sisanya banyak yang legacy, baca selektif)
-4. Baca STATE.md (current execution state + Challenges Log)
-5. Tanya user: "Apa yang mau dikerjakan hari ini?" — fase mana, milestone apa
-6. Jangan asumsi user mau implementasi langsung — bisa jadi diskusi codebook, refine PRD, dsb
+3. Baca **`wiki/index.md`** (Karpathy LLM Wiki pattern — catalog seluruh knowledge proyek). Lalu dive ke entity pages yang relevan: `wiki/decisions.md`, `wiki/pilots.md`, `wiki/glossary.md` sesuai kebutuhan.
+4. Baca STATE.md (current execution state + Challenges Log + sesi log)
+5. Baca `wiki/SCHEMA.md` SEKALI (untuk paham cara maintain wiki — ingest/query/lint workflow)
+6. Tanya user: "Apa yang mau dikerjakan hari ini?" — fase mana, milestone apa
+7. Jangan asumsi user mau implementasi langsung — bisa jadi diskusi codebook, refine PRD, dsb
+
+### Wiki maintenance (per `wiki/SCHEMA.md`)
+
+User preference: "saya fokus melihat wiki, kamu yg mengatur" — agent **maintain wiki sebagai bagian dari workflow**, bukan optional:
+- **Ingest:** Saat ada decision baru / pilot result / source baru → update entity page yang relevan + log entry di `wiki/log.md`. Single source of truth principle.
+- **Query:** Saat user tanya, cek wiki dulu sebelum dive ke raw sources. Kalau ada gap, file balik ke wiki.
+- **Lint:** Awal sesi panjang atau saat user minta "cek konsistensi" — periksa kontradiksi antar dokumen, orphan pages, gap.
 
 Saat session selesai:
 1. Update STATE.md kalau ada perubahan state

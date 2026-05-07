@@ -14,13 +14,17 @@ Riset deteksi ujaran kebencian Bahasa Jawa, framing **fully automated LLM pipeli
 ## Baca dalam urutan ini
 
 1. **`CLAUDE.md`** — Hard rules + workflow. Sudah di-update post-pivot.
-2. **`PRD.md` §0 Decisions Log** — D1-D9 keputusan yang sudah final. Sisanya (§1-§11) banyak yang **legacy/superseded** — akan di-rewrite setelah pilot.
-3. **`STATE.md`** — Status, milestones, **Challenges Log** (C1-C7 sudah teridentifikasi sebelum eksperimen), sesi log.
-4. **`prompts/cultural_classification_v0.md`** — Prompt template untuk pilot #1, dengan few-shot Jawa.
-5. **`experiments/pilot01_llm_characterization/README.md`** — Spec pilot pertama + decision gate.
-6. **`experiments/pilot04_autoresearch_prompts/README.md`** — Plan untuk autoresearch loop (Karpathy pattern adaptation), eksekusi setelah Pilot #1-3.
-7. **`Ujaran Kebencian Jawa_ Riset Mendalam_.md`** — Background riset (pre-pivot, baca kalau butuh konteks taksonomi 7-kategori atau survei pre-trained models).
-8. **External ref:** `~/Documents/autoresearch/` (Karpathy repo, cloned sebagai design reference Pilot #4).
+2. **`wiki/index.md`** — **PRIMARY USER-FACING KNOWLEDGE BASE** (Karpathy LLM Wiki pattern, [D12](../wiki/decisions.md#d12--adopsi-pattern-karpathy-llm-wiki-dokumentasi)). User fokus baca dari sini. Catalog all entity pages + raw sources.
+3. **`wiki/decisions.md`** — D1-D12 dengan rationale. Source-of-truth untuk decision history.
+4. **`wiki/pilots.md`** — Status Pilot #1-#4 + dependencies + commands.
+5. **`wiki/glossary.md`** — Term definitions (NEIL, krama/ngoko, BPB, unggah-ungguh, vendor LLM, dll).
+6. **`wiki/SCHEMA.md`** — Cara agent maintain wiki (ingest/query/lint workflow). **Wajib baca SEKALI** kalau sesi pertama setelah wiki creation.
+7. **`STATE.md`** — Live execution state, Challenges Log (C1-C7), sesi log.
+8. **`PRD.md` §0 Decisions Log** — Kanonik untuk D1-D9 (D10-D12 ditambah di wiki). §1-§11 banyak legacy.
+9. **`prompts/cultural_classification_v0.md`** — Prompt template Pilot #1.
+10. **`experiments/pilot01_*/README.md`** + **`pilot04_*/README.md`** — Spec per pilot.
+11. **`Ujaran Kebencian Jawa_ Riset Mendalam_.md`** — Background pre-pivot (taksonomi 7-kategori, pre-trained models survey).
+12. **External:** `~/Documents/autoresearch/` (Karpathy repo, design ref Pilot #4).
 
 Memory di `~/.claude/projects/.../memory/MEMORY.md` auto-loaded — berisi feedback tentang user preferences + project context.
 
