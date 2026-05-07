@@ -106,10 +106,11 @@ Project lain di KB yang related (sister projects, untuk awareness saja, bukan un
 
 Saat user buka sesi Claude Code di folder ini:
 1. Baca CLAUDE.md (otomatis)
-2. Baca PRD.md (full, konfirmasi konteks riset)
-3. Baca STATE.md kalau sudah ada (current execution state)
-4. Tanya user: "Apa yang mau dikerjakan hari ini?" — fase mana, milestone apa
-5. Jangan asumsi user mau implementasi langsung — bisa jadi diskusi codebook, refine PRD, dsb
+2. Baca **HANDOFF.md** (quick context untuk fresh session — TL;DR + decisions + gotchas + user comm notes)
+3. Baca PRD.md §0 Decisions Log (sisanya banyak yang legacy, baca selektif)
+4. Baca STATE.md (current execution state + Challenges Log)
+5. Tanya user: "Apa yang mau dikerjakan hari ini?" — fase mana, milestone apa
+6. Jangan asumsi user mau implementasi langsung — bisa jadi diskusi codebook, refine PRD, dsb
 
 Saat session selesai:
 1. Update STATE.md kalau ada perubahan state
