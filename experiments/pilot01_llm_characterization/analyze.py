@@ -19,11 +19,12 @@ OUTPUT_DIR = Path(__file__).resolve().parent / "outputs"
 LOG_PATH = OUTPUT_DIR / "pilot01_responses.jsonl"
 REPORT_PATH = Path(__file__).resolve().parent / "report.md"
 
-# Pricing approx per 1M tokens (USD), update kalau provider change
+# Pricing approx per 1M tokens (USD) — TENTATIVE, verify dengan provider docs
+# DeepSeek V4 + Kimi K2.6 belum di-verify exact, Grok 4.3 verified per xAI Apr 2026
 PRICING = {
-    "anthropic": {"in": 15.00, "out": 75.00},  # Opus 4.7
-    "openai": {"in": 2.50, "out": 10.00},  # GPT-4o
-    "deepseek": {"in": 0.27, "out": 1.10},  # DeepSeek-V3
+    "deepseek": {"in": 1.00, "out": 3.00},   # V4 Pro (placeholder, verify)
+    "grok":     {"in": 1.25, "out": 2.50},   # Grok 4.3 (xAI direct, verified)
+    "kimi":     {"in": 0.30, "out": 1.20},   # K2.6 (placeholder, verify)
 }
 
 

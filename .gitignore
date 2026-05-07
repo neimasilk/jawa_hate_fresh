@@ -37,8 +37,7 @@ wandb/
 
 # Secrets (CRITICAL — NEVER commit)
 .env
-.env.local
-.env.production
+.env.*
 *.key
 api_keys.json
 credentials.json

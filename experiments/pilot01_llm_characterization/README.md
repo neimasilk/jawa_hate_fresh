@@ -1,6 +1,6 @@
 # Pilot #1 — LLM Characterization
 
-**Tujuan:** Karakterisasi 3 LLM (Claude Opus, GPT-4o, DeepSeek-V3) untuk task klasifikasi ujaran kebencian Bahasa Jawa.
+**Tujuan:** Karakterisasi 3 LLM (DeepSeek V4 Pro, Grok 4.3, Kimi K2.6) untuk task klasifikasi ujaran kebencian Bahasa Jawa. Semua OpenAI-compatible API.
 
 **Output yang ingin diukur:**
 1. **Refusal rate** per LLM — seberapa sering LLM menolak engage dengan konten hate speech (over-cautious safety)
@@ -39,14 +39,21 @@ python experiments/pilot01_llm_characterization/analyze.py
 
 ## Estimasi cost
 
-Per sampel: ~700 token input × 3 LLM + ~150 token output × 3 LLM = ~2550 token total.
-Untuk 100 sampel: ~255K token total.
+Per sampel: ~700 token input × 3 LLM + ~200-400 token output × 3 LLM (output bervariasi karena reasoning models).
+Untuk 100 sampel: ~210K input + ~60-120K output total.
 
-| LLM | Pricing (in/out per 1M tok) | Cost 100 sampel |
+| LLM | Pricing (in/out per 1M tok, **tentative**) | Cost 100 sampel (rough) |
 |---|---|---|
-| Claude Opus 4.7 | $15 / $75 | ~$2.20 |
-| GPT-4o | $2.50 / $10 | ~$0.32 |
-| DeepSeek-V3 | $0.27 / $1.10 | ~$0.03 |
-| **Total** | | **~$2.55** |
+| DeepSeek V4 Pro | $1.00 / $3.00 | ~$0.20 |
+| Grok 4.3 | $1.25 / $2.50 | ~$0.20 |
+| Kimi K2.6 | $0.30 / $1.20 | ~$0.07 |
+| **Total** | | **~$0.50** |
 
-(Harga indikatif; verify saat run.)
+(DeepSeek V4 + Kimi pricing placeholder — verify post-run dari actual usage. Grok verified per xAI Apr 2026.)
+
+## Connectivity test (pre-pilot)
+
+Per 2026-05-07: ketiga API verified alive (`scripts/test_apis.py`):
+- DeepSeek V4 Pro: ~12s latency, paham Jawa krama
+- Grok 4.3: ~17s latency, paham Jawa krama
+- Kimi K2.6: ~7s latency, paham Jawa krama (note: Kimi force `temperature=1.0`)

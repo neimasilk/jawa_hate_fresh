@@ -32,7 +32,7 @@ from src.cultural_prompt import (  # noqa: E402
     parse_llm_output,
     render_user_prompt,
 )
-from src.llm_clients import call_claude, call_deepseek, call_openai  # noqa: E402
+from src.llm_clients import call_deepseek, call_grok, call_kimi  # noqa: E402
 
 OUTPUT_DIR = Path(__file__).resolve().parent / "outputs"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -153,9 +153,9 @@ def main() -> None:
         print(f"Resume mode: {len(done)} (sample, vendor) pairs already logged", flush=True)
 
     vendors = [
-        ("anthropic", call_claude),
-        ("openai", call_openai),
         ("deepseek", call_deepseek),
+        ("grok", call_grok),
+        ("kimi", call_kimi),
     ]
 
     total_calls = len(samples) * len(vendors)

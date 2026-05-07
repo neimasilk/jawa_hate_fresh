@@ -56,17 +56,20 @@ Per HARD RULE baru di CLAUDE.md ("Riset = coba-coba"): decisions methodologis bi
 - `prompts/cultural_classification_v0.md` (4-dimensi taxonomy + 5 few-shot Jawa)
 - `experiments/pilot01_llm_characterization/{run_pilot.py, analyze.py, README.md}`
 
-**Blocker eksekusi pilot #1 (butuh user, sekali saja):**
-1. Setup `.env` dengan 3 API keys (Anthropic, OpenAI, DeepSeek). Template di `.env.example`.
-2. Setup Python venv + `pip install -r requirements.txt`.
+**Status:** API keys sudah di `.env.txt` (3 vendor: DeepSeek + xAI + Kimi). Connectivity test ✅ 3/3 passed. venv `.venv/` sudah ada dengan openai+dotenv+tqdm.
 
-Setelah itu, semua eksekusi otomatis (zero user effort sampai hasil pilot keluar).
+**Untuk jalankan pilot #1 penuh, masih perlu:**
+- Install `datasets` package: `.venv/Scripts/python.exe -m pip install datasets pandas`
+- Jalankan: `.venv/Scripts/python.exe experiments/pilot01_llm_characterization/run_pilot.py`
+- Lalu: `.venv/Scripts/python.exe experiments/pilot01_llm_characterization/analyze.py`
+
+Estimasi cost ~$0.50 untuk 100 sampel (cheap karena 3 vendor relatif murah).
 
 ---
 
 ## Pilot #1 dalam satu paragraf
 
-Sample 100 teks Jawa dari OSCAR-2301 `jv` subset (streaming, dengan light keyword pre-filter untuk diversity 70% with-hint + 30% no-hint). Klasifikasi via 3 LLM (Claude Opus 4.7, GPT-4o, DeepSeek-V3) pakai cultural prompt v0. Log raw + parsed ke JSONL (resume-on-crash). Analyze → metrics: refusal rate, JSON validity, Krippendorff's α (binary hate), pairwise agreement, cost. **Decision gate** (otomatis di analyze.py): GREEN (refusal <20% + validity >90% + α >0.5) → lanjut fully-LLM; YELLOW → iterasi prompt (pilot #3); RED → fallback ladder (sanity check 50 / pending). Estimasi cost ~$2.55, runtime ~5-10 menit.
+Sample 100 teks Jawa dari OSCAR-2301 `jv` subset (streaming, dengan light keyword pre-filter untuk diversity 70% with-hint + 30% no-hint). Klasifikasi via 3 LLM (DeepSeek V4 Pro, Grok 4.3, Kimi K2.6 — semua OpenAI-compat) pakai cultural prompt v0. Log raw + parsed ke JSONL (resume-on-crash). Analyze → metrics: refusal rate, JSON validity, Krippendorff's α (binary hate), pairwise agreement, cost. **Decision gate** (otomatis di analyze.py): GREEN (refusal <20% + validity >90% + α >0.5) → lanjut fully-LLM; YELLOW → iterasi prompt (pilot #3); RED → fallback ladder (sanity check 50 / pending). Estimasi cost ~$0.50, runtime ~5-10 menit.
 
 ---
 
@@ -87,6 +90,8 @@ Sample 100 teks Jawa dari OSCAR-2301 `jv` subset (streaming, dengan light keywor
 |---|---|
 | Git config kosong di laptop ini → commit error "Author identity unknown" | Sudah di-set global per 2026-05-07 (Mukhlis Amien / amien@stiki.ac.id). Verify dengan `git config --global --list`. |
 | `.env.example` ke-ignore by `.env.*` pattern | Sudah di-fix dengan `!.env.example` exception di `.gitignore`. |
+| Bapak pakai `.env.txt` (Windows-friendly), bukan `.env` | `src/llm_clients.py` `load_dotenv()` try `.env` dulu, fallback `.env.txt`. Kedua di-gitignore via `.env.*` pattern. |
+| Kimi K2.6 reject `temperature=0.0` | Kimi force temperature=1. Sudah di-handle di `call_kimi()` (override). Determinism diandalkan dari few-shot + structured output. |
 | OSCAR-2301 streaming butuh `trust_remote_code=True` | Sudah di-set di `run_pilot.py`. |
 | Tidak ada Javanese-specific hate speech dataset publik | Confirm. Pakai OSCAR jv + LLM filtering sebagai source default. Fallback: `manueltonneau/indonesian-hate-speech-superset` filter for code-switched Javanese content. |
 | Riset mendalam Bagian 4.1 sebut "3 anotator + Cohen's κ" | **DIABAIKAN** — bertentangan dengan framing fully-LLM. Story mahasiswa cheating = case-in-point kenapa multi-annotator manual high-risk. |
