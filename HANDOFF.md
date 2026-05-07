@@ -1,13 +1,13 @@
 # HANDOFF — Untuk sesi Claude Code yang fresh
 
 **Tujuan:** Agar sesi baru langsung paham konteks tanpa user perlu re-explain.
-**Last updated:** 2026-05-07 (akhir sesi setup awal)
+**Last updated:** 2026-05-07 (akhir sesi pertama, sebelum pause untuk besok)
 
 ---
 
 ## TL;DR (3 baris)
 
-Riset deteksi ujaran kebencian Bahasa Jawa, framing **fully automated LLM pipeline** sebagai novelty (zero human in annotation + validation, fallback ladder kalau pilot gagal). Repo `neimasilk/jawa_hate_fresh` di GitHub. **Pre-eksperimen → Pilot #1 ready, blocker: API keys belum di-set di `.env`.**
+Riset deteksi ujaran kebencian Bahasa Jawa, framing **"Eliminating Human Bottleneck in Low-Resource Hate Speech Annotation"** = core novelty. Repo `neimasilk/jawa_hate_fresh` @ commit `d22172f` (atau lebih baru). Setup lengkap: dokumentasi terstruktur via Karpathy LLM Wiki pattern (`wiki/` folder), 4 pilot planned (#1 ready, #4 = adopsi Karpathy autoresearch). **Next concrete action: install `datasets pandas` + run Pilot #1 (~5-10 min, ~$0.50).**
 
 ---
 
@@ -50,26 +50,35 @@ Per HARD RULE baru di CLAUDE.md ("Riset = coba-coba"): decisions methodologis bi
 
 ---
 
-## Status hari ini (2026-05-07)
+## Status final 2026-05-07
 
-**Sudah selesai:**
-- Repo Git init + push ke GitHub `neimasilk/jawa_hate_fresh`
-- CLAUDE.md + PRD.md + STATE.md updated
-- Folder structure: `data/{raw,intermediate,labeled,golden}/`, `src/`, `notebooks/`, `prompts/`, `logs/`, `notes/`, `experiments/{pilot01,02,03}/`
-- `requirements.txt` + `.env.example`
-- `src/llm_clients.py` (Anthropic / OpenAI / DeepSeek wrappers, returning unified `LLMResponse`)
-- `src/cultural_prompt.py` (load template + parse JSON output)
-- `prompts/cultural_classification_v0.md` (4-dimensi taxonomy + 5 few-shot Jawa)
-- `experiments/pilot01_llm_characterization/{run_pilot.py, analyze.py, README.md}`
+**Yang sudah jadi:**
+- Repo Git + GitHub `neimasilk/jawa_hate_fresh` (latest: `d22172f`, branch `main`)
+- Dokumentasi lengkap: `CLAUDE.md`, `PRD.md` (§0 Decisions Log), `STATE.md`, `HANDOFF.md`, **`wiki/`** (6 files: SCHEMA, index, log, decisions, pilots, glossary)
+- Folder structure: `data/{raw,intermediate,labeled,golden}/`, `src/`, `prompts/`, `notebooks/`, `logs/`, `notes/`, `experiments/{pilot01,02,03,04}/`
+- Code: `src/llm_clients.py` (3 vendor wrappers OpenAI-compat), `src/cultural_prompt.py`, `scripts/test_apis.py`
+- Prompt: `prompts/cultural_classification_v0.md` (4-dim taxonomy + 5 few-shot Jawa)
+- Pilot #1: `experiments/pilot01_llm_characterization/` lengkap (run_pilot.py + analyze.py + README)
+- Pilot #4: `experiments/pilot04_autoresearch_prompts/README.md` (plan, akan eksekusi setelah Pilot #1-3)
+- API keys: `.env.txt` (gitignored) — DeepSeek + xAI + Kimi, **connectivity 3/3 ✅**
+- Python venv: `.venv/` dengan `openai 2.35.1`, `python-dotenv`, `tqdm`
+- Memory: 9 file di `~/.claude/projects/.../memory/`
 
-**Status:** API keys sudah di `.env.txt` (3 vendor: DeepSeek + xAI + Kimi). Connectivity test ✅ 3/3 passed. venv `.venv/` sudah ada dengan openai+dotenv+tqdm.
+**Yang siap di-eksekusi (tinggal jalankan):**
+```
+# Install datasets package (one-time, ~30 detik):
+.venv\Scripts\python.exe -m pip install datasets pandas
 
-**Untuk jalankan pilot #1 penuh, masih perlu:**
-- Install `datasets` package: `.venv/Scripts/python.exe -m pip install datasets pandas`
-- Jalankan: `.venv/Scripts/python.exe experiments/pilot01_llm_characterization/run_pilot.py`
-- Lalu: `.venv/Scripts/python.exe experiments/pilot01_llm_characterization/analyze.py`
+# Run pilot #1 (~5-10 menit, ~$0.50):
+.venv\Scripts\python.exe experiments\pilot01_llm_characterization\run_pilot.py
 
-Estimasi cost ~$0.50 untuk 100 sampel (cheap karena 3 vendor relatif murah).
+# Analyze (output: report.md dengan decision gate GREEN/YELLOW/RED):
+.venv\Scripts\python.exe experiments\pilot01_llm_characterization\analyze.py
+```
+
+**Yang masih open:**
+- HKI batch placement di tridarma tracker UBHINUS — minor, bisa nanti
+- Pilot #2/#3 folder belum dibuat (akan dibuat saat eksekusi)
 
 ---
 
@@ -108,11 +117,24 @@ Sample 100 teks Jawa dari OSCAR-2301 `jv` subset (streaming, dengan light keywor
 
 | Kalau user bilang... | Lakukan... |
 |---|---|
-| "Lanjut pilot" | Cek `.env` ada → jalankan `python experiments/pilot01_llm_characterization/run_pilot.py` |
-| "Apa progress?" | Baca STATE.md sesi log + Challenges Log |
-| "Update PRD" | Spesifik section mana — jangan rewrite blanket |
-| "Bahas ulang scope/venue/dialek" | Cek PRD §0 Decisions Log. Kalau user mau revisi, update D-entry + bilang konsekuensi |
-| "Bikin pilot baru" | Folder template di `experiments/pilot0X_*/` — copy structure pilot01 |
+| "Lanjut" / "Run pilot 1" | Install `datasets pandas` di venv (kalau belum) → jalankan `run_pilot.py` → `analyze.py` → diskusi hasil dengan user |
+| "Apa progress?" | Baca `wiki/index.md` → `wiki/pilots.md` → `STATE.md` Challenges Log + sesi log |
+| "Update wiki" | Identifikasi entity yg perlu update → edit + log entry di `wiki/log.md` |
+| "Cek konsistensi" / "Lint" | Run lint workflow per `wiki/SCHEMA.md` — cek kontradiksi PRD vs CLAUDE vs wiki, orphan pages, gaps di STATE Challenges |
+| "Update PRD/decision" | Update `wiki/decisions.md` (entity primary) + `PRD.md §0` (canonical) + log entry di `wiki/log.md` |
+| "Bikin pilot baru (#5/#6/dll)" | Update `wiki/pilots.md` future section → bikin folder `experiments/pilot0X_*/` + README. Pattern di pilot01 atau pilot04 |
+| "Bahas ulang scope/venue/dialek" | Cek `wiki/decisions.md` untuk D-entry yg sudah ada. Kalau user mau revisi, update D-entry + bilang konsekuensi + log |
+
+## Cara user mulai sesi baru (untuk Bapak)
+
+1. Buka folder ini di Claude Code
+2. Sesi Claude Code otomatis baca `CLAUDE.md`
+3. Berdasarkan daily protocol di `CLAUDE.md`, agent akan baca: HANDOFF.md → `wiki/index.md` → entity pages relevan → STATE.md → tanya Bapak
+4. Bapak cukup kasih instruksi singkat. Misalnya:
+   - **"Lanjut pilot 1"** — agent install deps + run + analyze
+   - **"Cek wiki konsisten"** — agent jalankan lint workflow
+   - **"Diskusi codebook v1"** — agent buka prompts + diskusi
+   - **"Cek hasil pilot kemarin"** — agent baca latest pilot output
 
 ---
 
