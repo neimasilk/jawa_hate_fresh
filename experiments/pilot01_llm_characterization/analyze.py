@@ -31,11 +31,12 @@ PRICING = {
 def load_records(path: Path) -> list[dict]:
     if not path.exists():
         raise FileNotFoundError(f"No log file at {path}. Run run_pilot.py first.")
-    out = []
+    latest: dict[tuple[str, str], dict] = {}
     with path.open(encoding="utf-8") as f:
         for line in f:
-            out.append(json.loads(line))
-    return out
+            rec = json.loads(line)
+            latest[(rec["source_id"], rec["vendor"])] = rec
+    return list(latest.values())
 
 
 def is_refusal(rec: dict) -> bool:
@@ -242,9 +243,10 @@ def main() -> None:
     else:
         lines.append("🟡 **YELLOW — iterasi prompt (pilot #3) sebelum scale up.**")
 
-    REPORT_PATH.write_text("\n".join(lines), encoding="utf-8")
+    report_text = "\n".join(lines)
+    REPORT_PATH.write_text(report_text, encoding="utf-8")
     print(f"Report written to {REPORT_PATH}")
-    print("\n" + "\n".join(lines))
+    print("\n" + report_text.encode("ascii", errors="replace").decode("ascii"))
 
 
 if __name__ == "__main__":

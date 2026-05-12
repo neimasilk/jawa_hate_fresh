@@ -1,141 +1,91 @@
-# HANDOFF — Untuk sesi Claude Code yang fresh
+# HANDOFF - Ujaran Kebencian Jawa
 
-**Tujuan:** Agar sesi baru langsung paham konteks tanpa user perlu re-explain.
-**Last updated:** 2026-05-07 (akhir sesi pertama, sebelum pause untuk besok)
-
----
-
-## TL;DR (3 baris)
-
-Riset deteksi ujaran kebencian Bahasa Jawa, framing **"Eliminating Human Bottleneck in Low-Resource Hate Speech Annotation"** = core novelty. Repo `neimasilk/jawa_hate_fresh` @ commit `d22172f` (atau lebih baru). Setup lengkap: dokumentasi terstruktur via Karpathy LLM Wiki pattern (`wiki/` folder), 4 pilot planned (#1 ready, #4 = adopsi Karpathy autoresearch). **Next concrete action: install `datasets pandas` + run Pilot #1 (~5-10 min, ~$0.50).**
+**Last updated:** 2026-05-12, setelah eksekusi awal Pilot #1.
+**Tujuan:** sesi baru langsung tahu status terbaru, blocker, dan next action.
 
 ---
 
-## Baca dalam urutan ini
+## TL;DR
 
-1. **`CLAUDE.md`** — Hard rules + workflow. Sudah di-update post-pivot.
-2. **`wiki/index.md`** — **PRIMARY USER-FACING KNOWLEDGE BASE** (Karpathy LLM Wiki pattern, [D12](../wiki/decisions.md#d12--adopsi-pattern-karpathy-llm-wiki-dokumentasi)). User fokus baca dari sini. Catalog all entity pages + raw sources.
-3. **`wiki/decisions.md`** — D1-D12 dengan rationale. Source-of-truth untuk decision history.
-4. **`wiki/pilots.md`** — Status Pilot #1-#4 + dependencies + commands.
-5. **`wiki/glossary.md`** — Term definitions (NEIL, krama/ngoko, BPB, unggah-ungguh, vendor LLM, dll).
-6. **`wiki/SCHEMA.md`** — Cara agent maintain wiki (ingest/query/lint workflow). **Wajib baca SEKALI** kalau sesi pertama setelah wiki creation.
-7. **`STATE.md`** — Live execution state, Challenges Log (C1-C7), sesi log.
-8. **`PRD.md` §0 Decisions Log** — Kanonik untuk D1-D9 (D10-D12 ditambah di wiki). §1-§11 banyak legacy.
-9. **`prompts/cultural_classification_v0.md`** — Prompt template Pilot #1.
-10. **`experiments/pilot01_*/README.md`** + **`pilot04_*/README.md`** — Spec per pilot.
-11. **`Ujaran Kebencian Jawa_ Riset Mendalam_.md`** — Background pre-pivot (taksonomi 7-kategori, pre-trained models survey).
-12. **External:** `~/Documents/autoresearch/` (Karpathy repo, design ref Pilot #4).
-
-Memory di `~/.claude/projects/.../memory/MEMORY.md` auto-loaded — berisi feedback tentang user preferences + project context.
+Riset tetap pada framing **"Eliminating Human Bottleneck in Low-Resource Hate Speech Annotation"** untuk paper JINITA Sinta 2 + dataset/codebook HKI. Pilot #1 sudah dijalankan 300 call awal, tetapi hasil report pertama **belum valid sebagai keputusan metodologis** karena masalah teknis output kosong dari Kimi/DeepSeek akibat `finish_reason='length'`. Patch retry + token limit sudah dibuat; next action adalah **rerun resume Pilot #1 setelah patch**, lalu regenerate report.
 
 ---
 
-## Konteks penting yang TIDAK obvious dari file-file di atas
+## Baca Dulu
 
-### Story motivasi (jangan dilupakan)
-
-Mahasiswa annotator di proyek lama v1-v4 **"curang" dengan back-translate English/Indo → Jawa**, hanya sedikit yg dianotasi asli. Mahasiswa sudah lulus, tidak available untuk fix. Dataset v1-v4 = mayoritas terjemahan, tidak menangkap realitas SARA Jawa. **Story ini = motivation utama untuk fully-LLM framing**, dan akan di-cite (anonimized) di paper introduction sebagai concrete failure mode dari "default" multi-annotator approach.
-
-### Framing pivot dari NEIL → Fully LLM
-
-CLAUDE.md/PRD awal punya "NEIL (Native-Expert-in-the-Loop)" sebagai kontribusi metodologis. Setelah diskusi 2026-05-07, framing pivot ke **"Eliminating Human Bottleneck in Low-Resource Hate Speech Annotation"**. NEIL term tidak dipakai lagi. Sebagian PRD section yang masih sebut NEIL = legacy, akan di-rewrite post-pilot.
-
-### Venue: Sinta 2, BUKAN Sinta 1
-
-CLAUDE.md/PRD awal target Sinta 1. User pilih **JINITA Sinta 2** (Politeknik Negeri Cilacap). KUM first author 25, bukan 40. Sudah di-update di CLAUDE.md HARD RULE #5.
-
-### Decisions tentative vs final
-
-Per HARD RULE baru di CLAUDE.md ("Riset = coba-coba"): decisions methodologis bisa berubah berdasarkan eksperimen. Detail blueprint a priori = minimum. Pilot dulu, blueprint setelahnya. **Dokumentasi tantangan + lessons-learned sambil jalan = potential kontribusi paper sendiri** — jangan sembunyikan "kegagalan" pilot.
+1. `CLAUDE.md` - hard rules dan daily protocol.
+2. `wiki/index.md` - user-facing knowledge base.
+3. `wiki/decisions.md` - D1-D12 decision history.
+4. `wiki/pilots.md` - status pilot.
+5. `STATE.md` - live state dan challenges log.
+6. `experiments/pilot01_llm_characterization/report.md` - report awal, tapi baca dengan catatan teknis di bawah.
 
 ---
 
-## Status final 2026-05-07
+## Status Terbaru
 
-**Yang sudah jadi:**
-- Repo Git + GitHub `neimasilk/jawa_hate_fresh` (latest: `d22172f`, branch `main`)
-- Dokumentasi lengkap: `CLAUDE.md`, `PRD.md` (§0 Decisions Log), `STATE.md`, `HANDOFF.md`, **`wiki/`** (6 files: SCHEMA, index, log, decisions, pilots, glossary)
-- Folder structure: `data/{raw,intermediate,labeled,golden}/`, `src/`, `prompts/`, `notebooks/`, `logs/`, `notes/`, `experiments/{pilot01,02,03,04}/`
-- Code: `src/llm_clients.py` (3 vendor wrappers OpenAI-compat), `src/cultural_prompt.py`, `scripts/test_apis.py`
-- Prompt: `prompts/cultural_classification_v0.md` (4-dim taxonomy + 5 few-shot Jawa)
-- Pilot #1: `experiments/pilot01_llm_characterization/` lengkap (run_pilot.py + analyze.py + README)
-- Pilot #4: `experiments/pilot04_autoresearch_prompts/README.md` (plan, akan eksekusi setelah Pilot #1-3)
-- API keys: `.env.txt` (gitignored) — DeepSeek + xAI + Kimi, **connectivity 3/3 ✅**
-- Python venv: `.venv/` dengan `openai 2.35.1`, `python-dotenv`, `tqdm`
-- Memory: 9 file di `~/.claude/projects/.../memory/`
+Yang sudah selesai:
+- Dependency `datasets` dan `pandas` sudah terpasang di `.venv`.
+- OSCAR-2301 ternyata **gated** di Hugging Face, tidak bisa diakses tanpa autentikasi.
+- Pilot #1 dipatch agar fallback ke `HuggingFaceFW/fineweb-2`, config `jav_Latn`.
+- Sampel 100 teks berhasil dibuat di `experiments/pilot01_llm_characterization/outputs/pilot01_samples.json`.
+- 300 call awal selesai, tersimpan di `outputs/pilot01_responses.jsonl`.
+- `report.md` awal sudah dibuat.
 
-**Yang siap di-eksekusi (tinggal jalankan):**
-```
-# Install datasets package (one-time, ~30 detik):
-.venv\Scripts\python.exe -m pip install datasets pandas
+Temuan penting:
+- Log berisi 302 record, bukan 300, karena ada 2 duplikasi dari proses resume timeout.
+- Tidak ada API error dan refusal rate 0%.
+- Banyak output kosong dengan `finish_reason='length'`: Kimi 98 record, DeepSeek 5 record.
+- Report awal memberi gate RED karena JSON validity rendah, tetapi ini **kemungkinan besar artefak `max_tokens` terlalu kecil**, bukan bukti LLM gagal memahami task.
 
-# Run pilot #1 (~5-10 menit, ~$0.50):
+Patch yang sudah dibuat tetapi belum rerun:
+- `src/llm_clients.py`: `max_tokens` DeepSeek dinaikkan ke 2048, Kimi ke 4096.
+- `experiments/pilot01_llm_characterization/run_pilot.py`: resume sekarang hanya menganggap record selesai kalau `raw_text` tidak kosong atau ada `error`; output kosong akan di-retry.
+- `experiments/pilot01_llm_characterization/analyze.py`: deduplicate `(source_id, vendor)` dan print ASCII-safe untuk Windows console.
+
+---
+
+## Next Concrete Action
+
+Jalankan ulang resume Pilot #1:
+
+```powershell
 .venv\Scripts\python.exe experiments\pilot01_llm_characterization\run_pilot.py
-
-# Analyze (output: report.md dengan decision gate GREEN/YELLOW/RED):
 .venv\Scripts\python.exe experiments\pilot01_llm_characterization\analyze.py
 ```
 
-**Yang masih open:**
-- HKI batch placement di tridarma tracker UBHINUS — minor, bisa nanti
-- Pilot #2/#3 folder belum dibuat (akan dibuat saat eksekusi)
+Ekspektasi:
+- Skrip akan skip record yang sudah valid.
+- Skrip akan retry record kosong, terutama Kimi dan sebagian DeepSeek.
+- Setelah itu baca ulang `report.md`; baru tentukan GREEN/YELLOW/RED.
+
+Kalau Kimi masih kosong setelah `max_tokens=4096`, next debug:
+- cek apakah provider butuh parameter khusus untuk reasoning output,
+- turunkan prompt verbosity khusus Kimi,
+- atau jalankan Pilot #1 analysis sementara dengan DeepSeek + Grok saja sebagai diagnostic, bukan keputusan final.
 
 ---
 
-## Pilot #1 dalam satu paragraf
+## Konteks Keputusan Final
 
-Sample 100 teks Jawa dari OSCAR-2301 `jv` subset (streaming, dengan light keyword pre-filter untuk diversity 70% with-hint + 30% no-hint). Klasifikasi via 3 LLM (DeepSeek V4 Pro, Grok 4.3, Kimi K2.6 — semua OpenAI-compat) pakai cultural prompt v0. Log raw + parsed ke JSONL (resume-on-crash). Analyze → metrics: refusal rate, JSON validity, Krippendorff's α (binary hate), pairwise agreement, cost. **Decision gate** (otomatis di analyze.py): GREEN (refusal <20% + validity >90% + α >0.5) → lanjut fully-LLM; YELLOW → iterasi prompt (pilot #3); RED → fallback ladder (sanity check 50 / pending). Estimasi cost ~$0.50, runtime ~5-10 menit.
-
----
-
-## User communication notes (penting!)
-
-- **Bahasa: Indonesian.** User dosen native Jawa, bicara Indonesia.
-- **Ringkas.** User pernah eksplisit bilang "saya ga baca semua yg kamu tulis". Default max 8-15 baris. Pakai bullet/tabel.
-- **Bottleneck constraint.** Weekend only, ~5-15 jam/bulan. Jangan minta input panjang. Tawarkan default + biarkan user revise.
-- **Empirical over theoretical.** User prefer pilot eksperimen kecil daripada diskusi blueprint detail. Saat ada konflik blueprint vs realitas → realitas menang.
-- **Decisions yang sudah final** ada di PRD §0 + memory. Jangan re-litigate kecuali user eksplisit minta.
-- **Risiko: jangan tergoda over-engineering.** Riset, bukan production. Pipeline minimal yang work > pipeline canggih yang macet.
+- Proyek lama v1-v4 **jangan dipakai** sebagai baseline, warm-start, atau data training. Alasan: dataset lama mayoritas hasil back-translation mahasiswa, bukan ujaran Jawa natural.
+- Human annotation bukan default. Fallback maksimal adalah sanity check kecil oleh Bapak jika pilot benar-benar gagal.
+- Data source default adalah public dumps, bukan live scraping.
+- Scope bahasa sumber: Jawa dan turunannya; Sunda/Madura bukan sumber, tetapi bisa menjadi target group dalam ujaran Jawa.
+- Vendor Pilot #1: DeepSeek V4 Pro, Grok 4.3, Kimi K2.6.
 
 ---
 
-## Common gotchas
+## Catatan Teknis
 
-| Gotcha | Solusi |
-|---|---|
-| Git config kosong di laptop ini → commit error "Author identity unknown" | Sudah di-set global per 2026-05-07 (Mukhlis Amien / amien@stiki.ac.id). Verify dengan `git config --global --list`. |
-| `.env.example` ke-ignore by `.env.*` pattern | Sudah di-fix dengan `!.env.example` exception di `.gitignore`. |
-| Bapak pakai `.env.txt` (Windows-friendly), bukan `.env` | `src/llm_clients.py` `load_dotenv()` try `.env` dulu, fallback `.env.txt`. Kedua di-gitignore via `.env.*` pattern. |
-| Kimi K2.6 reject `temperature=0.0` | Kimi force temperature=1. Sudah di-handle di `call_kimi()` (override). Determinism diandalkan dari few-shot + structured output. |
-| OSCAR-2301 streaming butuh `trust_remote_code=True` | Sudah di-set di `run_pilot.py`. |
-| Tidak ada Javanese-specific hate speech dataset publik | Confirm. Pakai OSCAR jv + LLM filtering sebagai source default. Fallback: `manueltonneau/indonesian-hate-speech-superset` filter for code-switched Javanese content. |
-| Riset mendalam Bagian 4.1 sebut "3 anotator + Cohen's κ" | **DIABAIKAN** — bertentangan dengan framing fully-LLM. Story mahasiswa cheating = case-in-point kenapa multi-annotator manual high-risk. |
+- `.env.txt` dipakai untuk API keys dan gitignored.
+- Kimi hanya menerima `temperature=1.0`; sudah di-handle.
+- FineWeb2 `jav_Latn` publik dan berhasil streaming, tapi contoh awal banyak teks web/Wikipedia/promosi. Ini mungkin membuat hate rate sangat rendah; jangan simpulkan kualitas hate detection hanya dari distribusi BUK di fallback source.
+- Runtime aktual lebih lama dari estimasi awal: sekitar 2 jam total karena Kimi lambat. Rerun resume seharusnya lebih pendek, tetapi tetap bisa puluhan menit.
+- Worktree saat handoff belum clean: ada patch di `src/llm_clients.py`, `run_pilot.py`, `analyze.py`, plus `outputs/` dan `report.md`.
 
 ---
 
-## Quick action menu untuk fresh session
+## User Communication
 
-| Kalau user bilang... | Lakukan... |
-|---|---|
-| "Lanjut" / "Run pilot 1" | Install `datasets pandas` di venv (kalau belum) → jalankan `run_pilot.py` → `analyze.py` → diskusi hasil dengan user |
-| "Apa progress?" | Baca `wiki/index.md` → `wiki/pilots.md` → `STATE.md` Challenges Log + sesi log |
-| "Update wiki" | Identifikasi entity yg perlu update → edit + log entry di `wiki/log.md` |
-| "Cek konsistensi" / "Lint" | Run lint workflow per `wiki/SCHEMA.md` — cek kontradiksi PRD vs CLAUDE vs wiki, orphan pages, gaps di STATE Challenges |
-| "Update PRD/decision" | Update `wiki/decisions.md` (entity primary) + `PRD.md §0` (canonical) + log entry di `wiki/log.md` |
-| "Bikin pilot baru (#5/#6/dll)" | Update `wiki/pilots.md` future section → bikin folder `experiments/pilot0X_*/` + README. Pattern di pilot01 atau pilot04 |
-| "Bahas ulang scope/venue/dialek" | Cek `wiki/decisions.md` untuk D-entry yg sudah ada. Kalau user mau revisi, update D-entry + bilang konsekuensi + log |
-
-## Cara user mulai sesi baru (untuk Bapak)
-
-1. Buka folder ini di Claude Code
-2. Sesi Claude Code otomatis baca `CLAUDE.md`
-3. Berdasarkan daily protocol di `CLAUDE.md`, agent akan baca: HANDOFF.md → `wiki/index.md` → entity pages relevan → STATE.md → tanya Bapak
-4. Bapak cukup kasih instruksi singkat. Misalnya:
-   - **"Lanjut pilot 1"** — agent install deps + run + analyze
-   - **"Cek wiki konsisten"** — agent jalankan lint workflow
-   - **"Diskusi codebook v1"** — agent buka prompts + diskusi
-   - **"Cek hasil pilot kemarin"** — agent baca latest pilot output
-
----
-
-**Catatan untuk diri sendiri (sesi mendatang):** Jangan re-explain semua dari awal. Asumsi user sudah paham proyek-nya. Tanya yang spesifik perlu sekarang. Kalau ada konflik dengan dokumentasi (CLAUDE/PRD/STATE), update dokumentasi-nya — jangan diam-diam menyimpang.
+Bahasa Indonesia, ringkas. User prefer eksperimen kecil daripada blueprint panjang. Jangan re-litigate decisions final kecuali diminta. Jika ada hasil buruk, dokumentasikan sebagai lesson learned, bukan disembunyikan.

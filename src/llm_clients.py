@@ -107,6 +107,7 @@ def call_deepseek(system: str, user: str, model: str = "deepseek-v4-pro") -> LLM
         base_url_default="https://api.deepseek.com/v1",
         system=system,
         user=user,
+        max_tokens=2048,
     )
 
 
@@ -133,5 +134,6 @@ def call_kimi(system: str, user: str, model: str = "kimi-k2.6") -> LLMResponse:
         base_url_default="https://api.moonshot.ai/v1",
         system=system,
         user=user,
+        max_tokens=4096,
         temperature=1.0,
     )

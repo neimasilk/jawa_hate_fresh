@@ -53,17 +53,35 @@ KEYWORD_HINTS = [
 ]
 
 
-def load_javanese_samples(n: int) -> list[dict]:
-    """Stream OSCAR-2301 jv subset, filter by length + keyword hint, random sample n."""
-    print(f"Loading OSCAR-2301 jv subset (streaming)...", flush=True)
+def _load_javanese_stream():
+    """Return (dataset_stream, source_name), preferring OSCAR but falling back if gated."""
+    try:
+        print("Loading OSCAR-2301 jv subset (streaming)...", flush=True)
+        ds = load_dataset(
+            "oscar-corpus/OSCAR-2301",
+            language="jv",
+            split="train",
+            streaming=True,
+        )
+        return ds, "oscar2301_jv"
+    except Exception as exc:
+        print(
+            f"  OSCAR unavailable ({type(exc).__name__}: {exc}). "
+            "Falling back to FineWeb2 jav_Latn.",
+            flush=True,
+        )
+        ds = load_dataset(
+            "HuggingFaceFW/fineweb-2",
+            "jav_Latn",
+            split="train",
+            streaming=True,
+        )
+        return ds, "fineweb2_jav_Latn"
 
-    ds = load_dataset(
-        "oscar-corpus/OSCAR-2301",
-        language="jv",
-        split="train",
-        streaming=True,
-        trust_remote_code=True,
-    )
+
+def load_javanese_samples(n: int) -> list[dict]:
+    """Stream Javanese web dump, filter by length + keyword hint, random sample n."""
+    ds, source_name = _load_javanese_stream()
 
     rng = random.Random(RANDOM_SEED)
     candidates: list[dict] = []
@@ -88,14 +106,15 @@ def load_javanese_samples(n: int) -> list[dict]:
             {
                 "text": first_chunk,
                 "has_keyword_hint": has_hint,
-                "source_id": f"oscar2301_jv_{seen}",
+                "source": source_name,
+                "source_id": f"{source_name}_{seen}",
             }
         )
 
         if len(candidates) >= target_pool:
             break
 
-    print(f"  Scanned {seen} OSCAR rows, kept {len(candidates)} length-valid candidates", flush=True)
+    print(f"  Scanned {seen} {source_name} rows, kept {len(candidates)} length-valid candidates", flush=True)
 
     # Stratified: ambil 70% with keyword hint + 30% random
     with_hint = [c for c in candidates if c["has_keyword_hint"]]
@@ -119,7 +138,7 @@ def load_javanese_samples(n: int) -> list[dict]:
 
 
 def already_processed(out_path: Path) -> set[tuple[str, str]]:
-    """Return set of (source_id, vendor) yang sudah di-log, untuk resume."""
+    """Return set of (source_id, vendor) yang sudah sukses di-log, untuk resume."""
     done: set[tuple[str, str]] = set()
     if not out_path.exists():
         return done
@@ -127,7 +146,9 @@ def already_processed(out_path: Path) -> set[tuple[str, str]]:
         for line in f:
             try:
                 rec = json.loads(line)
-                done.add((rec["source_id"], rec["vendor"]))
+                raw_text = (rec.get("raw_text") or "").strip()
+                if rec.get("error") or raw_text:
+                    done.add((rec["source_id"], rec["vendor"]))
             except (json.JSONDecodeError, KeyError):
                 continue
     return done
