@@ -10,7 +10,7 @@ Cross-ref: [`STATE.md` Next milestones](../STATE.md), [`STATE.md` Challenges Log
 
 | Pilot | Topik | Status | Estimated cost | User effort | Folder |
 |---|---|---|---|---|---|
-| **#1** | LLM characterization (3 LLM × 100 sampel Jawa) | ✅ READY (blocker: install `datasets` + run) | ~$0.50 | 0 jam | [`pilot01_llm_characterization/`](../experiments/pilot01_llm_characterization/) |
+| **#1** | LLM characterization (3 LLM × 100 sampel Jawa) | ✅ DONE 2026-05-25 — gate GREEN (lihat caveat) | $0.85 actual | 0 jam | [`pilot01_llm_characterization/`](../experiments/pilot01_llm_characterization/) |
 | **#2** | LLM-as-Jawa-filter (vs langid baseline) | 📋 PLANNED | ~$0.30 | 0 jam | `pilot02_llm_jawa_filter/` |
 | **#3** | Cultural prompt manual iteration v1, v2 (5-10 iter) | 📋 PLANNED | ~$2.50 | 0 jam (saya iterate) | `pilot03_cultural_prompt/` |
 | **#4** | AutoResearch loop (Karpathy pattern) | 📋 PLANNED | ~$12.5/run (bounded) | 0 jam (overnight agent) | [`pilot04_autoresearch_prompts/`](../experiments/pilot04_autoresearch_prompts/) |
@@ -35,15 +35,21 @@ Cross-ref: [`STATE.md` Next milestones](../STATE.md), [`STATE.md` Challenges Log
 - 🟡 YELLOW — marginal → iterasi prompt (Pilot #3)
 - 🔴 RED — buruk → trigger fallback ladder ([D2](decisions.md#d2--fallback-ladder-kalau-pilot-gagal))
 
-**Blocker eksekusi:** install `datasets` + `pandas` package, lalu jalankan `run_pilot.py`.
+**Detail:** [`pilot01_llm_characterization/README.md`](../experiments/pilot01_llm_characterization/README.md). Report: [`report.md`](../experiments/pilot01_llm_characterization/report.md).
 
-```
-.venv\Scripts\python.exe -m pip install datasets pandas
-.venv\Scripts\python.exe experiments\pilot01_llm_characterization\run_pilot.py
-.venv\Scripts\python.exe experiments\pilot01_llm_characterization\analyze.py
-```
+### Hasil (2026-05-25, deduped 100 sampel × 3 LLM)
 
-**Detail:** [`pilot01_llm_characterization/README.md`](../experiments/pilot01_llm_characterization/README.md).
+| Vendor | Refusal | JSON Valid | Latency mean | Out tok | Cost |
+|---|---|---|---|---|---|
+| DeepSeek V4 Pro | 1.0% | 97% | 20s | 58K | $0.31 |
+| Grok 4.3 | 0% | 100% | **11s** | 7K | $0.20 |
+| Kimi K2.6 | 0% | 85% | **91s** | **260K** | $0.35 |
+
+- **Gate GREEN:** refusal 0.3% (<20%), JSON valid 94% (>90%), α=1.000 (>0.5). Total cost $0.85, runtime 2j32m.
+- **⚠️ CAVEAT — α=1.000 degenerate.** Ketiga LLM melabeli SEMUA 100 sampel `hate=false`/BUK. Agreement sempurna karena sumber FineWeb2 `jav_Latn` (fallback dari OSCAR gated) hampir tidak mengandung ujaran kebencian — mayoritas web/Wikipedia/promosi. Jadi **C3 (agreement pada konten hate asli) BELUM terjawab**; α ini tidak bisa dipakai untuk klaim multi-LLM consensus bekerja.
+- **Terkonfirmasi real:** C2 (refusal bukan blocker ✅), C1 sebagian (LLM bisa hasilkan JSON taksonomi kultural valid ✅).
+- **Vendor concern:** Kimi K2.6 reasoning model — 91s/call, 260K out-token, 11/100 masih kosong walau `max_tokens=4096`. Grok jauh lebih efisien. Relevan untuk seleksi vendor bulk pipeline (C-baru).
+- **Implikasi next:** butuh sumber yang benar-benar mengandung hate Jawa untuk uji agreement bermakna → menyatu dengan masalah data sourcing (Pilot #2 filter + cari dump yang lebih "panas").
 
 ---
 

@@ -1,13 +1,13 @@
 # HANDOFF - Ujaran Kebencian Jawa
 
-**Last updated:** 2026-05-12, setelah eksekusi awal Pilot #1.
+**Last updated:** 2026-05-25, setelah Pilot #1 selesai (rerun + report final).
 **Tujuan:** sesi baru langsung tahu status terbaru, blocker, dan next action.
 
 ---
 
 ## TL;DR
 
-Riset tetap pada framing **"Eliminating Human Bottleneck in Low-Resource Hate Speech Annotation"** untuk paper JINITA Sinta 2 + dataset/codebook HKI. Pilot #1 sudah dijalankan 300 call awal, tetapi hasil report pertama **belum valid sebagai keputusan metodologis** karena masalah teknis output kosong dari Kimi/DeepSeek akibat `finish_reason='length'`. Patch retry + token limit sudah dibuat; next action adalah **rerun resume Pilot #1 setelah patch**, lalu regenerate report.
+Riset tetap pada framing **"Eliminating Human Bottleneck in Low-Resource Hate Speech Annotation"** untuk paper JINITA Sinta 2 + dataset/codebook HKI. **Pilot #1 SELESAI** (rerun setelah patch max_tokens berhasil: Kimi empty 98→11, DeepSeek 5→0). Report final **gate GREEN** (refusal 0.3%, JSON valid 94%, α=1.000) — **TAPI α=1.000 degenerate**: ketiga LLM melabeli semua 100 sampel `hate=false`/BUK karena sumber FineWeb2 `jav_Latn` nyaris tanpa ujaran kebencian. Jadi C2 (refusal) ✅ + C1 (JSON valid) sebagian ✅, tapi **C3 (multi-LLM agreement pada hate asli) BELUM terjawab**. Next action: **dapatkan sumber Jawa yang benar-benar mengandung hate** untuk uji agreement bermakna (menyatu dengan Pilot #2 filter + data sourcing).
 
 ---
 
@@ -24,45 +24,38 @@ Riset tetap pada framing **"Eliminating Human Bottleneck in Low-Resource Hate Sp
 
 ## Status Terbaru
 
-Yang sudah selesai:
-- Dependency `datasets` dan `pandas` sudah terpasang di `.venv`.
-- OSCAR-2301 ternyata **gated** di Hugging Face, tidak bisa diakses tanpa autentikasi.
-- Pilot #1 dipatch agar fallback ke `HuggingFaceFW/fineweb-2`, config `jav_Latn`.
-- Sampel 100 teks berhasil dibuat di `experiments/pilot01_llm_characterization/outputs/pilot01_samples.json`.
-- 300 call awal selesai, tersimpan di `outputs/pilot01_responses.jsonl`.
-- `report.md` awal sudah dibuat.
+Pilot #1 SELESAI (2026-05-25, di komputer kantor baru). Report final di `experiments/pilot01_llm_characterization/report.md`.
 
-Temuan penting:
-- Log berisi 302 record, bukan 300, karena ada 2 duplikasi dari proses resume timeout.
-- Tidak ada API error dan refusal rate 0%.
-- Banyak output kosong dengan `finish_reason='length'`: Kimi 98 record, DeepSeek 5 record.
-- Report awal memberi gate RED karena JSON validity rendah, tetapi ini **kemungkinan besar artefak `max_tokens` terlalu kecil**, bukan bukti LLM gagal memahami task.
+Hasil deduped (100 sampel × 3 LLM):
+- DeepSeek: refusal 1%, JSON valid 97%, 20s/call, $0.31
+- Grok: refusal 0%, JSON valid 100%, 11s/call, $0.20 (paling efisien)
+- Kimi: refusal 0%, JSON valid 85%, **91s/call, 260K out-tok, $0.35** (reasoning model, mahal+lambat, 11/100 masih kosong walau max_tokens=4096)
+- Total cost $0.85, runtime 2j32m.
 
-Patch yang sudah dibuat tetapi belum rerun:
-- `src/llm_clients.py`: `max_tokens` DeepSeek dinaikkan ke 2048, Kimi ke 4096.
-- `experiments/pilot01_llm_characterization/run_pilot.py`: resume sekarang hanya menganggap record selesai kalau `raw_text` tidak kosong atau ada `error`; output kosong akan di-retry.
-- `experiments/pilot01_llm_characterization/analyze.py`: deduplicate `(source_id, vendor)` dan print ASCII-safe untuk Windows console.
+Gate GREEN: refusal 0.3% (<20%), JSON valid 94% (>90%), α=1.000 (>0.5).
+
+**⚠️ CAVEAT KRITIS — jangan dibaca bulat-bulat:**
+- α=1.000 itu **degenerate**: ketiga LLM melabeli SEMUA 100 sampel `hate=false`/BUK. Setuju sempurna karena sumber FineWeb2 `jav_Latn` (fallback dari OSCAR yang gated) nyaris tidak mengandung hate — mayoritas teks web/Wikipedia/promosi.
+- Yang terkonfirmasi real: C2 (refusal bukan blocker) + C1 sebagian (LLM bisa hasilkan JSON taksonomi valid).
+- Yang BELUM terjawab: C3 (apakah multi-LLM consensus bekerja pada hate ASLI). α ini tidak bisa dipakai untuk klaim consensus.
+
+Patch yang sudah final dan ter-commit:
+- `src/llm_clients.py`: max_tokens DeepSeek 2048, Kimi 4096.
+- `run_pilot.py`: resume retry record kosong (done = ada raw_text atau error).
+- `analyze.py`: dedup `(source_id, vendor)` keep-last (retry menang), print ASCII-safe.
+
+Catatan dedup: rerun meng-APPEND record baru (responses.jsonl punya 300 unik tapi ~106 baris duplikat untuk Kimi/DeepSeek yang di-retry). `analyze.py` dedup keep-last sudah benar memilih retry yang valid.
 
 ---
 
 ## Next Concrete Action
 
-Jalankan ulang resume Pilot #1:
+Pilot #1 tidak perlu di-rerun lagi. Open question utama: **uji agreement (C3) pada konten yang benar-benar hate.** Opsi (diskusikan dengan user):
+1. **Cari/sumber dump Jawa yang lebih "panas"** (komentar sosmed, forum) — bukan korpus web bersih seperti FineWeb2. Ini prasyarat agar α bermakna.
+2. **Pilot #2 (LLM-as-Jawa-filter)** — sekalian filter Jawa-vs-non dan bisa di-arahkan ke sumber yang lebih mungkin mengandung hate.
+3. **Vendor decision:** pertimbangkan apakah Kimi K2.6 layak di bulk pipeline (mahal/lambat/15% gagal) atau dipakai hanya untuk triangulasi sampel kecil.
 
-```powershell
-.venv\Scripts\python.exe experiments\pilot01_llm_characterization\run_pilot.py
-.venv\Scripts\python.exe experiments\pilot01_llm_characterization\analyze.py
-```
-
-Ekspektasi:
-- Skrip akan skip record yang sudah valid.
-- Skrip akan retry record kosong, terutama Kimi dan sebagian DeepSeek.
-- Setelah itu baca ulang `report.md`; baru tentukan GREEN/YELLOW/RED.
-
-Kalau Kimi masih kosong setelah `max_tokens=4096`, next debug:
-- cek apakah provider butuh parameter khusus untuk reasoning output,
-- turunkan prompt verbosity khusus Kimi,
-- atau jalankan Pilot #1 analysis sementara dengan DeepSeek + Grok saja sebagai diagnostic, bukan keputusan final.
+Belum ada keputusan final di antara opsi ini — user yang pilih arah.
 
 ---
 
