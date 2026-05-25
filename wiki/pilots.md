@@ -11,7 +11,7 @@ Cross-ref: [`STATE.md` Next milestones](../STATE.md), [`STATE.md` Challenges Log
 | Pilot | Topik | Status | Estimated cost | User effort | Folder |
 |---|---|---|---|---|---|
 | **#1** | LLM characterization (3 LLM × 100 sampel Jawa) | ✅ DONE 2026-05-25 — gate GREEN (lihat caveat) | $0.85 actual | 0 jam | [`pilot01_llm_characterization/`](../experiments/pilot01_llm_characterization/) |
-| **#2** | LLM-as-Jawa-filter + ekstrak subset Jawa-panas | ⏳ RUNNING 2026-05-25 | ~$0.05 | 0 jam | [`pilot02_llm_jawa_filter/`](../experiments/pilot02_llm_jawa_filter/) |
+| **#2** | LLM-as-Jawa-filter + ekstrak subset Jawa-panas | ✅ DONE 2026-05-25 — yield 9.6%, 24 hot (9 hate) | ~$0.05 | 0 jam | [`pilot02_llm_jawa_filter/`](../experiments/pilot02_llm_jawa_filter/) |
 | **#3** | Cultural prompt manual iteration v1, v2 (5-10 iter) | 📋 PLANNED | ~$2.50 | 0 jam (saya iterate) | `pilot03_cultural_prompt/` |
 | **#4** | AutoResearch loop (Karpathy pattern) | 📋 PLANNED | ~$12.5/run (bounded) | 0 jam (overnight agent) | [`pilot04_autoresearch_prompts/`](../experiments/pilot04_autoresearch_prompts/) |
 
@@ -65,7 +65,17 @@ Cross-ref: [`STATE.md` Next milestones](../STATE.md), [`STATE.md` Challenges Log
 
 **Output:** distribusi bahasa, yield Jawa+campuran, cross-tab × hate, `outputs/hot_jawa_subset.jsonl`.
 
-**Status:** ⏳ RUNNING. Detail: [`pilot02_llm_jawa_filter/README.md`](../experiments/pilot02_llm_jawa_filter/README.md).
+### Hasil (2026-05-25, 250 sampel)
+
+- **Filter robust:** 100% JSON valid (250/250). Kategori `lainnya` (2.8%) tepat menangkap Sunda/Melayu/Portugis → filter tidak asal-asalan.
+- **Distribusi:** jawa 0.4% (1) · campuran 9.2% (23) · indonesia 87.6% (219) · lainnya 2.8% (7).
+- **Yield Jawa+campuran = 9.6%** (24/250). Di antaranya **9 hate** (38%). → densitas hot-Jawa ≈ 3.6% dari dump Indonesia.
+- **Temuan kunci:** Jawa "murni" nyaris nol (1 teks, "jancuk jancuk"); hate Jawa sosmed **didominasi code-mixed** → **memvalidasi keputusan menerima code-mixed sebagai scope** secara empiris.
+- Subset panas tersimpan: `outputs/hot_jawa_subset.jsonl` (24 teks).
+
+**Implikasi:** 24 teks (9 hate) cukup untuk C3 re-test PERTAMA (non-degenerate, α akan punya variasi label), tapi tipis untuk angka robust. Untuk pool lebih besar: scale filter ke lebih banyak baris haipradana (~12.7K → estimasi ~460 hot-Jawa).
+
+**Status:** ✅ DONE. Detail: [`pilot02_llm_jawa_filter/README.md`](../experiments/pilot02_llm_jawa_filter/README.md), report: [`report.md`](../experiments/pilot02_llm_jawa_filter/report.md).
 
 ---
 

@@ -27,6 +27,8 @@ Format: `YYYY-MM-DD | OP | sumber/trigger | entities-touched | summary`
 | session-start | QUERY | User "lanjutkan?" pada fresh office machine | HANDOFF.md, STATE.md, wiki/index.md (read) | Pickup: Pilot #1 patch committed tapi rerun belum dijalankan. Blocker: fresh machine tanpa `.env`/`.venv`. |
 | setup | INGEST | Fresh office machine | .venv rebuilt, .env disediakan user (3 keys) | venv + deps reinstall; connectivity 3/3 ✅. Data/kode/output sudah dari Git. |
 | **pilot1-rerun** | **INGEST** | Rerun resume Pilot #1 setelah patch max_tokens | **experiments/pilot01_*/outputs/, report.md, wiki/pilots.md, STATE.md, HANDOFF.md** | Rerun 2j32m. Kimi empty turun 98→11, DeepSeek 5→0. **Gate GREEN** (refusal 0.3%, valid 94%, α=1.000) **tapi α degenerate** (semua sampel BUK; FineWeb2 nyaris tanpa hate). C2 ✅, C1 sebagian ✅, C3 belum terjawab. Kimi mahal/lambat. |
+| data-strategy | INGEST | User "cari sumber data panas" + survei HF/web | wiki/pilots.md #2, README pilot02 | Tak ada korpus hate Jawa siap-unduh. Keputusan: filter dump hate Indonesia → subset Jawa/code-mixed, terima code-mixed scope. Flag novelty (dataset Jawa sudah ada) untuk PRD. |
+| **pilot2-done** | **INGEST** | Pilot #2 LLM-as-Jawa-filter (Grok, 250 tweet haipradana) | **prompts/jawa_filter_v0.md, experiments/pilot02_*/, wiki/pilots.md, STATE.md, HANDOFF.md** | Filter 100% valid; yield Jawa+campuran 9.6% (24, 9 hate); `lainnya` tepat tangkap Sunda/Melayu/Portugis. Jawa murni ~nol → code-mixed scope tervalidasi. `hot_jawa_subset.jsonl` siap untuk C3 re-test. |
 
 ---
 
