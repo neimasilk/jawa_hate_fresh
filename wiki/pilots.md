@@ -11,7 +11,7 @@ Cross-ref: [`STATE.md` Next milestones](../STATE.md), [`STATE.md` Challenges Log
 | Pilot | Topik | Status | Estimated cost | User effort | Folder |
 |---|---|---|---|---|---|
 | **#1** | LLM characterization (3 LLM × 100 sampel Jawa) | ✅ DONE 2026-05-25 — gate GREEN (lihat caveat) | $0.85 actual | 0 jam | [`pilot01_llm_characterization/`](../experiments/pilot01_llm_characterization/) |
-| **#2** | LLM-as-Jawa-filter (vs langid baseline) | 📋 PLANNED | ~$0.30 | 0 jam | `pilot02_llm_jawa_filter/` |
+| **#2** | LLM-as-Jawa-filter + ekstrak subset Jawa-panas | ⏳ RUNNING 2026-05-25 | ~$0.05 | 0 jam | [`pilot02_llm_jawa_filter/`](../experiments/pilot02_llm_jawa_filter/) |
 | **#3** | Cultural prompt manual iteration v1, v2 (5-10 iter) | 📋 PLANNED | ~$2.50 | 0 jam (saya iterate) | `pilot03_cultural_prompt/` |
 | **#4** | AutoResearch loop (Karpathy pattern) | 📋 PLANNED | ~$12.5/run (bounded) | 0 jam (overnight agent) | [`pilot04_autoresearch_prompts/`](../experiments/pilot04_autoresearch_prompts/) |
 
@@ -53,17 +53,19 @@ Cross-ref: [`STATE.md` Next milestones](../STATE.md), [`STATE.md` Challenges Log
 
 ---
 
-## Pilot #2 — LLM-as-Jawa-filter
+## Pilot #2 — LLM-as-Jawa-filter + ekstrak subset Jawa-panas
 
-**Tujuan:** Test apakah LLM (atau salah satu dari 3 vendor) bisa filter Jawa-vs-non-Jawa lebih reliable dari langid pada raw dump.
+**Tujuan ganda:** (1) test apakah LLM bisa filter Jawa/code-mixed dari dump Indonesia; (2) **memecahkan blocker C3 Pilot #1** — ekstrak teks Jawa yang benar-benar mengandung hate (Pilot #1 α degenerate karena FineWeb2 nyaris tanpa hate).
 
-**Motivasi:** langid Jawa false-positive tinggi (Jawa low-resource). Kalau LLM bisa filter accurate → pipeline cascade bisa pakai LLM untuk filter, bukan langid.
+**Motivasi:** langid Jawa false-positive tinggi (low-resource). Kalau LLM akurat → pipeline pakai LLM filter, bukan langid.
 
-**Sample:** Mixed pool ~200 sampel dari OSCAR (`id` + `jv` + multilingual web crawl).
+**Strategi data (keputusan 2026-05-25):** tidak ada korpus hate Jawa siap-unduh (UI/WCSE 2021 hanya di paper). Maka **filter dump hate Indonesia (`haipradana`) → ekstrak subset Jawa/code-mixed**, RAW TEXT saja (label asli tak dipakai sbg label pipeline), dan **terima code-mixed sebagai scope sah**. Konsisten dengan metodologi fully-LLM + public dumps. ⚠️ Implikasi novelty di-flag (lihat README Pilot #2 + perlu update PRD).
 
-**Metric:** Akurasi LLM filter (binary Jawa-vs-non) vs ground truth (langid + manual validation kecil kalau perlu).
+**Setup:** 250 sampel (seed 42) dari haipradana, anonimisasi, filter via Grok 4.3 (`prompts/jawa_filter_v0.md`). Smoke test 4 contoh ✅ (jawa/krama/campuran/indonesia terbedakan benar, tidak tertipu kata gaul).
 
-**Status:** PLANNED. Folder belum dibuat.
+**Output:** distribusi bahasa, yield Jawa+campuran, cross-tab × hate, `outputs/hot_jawa_subset.jsonl`.
+
+**Status:** ⏳ RUNNING. Detail: [`pilot02_llm_jawa_filter/README.md`](../experiments/pilot02_llm_jawa_filter/README.md).
 
 ---
 

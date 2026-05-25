@@ -1,13 +1,23 @@
 # HANDOFF - Ujaran Kebencian Jawa
 
-**Last updated:** 2026-05-25, setelah Pilot #1 selesai (rerun + report final).
+**Last updated:** 2026-05-25, sore — Pilot #1 selesai, Pilot #2 sedang berjalan.
 **Tujuan:** sesi baru langsung tahu status terbaru, blocker, dan next action.
+
+**Cara mulai besok:** cukup bilang **"lanjut"**. Agent: baca CLAUDE.md → HANDOFF.md (ini) → wiki/index.md → STATE.md, lalu kerjakan "Next Concrete Action" di bawah.
 
 ---
 
 ## TL;DR
 
-Riset tetap pada framing **"Eliminating Human Bottleneck in Low-Resource Hate Speech Annotation"** untuk paper JINITA Sinta 2 + dataset/codebook HKI. **Pilot #1 SELESAI** (rerun setelah patch max_tokens berhasil: Kimi empty 98→11, DeepSeek 5→0). Report final **gate GREEN** (refusal 0.3%, JSON valid 94%, α=1.000) — **TAPI α=1.000 degenerate**: ketiga LLM melabeli semua 100 sampel `hate=false`/BUK karena sumber FineWeb2 `jav_Latn` nyaris tanpa ujaran kebencian. Jadi C2 (refusal) ✅ + C1 (JSON valid) sebagian ✅, tapi **C3 (multi-LLM agreement pada hate asli) BELUM terjawab**. Next action: **dapatkan sumber Jawa yang benar-benar mengandung hate** untuk uji agreement bermakna (menyatu dengan Pilot #2 filter + data sourcing).
+Riset tetap pada framing **"Eliminating Human Bottleneck in Low-Resource Hate Speech Annotation"** untuk paper JINITA Sinta 2 + dataset/codebook HKI.
+
+**Pilot #1 SELESAI** — gate GREEN (refusal 0.3%, JSON valid 94%, α=1.000) **TAPI α degenerate**: semua 100 sampel dilabeli `hate=false`/BUK karena sumber FineWeb2 `jav_Latn` nyaris tanpa hate. C2 ✅ + C1 sebagian ✅, tapi **C3 (multi-LLM agreement pada hate asli) BELUM terjawab**.
+
+**Keputusan strategi data (2026-05-25):** survei menemukan tidak ada korpus hate Jawa siap-unduh (dataset UI/WCSE 2021 cuma di paper). Maka: **filter dump hate Indonesia (`haipradana`) → ekstrak subset Jawa/code-mixed**, terima code-mixed sebagai scope sah. Ini sekaligus prototipe Pilot #2 + memecahkan blocker C3.
+
+**Pilot #2 SEDANG BERJALAN** (LLM-as-Jawa-filter, Grok, 250 tweet). Smoke test 4 contoh ✅. Begitu selesai → ekstrak `hot_jawa_subset.jsonl` → re-test C3 di subset itu.
+
+**⚠️ Flag novelty (butuh keputusan Bapak):** dataset hate Jawa SUDAH pernah dibuat orang lain → klaim "dataset from-scratch" perlu disandarkan ulang ke pipeline fully-automated + taksonomi kultural lebih dalam + zero-human. **PRD belum diubah** — menunggu keputusan Bapak.
 
 ---
 
@@ -50,12 +60,25 @@ Catatan dedup: rerun meng-APPEND record baru (responses.jsonl punya 300 unik tap
 
 ## Next Concrete Action
 
-Pilot #1 tidak perlu di-rerun lagi. Open question utama: **uji agreement (C3) pada konten yang benar-benar hate.** Opsi (diskusikan dengan user):
-1. **Cari/sumber dump Jawa yang lebih "panas"** (komentar sosmed, forum) — bukan korpus web bersih seperti FineWeb2. Ini prasyarat agar α bermakna.
-2. **Pilot #2 (LLM-as-Jawa-filter)** — sekalian filter Jawa-vs-non dan bisa di-arahkan ke sumber yang lebih mungkin mengandung hate.
-3. **Vendor decision:** pertimbangkan apakah Kimi K2.6 layak di bulk pipeline (mahal/lambat/15% gagal) atau dipakai hanya untuk triangulasi sampel kecil.
+**Langkah 1 — selesaikan Pilot #2 (kalau belum):**
+```powershell
+.venv\Scripts\python.exe experiments\pilot02_llm_jawa_filter\run_filter.py
+.venv\Scripts\python.exe experiments\pilot02_llm_jawa_filter\analyze.py
+```
+- `run_filter.py` resume-aware: kalau run sore tadi terputus, ini lanjut dari yang belum selesai (cek `outputs/pilot02_responses.jsonl`, target 250 baris unik).
+- `analyze.py` hasilkan `report.md` + `outputs/hot_jawa_subset.jsonl` (subset Jawa+campuran).
+- **Baca yield:** berapa % Jawa+campuran, berapa yang berlabel hate. Ini menentukan langkah 2.
 
-Belum ada keputusan final di antara opsi ini — user yang pilih arah.
+**Langkah 2 — re-test C3 (kalau yield memadai, mis. >=40 teks Jawa-panas):**
+- Jalankan karakterisasi 3-LLM (DeepSeek+Grok+Kimi) seperti Pilot #1 TAPI input dari `hot_jawa_subset.jsonl`, bukan FineWeb2.
+- Hitung ulang Krippendorff's alpha. Kali ini ada hate beneran -> alpha tidak lagi degenerate -> C3 baru terjawab.
+- (Belum ada script khusus; adaptasi `pilot01/run_pilot.py` agar baca dari hot_jawa_subset, atau buat runner kecil baru.)
+
+**Langkah 3 — keputusan framing (perlu Bapak):** putuskan reframe novelty di PRD (lihat flag di TL;DR). Jangan diam-diam ubah PRD; angkat ke Bapak.
+
+**Kalau yield Pilot #2 terlalu kecil:** pertimbangkan sumber lain (dump sosmed Indonesia lebih besar) atau kontak penulis dataset Jawa UI/WCSE 2021.
+
+**Catatan vendor (Pilot #1):** Kimi K2.6 mahal+lambat (91s, 260K out-tok, 11% gagal). Untuk re-test C3 sampel kecil masih OK; bulk pipeline nanti pertimbangkan drop/batasi Kimi.
 
 ---
 
