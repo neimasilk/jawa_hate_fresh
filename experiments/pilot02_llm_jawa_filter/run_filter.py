@@ -38,7 +38,10 @@ LOG_PATH = OUT_DIR / "pilot02_responses.jsonl"
 PROMPT_PATH = _ROOT / "prompts" / "jawa_filter_v0.md"
 
 DATASET = "haipradana/indonesian-twitter-hate-speech-cleaned"
-N_SAMPLE = 250
+# 2026-06-08 scale-up: 250 -> 2000 untuk pool hot-Jawa lebih besar (C3 robust,
+# CI sempit). Seed sama -> 250 pertama identik -> resume skip otomatis, hanya
+# proses ~1750 baris baru. Yield ~9.6% Jawa+campuran -> estimasi ~168 teks.
+N_SAMPLE = 2000
 SEED = 42
 
 _MENTION = re.compile(r"@\w+")

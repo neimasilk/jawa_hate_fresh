@@ -19,6 +19,7 @@ Pipeline:
 from __future__ import annotations
 
 import json
+import os
 import sys
 import time
 from datetime import datetime, timezone
@@ -40,6 +41,19 @@ INPUT_PATH = ROOT / "experiments" / "pilot02_llm_jawa_filter" / "outputs" / "hot
 OUTPUT_DIR = Path(__file__).resolve().parent / "outputs"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 OUT_PATH = OUTPUT_DIR / "c3_responses.jsonl"
+
+# Vendor mix C3. Default 3-LLM (klaim paper "cross-LLM consistency", D8).
+# Override via env C3_VENDORS="deepseek,grok" untuk run cepat tanpa Kimi
+# (Kimi K2.6 ~115s/call + validity 62.5% -> bottleneck untuk pool besar;
+# sensitivitas drop-Kimi dilaporkan di analyze.py, jadi 2-LLM = pelengkap sah).
+# Resume-aware: run_c3 append, dedup keep-last di analyze. Menjalankan ulang
+# dengan input lebih besar (hot_jawa_subset di-scale Pilot #2) akan otomatis
+# memproses source_id baru saja.
+_ALL_VENDORS = {
+    "deepseek": call_deepseek,
+    "grok": call_grok,
+    "kimi": call_kimi,
+}
 
 
 def load_hot_subset() -> list[dict]:
@@ -84,11 +98,10 @@ def main() -> None:
     if done:
         print(f"Resume mode: {len(done)} (sample, vendor) pairs already logged", flush=True)
 
-    vendors = [
-        ("deepseek", call_deepseek),
-        ("grok", call_grok),
-        ("kimi", call_kimi),
-    ]
+    sel = os.environ.get("C3_VENDORS")
+    names = [s.strip() for s in sel.split(",")] if sel else list(_ALL_VENDORS)
+    vendors = [(n, _ALL_VENDORS[n]) for n in names if n in _ALL_VENDORS]
+    print(f"Vendors C3: {', '.join(n for n, _ in vendors)}", flush=True)
 
     total_calls = len(samples) * len(vendors)
     pbar = tqdm(total=total_calls, desc="LLM calls")
