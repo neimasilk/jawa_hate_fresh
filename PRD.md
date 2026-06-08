@@ -1,15 +1,15 @@
 # PRD — Ujaran Kebencian Jawa: Fully Automated LLM Pipeline
 
 **Document type:** Product Requirement Document (research project)
-**Version:** 0.2 (post-pivot 2026-05-07)
-**Last updated:** 2026-05-07
+**Version:** 0.3 (novelty reframe 2026-06-08)
+**Last updated:** 2026-06-08
 **Owner:** Mukhlis Amien
 **Coauthors:** Yekti Asmoro Kanthi, Daniel Rudiaman Sijabat (semua UBHINUS)
 **Target:** 1 paper **Sinta 2 (JINITA)** + 1 dataset HKI + 1 codebook HKI
 
 ---
 
-## 0. Decisions Log (2026-05-07)
+## 0. Decisions Log (2026-05-07, updated 2026-06-08)
 
 Sesi Claude Code 2026-05-07 menghasilkan pivot framing besar — section di PRD ini (terutama §4.2 NEIL) **superseded** oleh decisions berikut, akan di-rewrite penuh setelah pilot eksperimen #1 selesai:
 
@@ -24,6 +24,8 @@ Sesi Claude Code 2026-05-07 menghasilkan pivot framing besar — section di PRD 
 | D7 | **Data scope** | Target tentative 10K, dengan gate di 3K (re-evaluate berdasarkan eksperimen). Pivot dari "anotator burden" jadi "LLM cost + quality threshold". |
 | D8 | **Validation strategy (default)** | Cross-LLM consistency (Claude + GPT-4o + DeepSeek), Krippendorff's α antar-LLM, adversarial perturbation testing, XAI (LIME/SHAP). Zero human gold subset (kecuali fallback aktif). |
 | D9 | **Riset = exploratory** | Decisions methodologis bisa berubah berdasarkan eksperimen. Detail blueprint a priori → minimum. Pilot dulu, blueprint setelahnya. Dokumentasi tantangan + lessons-learned sambil jalan = potential kontribusi paper. |
+| D13 | **Data strategy: code-mixed via dump Indonesia** (2026-05-25) | Tidak ada korpus hate Jawa siap-unduh → filter dump hate Indonesia (`haipradana`) via LLM → ekstrak subset Jawa/code-mixed. **Code-mixed = scope sah** (tervalidasi Pilot #2: Jawa murni ~nol di sosmed, hate Jawa real didominasi code-mixed). |
+| D14 | **Novelty reframe** (2026-06-08) | Dataset hate Jawa SUDAH pernah dibuat (UI/WCSE 2021, tidak di-release). Klaim "dataset pertama/from-scratch" DITINGGALKAN. Novelty utama = (1) **pipeline fully-automated zero-human**, (2) **taksonomi kultural 4-dimensi register-aware**, (3) **code-mixed realism**. Dataset tetap deliverable — bisa disebut "first *publicly released*" sebagai fakta sekunder, bukan klaim utama. |
 
 **Catatan:** Section 4.2 (NEIL) di bawah ini **legacy**, akan di-rewrite penuh setelah pilot. Baca sebagai konteks historis pre-pivot.
 
@@ -62,20 +64,20 @@ Empat alasan struktural kenapa dataset/codebase translasi tidak bisa di-fix deng
 ### 2.1 Primary goals
 
 - **G1.** Develop **Cultural Taxonomy** ujaran kebencian Bahasa Jawa dalam 4 dimensi (target group, severity, register, form) — di-release sebagai codebook formal
-- **G2.** Develop **NEIL (Native-Expert-in-the-Loop) Annotation Protocol** — kontribusi metodologis untuk skenario single domain-native expert
-- **G3.** Build **dataset** ujaran kebencian Jawa from-scratch (target 5K-10K instance) — multi-platform, multi-region, anonimized, properly licensed
+- **G2.** Develop **fully-automated LLM annotation pipeline** (zero human; per D1, menggantikan NEIL) — kontribusi metodologis untuk low-resource hate speech annotation
+- **G3.** Build **dataset** ujaran kebencian Jawa **code-mixed** (target 5K-10K instance; per D13-D14: release publik pertama, bukan klaim "dataset pertama") — anonimized, properly licensed
 - **G4.** Train + report **baseline models** sebagai *characterization* dataset baru (bukan untuk dibandingkan dengan paper lain)
-- **G5.** Submit **paper Sinta 1** dengan tiga pilar di atas sebagai kontribusi
+- **G5.** Submit **paper Sinta 2 (JINITA, per D3)** dengan tiga pilar di atas sebagai kontribusi
 
 ### 2.2 Success criteria
 
 | Goal | Success metric |
 |------|----------------|
 | G1 | Codebook 4-dimensi published sebagai supplementary; reviewer apresiasi cultural specificity |
-| G2 | NEIL protocol fully documented; intra-rater κ > 0.7; external verifier κ subset reported |
+| G2 | Pipeline fully documented + reproducible; cross-LLM Krippendorff's α > 0.5 pada data hate asli; adversarial perturbation + XAI reported (per D8) |
 | G3 | Dataset ≥ 5K instance; per-category balance memadai; release Hugging Face + Zenodo dengan DOI |
 | G4 | Baseline F1 macro per kategori reported; per-register breakdown shown; error analysis register-aware vs register-blind |
-| G5 | Paper accepted (atau revise & resubmit) di jurnal Sinta 1 list |
+| G5 | Paper accepted (atau revise & resubmit) di JINITA / jurnal Sinta 2 list |
 
 ---
 

@@ -1,6 +1,6 @@
 # Decisions Log
 
-_Last touched: 2026-05-07 saat wiki creation. Source-of-truth untuk decision rationale._
+_Last touched: 2026-06-08 (D13 retroaktif + D14 novelty reframe). Source-of-truth untuk decision rationale._
 
 Cross-ref: [`PRD.md` §0](../PRD.md) (kanonik), [STATE.md sesi log](../STATE.md), [memory project files](../../.claude/projects/C--Users-Mukhlis-Amien-Documents-ujaran-kebencian-jawa-fresh/memory/MEMORY.md).
 
@@ -157,6 +157,35 @@ Semua OpenAI-compatible API → code simpler (1 SDK + 3 base_url).
 **Decision:** Adopsi pattern Karpathy LLM Wiki (Apr 2026 gist) untuk struktur dokumentasi proyek. User fokus baca `wiki/`, agent maintain.
 
 **Rationale:** Match dengan user preference "saya fokusnya hanya melihat wiki, kamu yg mengatur". Lean version: 6 file (SCHEMA, index, log, decisions, pilots, glossary). Expand sesuai pattern incremental kalau butuh.
+
+---
+
+## D13 — Data strategy: code-mixed via dump hate Indonesia
+
+**Date:** 2026-05-25 (dinomori retroaktif 2026-06-08)
+**Decision:** Tidak ada korpus hate Jawa siap-unduh (survei: dataset UI/WCSE 2021 cuma di paper, tidak di-release). Maka: **filter dump hate Indonesia (`haipradana`, ~12.7K tweet) via LLM → ekstrak subset Jawa/code-mixed**. Code-mixed diterima sebagai scope sah.
+
+**Rationale:** Pilot #2 memvalidasi empiris: Jawa murni nyaris nol di sosmed (1/250), hate Jawa real didominasi code-mixed. Insisting "ngoko/krama murni" akan bias jauh dari realita.
+
+**Konsekuensi:** Pipeline D6 di-refine: `dump hate Indonesia → LLM filter Jawa/code-mixed → LLM full-taxonomy label → ...`. Yield rendah (~9.6% Jawa+campuran, ~3.6% hot) → pool besar butuh filter banyak baris.
+
+**See also:** [pilots.md Pilot #2](pilots.md), STATE.md Challenges Log C4 + C-scope.
+
+---
+
+## D14 — Novelty reframe: pipeline + taksonomi, bukan "dataset pertama"
+
+**Date:** 2026-06-08
+**Decision:** Klaim "dataset from-scratch / pertama" **DITINGGALKAN** (dataset hate Jawa sudah pernah dibuat: UI/WCSE 2021). Novelty utama paper di-reframe ke tiga pilar:
+1. **Pipeline fully-automated zero-human** (eliminating human bottleneck)
+2. **Taksonomi kultural 4-dimensi register-aware** (lebih dalam dari prior work)
+3. **Code-mixed realism** (grounded di realita sosmed, bukan Jawa murni idealisasi)
+
+Dataset tetap deliverable (HKI + release HF/Zenodo) — boleh disebut "first *publicly released* Javanese hate speech dataset" sebagai fakta sekunder, bukan klaim utama.
+
+**Rationale:** User pilih opsi "reframe ke pipeline+taksonomi" (paling defensible ke reviewer; klaim "pertama" rawan ditembak). Pilot #2 memberi bukti empiris untuk pilar 3.
+
+**Konsekuensi:** PRD v0.3: G2 (NEIL → pipeline), G3 (from-scratch → code-mixed + publicly-released), G5 (Sinta 1 → Sinta 2 JINITA, sinkron D3). Paper introduction tetap cite story mahasiswa cheating sebagai motivasi pilar 1.
 
 ---
 
