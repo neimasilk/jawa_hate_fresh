@@ -39,6 +39,7 @@ Format: `YYYY-MM-DD | OP | sumber/trigger | entities-touched | summary`
 | session-start | QUERY | User "lanjutkan" | CLAUDE.md, HANDOFF.md, wiki/index.md, STATE.md (read) | Pickup: Next Concrete Action = Opsi A (C3 re-test di hot_jawa_subset 24 teks). Connectivity 3/3 ✅, run launched background. |
 | **novelty-reframe** | **INGEST** | User decision: reframe novelty (opsi recommended) | **PRD.md (v0.3: D13+D14 di §0, G2/G3/G5 sinkron), wiki/decisions.md (D13 retroaktif + D14), wiki/index.md** | D14: klaim "dataset pertama" ditinggalkan → novelty = pipeline zero-human + taksonomi register-aware + code-mixed realism. D13 (data strategy 2026-05-25) dinomori retroaktif. |
 | pilot1b-launch | INGEST | C3 re-test (Opsi A HANDOFF) | experiments/pilot01b_c3_retest/ (run_c3.py + analyze.py + README) | Runner baru: 24 teks × 3 LLM, prompt v0 sama (atribusi beda hasil ke DATA), + α severity + bootstrap CI + majority-vs-orig_label. |
+| **pilot1b-done** | **INGEST** | Run C3 selesai (72 call, $0.26, ~50 mnt) | **experiments/pilot01b_c3_retest/report.md + outputs/, STATE.md, HANDOFF.md, wiki/pilots.md** | **α hate=0.384 NON-DEGENERATE** (CI [0.01,0.70]), severity 0.376. Pairwise deepseek-grok 80%. Kimi noise utama (validity 62.5%, drop→α 0.48). Gate YELLOW. C3 terjawab (consensus moderat). Tambah sensitivitas drop-1-vendor ke analyze.py. Next: scale filter pool besar untuk CI sempit. |
 
 ---
 

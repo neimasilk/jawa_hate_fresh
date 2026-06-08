@@ -182,6 +182,25 @@ def main() -> None:
     alpha_sev = krippendorff_alpha_nominal(units_severity)
     alpha_sev_ci = bootstrap_alpha_ci(units_severity)
 
+    # Sensitivity: drop Kimi (Pilot #1 menandai Kimi mahal+lambat+validity rendah).
+    # Kalau alpha naik signifikan tanpa Kimi -> Kimi sumber noise utama, relevan
+    # untuk seleksi vendor bulk pipeline.
+    alpha_drop = {}
+    for drop in vendors:
+        keep = [v for v in vendors if v != drop]
+        units_k = []
+        for sid in sids:
+            bv = by_source[sid]
+            vec = []
+            for v in keep:
+                r = bv.get(v)
+                vec.append(None if (r is None or is_refusal(r) or not is_valid_json(r)) else bool(r["parsed"].get("hate")))
+            units_k.append(vec)
+        a = krippendorff_alpha_nominal(units_k)
+        ci = bootstrap_alpha_ci(units_k)
+        npair = sum(1 for u in units_k if sum(1 for x in u if x is not None) >= 2)
+        alpha_drop[drop] = {"keep": keep, "alpha": a, "ci": ci, "n_pairable": npair}
+
     # Degeneracy check: alpha bermakna hanya kalau ada variasi label
     hate_vals = Counter(v for u in units_hate for v in u if v is not None)
     is_degenerate = len(hate_vals) < 2
@@ -273,6 +292,13 @@ def main() -> None:
     lines.append("|---|---|---|")
     for pair, m in pairwise.items():
         lines.append(f"| {pair} | {m['n_pairs']} | {m['agreement_rate']*100:.1f} |")
+    lines.append("")
+    lines.append("### Sensitivitas: alpha hate setelah drop 1 vendor")
+    lines.append("")
+    lines.append("| Drop | Keep | alpha | 95% CI | n pairable |")
+    lines.append("|---|---|---|---|---|")
+    for drop, m in alpha_drop.items():
+        lines.append(f"| {drop} | {'+'.join(m['keep'])} | {m['alpha']:.3f} | [{m['ci'][0]:.3f}, {m['ci'][1]:.3f}] | {m['n_pairable']} |")
     lines.append("")
     lines.append("## Majority vote vs label asli haipradana")
     lines.append("")

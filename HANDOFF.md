@@ -1,6 +1,6 @@
 # HANDOFF - Ujaran Kebencian Jawa
 
-**Last updated:** 2026-05-25, sore — Pilot #1 selesai, Pilot #2 sedang berjalan.
+**Last updated:** 2026-06-08 — Pilot #1b (C3 re-test) selesai + novelty reframe (D14).
 **Tujuan:** sesi baru langsung tahu status terbaru, blocker, dan next action.
 
 **Cara mulai besok:** cukup bilang **"lanjut"**. Agent: baca CLAUDE.md → HANDOFF.md (ini) → wiki/index.md → STATE.md, lalu kerjakan "Next Concrete Action" di bawah.
@@ -11,13 +11,13 @@
 
 Riset tetap pada framing **"Eliminating Human Bottleneck in Low-Resource Hate Speech Annotation"** untuk paper JINITA Sinta 2 + dataset/codebook HKI.
 
-**Pilot #1 SELESAI** — gate GREEN (refusal 0.3%, JSON valid 94%, α=1.000) **TAPI α degenerate**: semua 100 sampel dilabeli `hate=false`/BUK karena sumber FineWeb2 `jav_Latn` nyaris tanpa hate. C2 ✅ + C1 sebagian ✅, tapi **C3 (multi-LLM agreement pada hate asli) BELUM terjawab**.
+**✅ NOVELTY REFRAME (D14, 2026-06-08):** keputusan Bapak — klaim "dataset pertama/from-scratch" **DITINGGALKAN** (dataset hate Jawa sudah ada: UI/WCSE 2021, tak di-release). Novelty utama sekarang 3 pilar: (1) **pipeline fully-automated zero-human**, (2) **taksonomi kultural 4-dimensi register-aware**, (3) **code-mixed realism**. PRD sudah di-update ke v0.3 (D13 retroaktif + D14, Goals G2/G3/G5 sinkron). Dataset tetap deliverable ("first *publicly released*" = fakta sekunder, bukan klaim utama).
 
-**Keputusan strategi data (2026-05-25):** survei menemukan tidak ada korpus hate Jawa siap-unduh (dataset UI/WCSE 2021 cuma di paper). Maka: **filter dump hate Indonesia (`haipradana`) → ekstrak subset Jawa/code-mixed**, terima code-mixed sebagai scope sah. Ini sekaligus prototipe Pilot #2 + memecahkan blocker C3.
+**✅ PILOT #1b SELESAI — C3 TERJAWAB (gate YELLOW):** re-test 3-LLM (prompt v0 sama) di 24 teks hot-Jawa (Pilot #2). **α hate = 0.384 NON-DEGENERATE** (CI [0.01, 0.70]), severity 0.376. Multi-LLM consensus **bekerja moderat** pada hate Jawa asli — beda fundamental dari α=1.000 degenerate Pilot #1. Pairwise deepseek-grok **80%**. **Kimi = noise utama** (validity 62.5%, drop Kimi → α 0.48). **CI lebar (n=24) → angka belum robust, scale-up wajib sebelum klaim paper.**
 
-**Pilot #2 SELESAI** (LLM-as-Jawa-filter, Grok, 250 tweet): filter 100% valid; yield Jawa+campuran **9.6%** (24 teks, 9 hate). Jawa murni ~nol → **code-mixed scope tervalidasi empiris**. Subset panas → `experiments/pilot02_llm_jawa_filter/outputs/hot_jawa_subset.jsonl` (24 teks). Densitas hot-Jawa di dump Indonesia rendah (~3.6%) → untuk pool besar perlu filter banyak baris.
-
-**⚠️ Flag novelty (butuh keputusan Bapak):** dataset hate Jawa SUDAH pernah dibuat orang lain → klaim "dataset from-scratch" perlu disandarkan ulang ke pipeline fully-automated + taksonomi kultural lebih dalam + zero-human. **PRD belum diubah** — menunggu keputusan Bapak.
+**Konteks lama (tetap berlaku):**
+- **Pilot #1** gate GREEN tapi α degenerate (FineWeb2 nyaris tanpa hate) → sudah dipecahkan Pilot #1b.
+- **Pilot #2** (LLM-as-Jawa-filter, Grok, 250 tweet): yield Jawa+campuran 9.6% (24 hot, 9 hate). Jawa murni ~nol → code-mixed scope tervalidasi. Densitas hot-Jawa ~3.6% → pool besar perlu filter banyak baris.
 
 ---
 
@@ -60,22 +60,19 @@ Catatan dedup: rerun meng-APPEND record baru (responses.jsonl punya 300 unik tap
 
 ## Next Concrete Action
 
-Pilot #1 & #2 sudah selesai. Open question utama tetap **C3: apakah multi-LLM agreement bekerja pada hate Jawa ASLI?** Sekarang sudah ada bahan (`hot_jawa_subset.jsonl`, 24 teks, 9 hate).
+C3 sudah terjawab (YELLOW, α=0.384). Masalah inti sekarang = **CI lebar karena n=24 kecil**, bukan prompt. Maka prioritas:
 
-**Opsi A (cepat, direkomendasikan dulu) — C3 re-test di 24 teks yang sudah ada:**
-- Jalankan karakterisasi 3-LLM (DeepSeek+Grok+Kimi, prompt `cultural_classification_v0`) di `experiments/pilot02_llm_jawa_filter/outputs/hot_jawa_subset.jsonl`.
-- Hitung Krippendorff's α. Karena ada 9 hate + 15 non-hate → ada variasi label → α tidak lagi degenerate. Ini **sinyal C3 pertama** (n kecil tapi real). Murah (~72 call, ~15 mnt).
-- Belum ada script khusus; adaptasi `pilot01/run_pilot.py` agar input dari hot_jawa_subset (ganti bagian sampling), atau buat runner kecil baru.
-- **Logika:** kalau α jelek bahkan di sini, itu temuan besar — wajib tahu SEBELUM invest scale-up.
+**Opsi A (DIREKOMENDASIKAN) — scale filter haipradana → pool besar, lalu C3 ulang untuk α robust:**
+- Naikkan `N_SAMPLE` di `experiments/pilot02_llm_jawa_filter/run_filter.py` (mis. 2000-4000) atau loop seluruh haipradana (~12.7K). Estimasi yield ~460 hot-Jawa dari 12.7K. ~6s/call → jalankan background/overnight.
+- Lalu re-run `experiments/pilot01b_c3_retest/run_c3.py` (ganti INPUT_PATH ke subset besar baru, atau parametrize). α dengan n~100+ → CI jauh lebih sempit → bisa klaim C3 robust untuk paper.
+- **Hemat:** pertimbangkan **2-LLM deepseek+grok** saja (Kimi noise + mahal+lambat 115s/call). Pairwise mereka 80%, drop-Kimi α 0.48. Hemat waktu besar untuk bulk.
 
-**Opsi B (kalau mau angka robust) — scale filter dulu:**
-- Naikkan `N_SAMPLE` di `pilot02/run_filter.py` (mis. 1500-2000) atau loop seluruh haipradana (~12.7K). Estimasi yield ~460 hot-Jawa dari 12.7K. Mahal waktu (~6s/call), jalankan overnight/background. Lalu C3 re-test di pool besar.
+**Opsi B (kalau α tetap < 0.5 di pool besar) — iterasi prompt (Pilot #3):**
+- Baru relevan kalau scale-up tidak mengangkat α. Sekarang CI lebar bilang "kurang data", belum tentu "prompt jelek".
 
-**Langkah framing (perlu Bapak):** reframe novelty di PRD (dataset Jawa sudah ada → sandarkan ke pipeline fully-automated + taksonomi lebih dalam + zero-human). Jangan diam-diam ubah PRD; angkat ke Bapak. Pilot #2 sudah kasih bukti kuat untuk argumen "kontribusi = taksonomi kultural dalam + code-mixed realita", bukan "dataset pertama".
+**Inspeksi kualitatif (cepat, berguna untuk paper):** 9/15 teks orig-label `neutral` haipradana → LLM majority hate=True (umpatan Jawa `asu/ngewe/tae`). Apakah ini **sinyal kultural** (haipradana Indonesia-context melewatkan kekasaran Jawa) atau **over-flag** LLM? Inspeksi 7 disagreement di `report.md`. Ini bahan diskusi menarik untuk paper (gold haipradana bukan Jawa-aware).
 
 **Follow-up Pilot #2:** validasi filter vs langid baseline (belum dikerjakan).
-
-**Catatan vendor (Pilot #1):** Kimi K2.6 mahal+lambat (91s, 260K out-tok, 11% gagal). Untuk C3 re-test sampel kecil masih OK; bulk pipeline nanti pertimbangkan drop/batasi Kimi.
 
 ---
 

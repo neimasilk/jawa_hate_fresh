@@ -12,6 +12,7 @@ Cross-ref: [`STATE.md` Next milestones](../STATE.md), [`STATE.md` Challenges Log
 |---|---|---|---|---|---|
 | **#1** | LLM characterization (3 LLM × 100 sampel Jawa) | ✅ DONE 2026-05-25 — gate GREEN (lihat caveat) | $0.85 actual | 0 jam | [`pilot01_llm_characterization/`](../experiments/pilot01_llm_characterization/) |
 | **#2** | LLM-as-Jawa-filter + ekstrak subset Jawa-panas | ✅ DONE 2026-05-25 — yield 9.6%, 24 hot (9 hate) | ~$0.05 | 0 jam | [`pilot02_llm_jawa_filter/`](../experiments/pilot02_llm_jawa_filter/) |
+| **#1b** | C3 re-test (3 LLM × 24 teks hot-Jawa) — memecah α degenerate | ✅ DONE 2026-06-08 — **α=0.384 non-degenerate, gate YELLOW** | $0.26 | 0 jam | [`pilot01b_c3_retest/`](../experiments/pilot01b_c3_retest/) |
 | **#3** | Cultural prompt manual iteration v1, v2 (5-10 iter) | 📋 PLANNED | ~$2.50 | 0 jam (saya iterate) | `pilot03_cultural_prompt/` |
 | **#4** | AutoResearch loop (Karpathy pattern) | 📋 PLANNED | ~$12.5/run (bounded) | 0 jam (overnight agent) | [`pilot04_autoresearch_prompts/`](../experiments/pilot04_autoresearch_prompts/) |
 
@@ -76,6 +77,33 @@ Cross-ref: [`STATE.md` Next milestones](../STATE.md), [`STATE.md` Challenges Log
 **Implikasi:** 24 teks (9 hate) cukup untuk C3 re-test PERTAMA (non-degenerate, α akan punya variasi label), tapi tipis untuk angka robust. Untuk pool lebih besar: scale filter ke lebih banyak baris haipradana (~12.7K → estimasi ~460 hot-Jawa).
 
 **Status:** ✅ DONE. Detail: [`pilot02_llm_jawa_filter/README.md`](../experiments/pilot02_llm_jawa_filter/README.md), report: [`report.md`](../experiments/pilot02_llm_jawa_filter/report.md).
+
+---
+
+## Pilot #1b — C3 re-test (multi-LLM agreement pada hate Jawa asli)
+
+**Tujuan:** Memecahkan blocker C3 dari Pilot #1 (α=1.000 degenerate karena FineWeb2 nyaris tanpa hate). Re-test 3-LLM dengan prompt v0 **sama** di `hot_jawa_subset.jsonl` (Pilot #2: 24 teks Jawa code-mixed, 9 berlabel hate asli). Prompt sengaja sama → beda hasil atribusi ke **DATA**, bukan prompt.
+
+### Hasil (2026-06-08, 24 teks × 3 LLM, $0.26)
+
+| Vendor | Refusal | JSON Valid | Latency mean | Hate dist |
+|---|---|---|---|---|
+| DeepSeek V4 Pro | 8.3% | 91.7% | 23s | 14T/6F |
+| Grok 4.3 | 0% | 100% | **6s** | 20T/4F |
+| Kimi K2.6 | 0% | **62.5%** | **115s** | 7T/8F |
+
+- **Krippendorff's α (binary hate) = 0.384** (bootstrap 95% CI [0.01, 0.70]); severity α = 0.376. **NON-DEGENERATE** (41T/18F) → α bermakna, beda fundamental dari Pilot #1.
+- **Pairwise:** deepseek–grok **80%**, deepseek–kimi 69%, grok–kimi 67%.
+- **Sensitivitas drop-1-vendor:** drop Kimi → α **0.480** (keep deepseek+grok); drop Grok → 0.405; drop DeepSeek → 0.306. Kimi = penurun α terbesar.
+- **Gate YELLOW** (refusal 2.8% ✅, validity 84.7% 🟡 ditarik turun Kimi, α 0.384 < 0.5).
+- **Majority vs label haipradana:** 9/9 teks ber-orig-label `hate` → majority hate=True (recall 100% pada hate eksplisit); 9/15 `neutral` → majority hate=True (LLM lebih sensitif ke umpatan Jawa `asu/ngewe/tae` daripada anotasi Indonesia-context haipradana — bisa sinyal kultural, bisa over-flag; perlu inspeksi).
+
+**Lesson (materi paper):**
+1. **C3 terjawab: multi-LLM consensus bekerja MODERAT pada hate Jawa asli**, bukan degenerate. α 0.38–0.48 tergantung vendor mix.
+2. **Kimi K2.6 = sumber noise utama** (validity 62.5% karena reasoning-model empty, 5/7 disagreement = Kimi dissenter melabeli BUK). Menguatkan temuan vendor Pilot #1 → pertimbangkan **2-LLM deepseek+grok** untuk bulk (lebih murah, agreement 80%).
+3. **CI sangat lebar (n=24)** → angka belum robust. Masalah = ukuran sampel, bukan prompt. **Scale-up filter pool besar wajib sebelum klaim paper.**
+
+**Status:** ✅ DONE. Detail: [`pilot01b_c3_retest/README.md`](../experiments/pilot01b_c3_retest/README.md), report: [`report.md`](../experiments/pilot01b_c3_retest/report.md).
 
 ---
 
