@@ -1,6 +1,6 @@
 # Decisions Log
 
-_Last touched: 2026-06-08 (D13 retroaktif + D14 novelty reframe). Source-of-truth untuk decision rationale._
+_Last touched: 2026-06-10 (D15 vendor mix final). Source-of-truth untuk decision rationale._
 
 Cross-ref: [`PRD.md` §0](../PRD.md) (kanonik), [STATE.md sesi log](../STATE.md), [memory project files](../../.claude/projects/C--Users-Mukhlis-Amien-Documents-ujaran-kebencian-jawa-fresh/memory/MEMORY.md).
 
@@ -186,6 +186,25 @@ Dataset tetap deliverable (HKI + release HF/Zenodo) — boleh disebut "first *pu
 **Rationale:** User pilih opsi "reframe ke pipeline+taksonomi" (paling defensible ke reviewer; klaim "pertama" rawan ditembak). Pilot #2 memberi bukti empiris untuk pilar 3.
 
 **Konsekuensi:** PRD v0.3: G2 (NEIL → pipeline), G3 (from-scratch → code-mixed + publicly-released), G5 (Sinta 1 → Sinta 2 JINITA, sinkron D3). Paper introduction tetap cite story mahasiswa cheating sebagai motivasi pilar 1.
+
+---
+
+## D15 — Vendor mix final: 2-LLM deepseek+grok, Kimi dropped
+
+**Date:** 2026-06-10
+**Decision:** Pipeline cross-LLM consistency memakai **2 LLM: DeepSeek V4 Pro + Grok 4.3**. Kimi K2.6 **di-drop** dari pipeline (keputusan Bapak: "untuk kimi biarin, pakai yg ada aja").
+
+**Rationale:**
+1. **Operasional:** saldo Moonshot habis (run Kimi Pilot #3 v1 gagal 149/149 call, 429 insufficient balance).
+2. **Empiris (lebih penting):** di n=149 Kimi = penyumbang noise — validity 73.8% (vs ds 95.3% / grok 100%), 126s/call (vs 7s grok), out-token 475K (~30× grok). Keunggulannya (pairwise ds–kimi 86.1%, drop-Grok α 0.722) tidak menebus ongkos praktis untuk bulk.
+3. α tetap terukur dengan 2 rater; klaim "cross-LLM consistency" tetap valid (2 vendor independen).
+
+**Konsekuensi:**
+- Update D8 (validation strategy): consensus = deepseek+grok; baseline α pair ini di prompt v0 = **0.534** (bukan 0.587 3-LLM).
+- Data Kimi v0 n=149 TETAP dipakai di paper sebagai **sensitivity analysis 3-vs-2 vendor** (tabel drop-1-vendor) — narasi seleksi vendor berbasis data = materi metodologi.
+- Pilot #3+ eval cukup ds+grok (~50 mnt + ~$1.1/iter); tidak ada dependensi saldo Moonshot.
+
+**See also:** [pilots.md Pilot #1b + #3](pilots.md), STATE.md Challenges Log (C-vendor + ops-resume), PRD §0 D15.
 
 ---
 

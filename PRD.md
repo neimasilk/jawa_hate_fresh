@@ -9,7 +9,7 @@
 
 ---
 
-## 0. Decisions Log (2026-05-07, updated 2026-06-08)
+## 0. Decisions Log (2026-05-07, updated 2026-06-10)
 
 Sesi Claude Code 2026-05-07 menghasilkan pivot framing besar — section di PRD ini (terutama §4.2 NEIL) **superseded** oleh decisions berikut, akan di-rewrite penuh setelah pilot eksperimen #1 selesai:
 
@@ -26,6 +26,7 @@ Sesi Claude Code 2026-05-07 menghasilkan pivot framing besar — section di PRD 
 | D9 | **Riset = exploratory** | Decisions methodologis bisa berubah berdasarkan eksperimen. Detail blueprint a priori → minimum. Pilot dulu, blueprint setelahnya. Dokumentasi tantangan + lessons-learned sambil jalan = potential kontribusi paper. |
 | D13 | **Data strategy: code-mixed via dump Indonesia** (2026-05-25) | Tidak ada korpus hate Jawa siap-unduh → filter dump hate Indonesia (`haipradana`) via LLM → ekstrak subset Jawa/code-mixed. **Code-mixed = scope sah** (tervalidasi Pilot #2: Jawa murni ~nol di sosmed, hate Jawa real didominasi code-mixed). |
 | D14 | **Novelty reframe** (2026-06-08) | Dataset hate Jawa SUDAH pernah dibuat (UI/WCSE 2021, tidak di-release). Klaim "dataset pertama/from-scratch" DITINGGALKAN. Novelty utama = (1) **pipeline fully-automated zero-human**, (2) **taksonomi kultural 4-dimensi register-aware**, (3) **code-mixed realism**. Dataset tetap deliverable — bisa disebut "first *publicly released*" sebagai fakta sekunder, bukan klaim utama. |
+| D15 | **Vendor mix final: 2-LLM deepseek+grok, Kimi DROPPED** (2026-06-10, keputusan Bapak) | Update D8: cross-LLM consistency pakai **DeepSeek V4 Pro + Grok 4.3** (2 rater — α tetap terukur). Kimi K2.6 di-drop: saldo Moonshot habis DAN secara empiris penyumbang noise (validity 73.8% di n=149, 126s/call, out-token 30× grok). Data Kimi v0 n=149 TETAP dipakai di paper sebagai sensitivity analysis 3-vs-2 vendor (drop-Kimi α 0.534, drop-Grok 0.722) — narasi seleksi vendor berbasis data = materi metodologi. |
 
 **Catatan:** Section 4.2 (NEIL) di bawah ini **legacy**, akan di-rewrite penuh setelah pilot. Baca sebagai konteks historis pre-pivot.
 

@@ -11,12 +11,9 @@
 ## Protokol per iterasi
 
 1. Tulis `prompts/cultural_classification_vN.md` (perubahan TERFOKUS, 1 hipotesis per versi; dokumentasikan di tabel "Catatan iterasi" dalam file prompt).
-2. Eval di pool sama (149 teks `hot_jawa_subset.jsonl`):
+2. Eval di pool sama (149 teks `hot_jawa_subset.jsonl`). **Per D15 (2026-06-10): vendor = deepseek+grok saja** (Kimi dropped — saldo habis + noise; lihat `wiki/decisions.md`):
    ```
-   # stage cepat: pair kunci dulu (~50 mnt)
    $env:P3_PROMPT_VERSION="v1"; $env:P3_VENDORS="deepseek,grok"; .venv\Scripts\python experiments\pilot03_cultural_prompt\run_eval.py
-   # kimi menyusul (resume-aware, skip yang sudah ada; ~5 jam)
-   $env:P3_PROMPT_VERSION="v1"; $env:P3_VENDORS="kimi"; .venv\Scripts\python experiments\pilot03_cultural_prompt\run_eval.py
    ```
 3. Analisis komparatif vs baseline v0 (Pilot #1b):
    ```
@@ -25,9 +22,9 @@
    → `report_v1.md`: Δα per vendor-set, flip table per vendor (T→F vs F→T), hate-rate shift, disagreement listing.
 4. Keep/discard (threshold Δα ±0.05) → catat lesson → iterasi berikut.
 
-## Keputusan yang menunggu hasil
+## Keputusan
 
-- **Vendor mix bulk:** kalau α deepseek+grok naik mendekati/melewati α full (0.587) → 2-LLM deepseek+grok untuk bulk (tercepat+termurah+validity 97.7%). Kimi hanya triangulasi sampel.
+- **Vendor mix (D15, 2026-06-10): 2-LLM deepseek+grok FINAL.** Baseline pembanding = α ds+grok v0 **0.534**. Kimi dropped (saldo + noise); data Kimi v0 n=149 tetap jadi sensitivity analysis di paper.
 - **Catatan kontaminasi:** few-shot vN TIDAK boleh memakai teks dari pool eval 149 (semua contoh baru = sintetis analog).
 
 ## Biaya per iterasi

@@ -10,7 +10,7 @@ Catalog dari semua knowledge proyek. **Bapak baca dari sini — agent maintain s
 
 | File | Topik | Status |
 |---|---|---|
-| [decisions.md](decisions.md) | Decisions log D1-D14 + rationale | [active] |
+| [decisions.md](decisions.md) | Decisions log D1-D15 + rationale | [active] |
 | [pilots.md](pilots.md) | Index Pilot #1-#4 + status + dependencies | [active] |
 | [glossary.md](glossary.md) | Terms: NEIL, krama/ngoko, BPB, unggah-ungguh, BPE, dll | [active] |
 | [SCHEMA.md](SCHEMA.md) | Cara agent maintain wiki ini (Karpathy pattern) | [stable] |

@@ -7,9 +7,9 @@
 
 ---
 
-## ⚠️ BLOCKER USER ACTION: saldo Kimi (Moonshot) HABIS
+## ✅ D15 (2026-06-10): KIMI DROPPED — pipeline = 2-LLM deepseek+grok
 
-Run Kimi v1 Pilot #3 gagal total: 149/149 call kena **429 insufficient balance** (akun `org-fd4daff...` suspended). **Perlu Bapak top-up akun Moonshot** kalau mau triangulasi 3-LLM lanjut. Iterasi Pilot #3 TIDAK terblokir (jalan dengan deepseek+grok, pair kunci); Kimi hanya dibutuhkan untuk α 3-LLM final vs baseline 0.587. Record error sudah dibersihkan + resume logic di-patch (429 tidak dihitung done) — setelah top-up tinggal rerun `run_eval.py` dengan `P3_VENDORS=kimi`.
+Saldo Moonshot habis (run Kimi v1 gagal 149/149, 429) → keputusan Bapak: **biarkan, pakai yang ada** = deepseek+grok. Empiris mendukung (Kimi validity 73.8%, 126s/call). α tetap terukur (2 rater); data Kimi v0 n=149 tetap dipakai di paper sebagai sensitivity analysis 3-vs-2 vendor. **Baseline pembanding Pilot #3 sekarang: α ds+grok v0 = 0.534.** Detail: `wiki/decisions.md` D15.
 
 ---
 
