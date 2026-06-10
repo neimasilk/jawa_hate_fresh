@@ -38,10 +38,11 @@ LOG_PATH = OUT_DIR / "pilot02_responses.jsonl"
 PROMPT_PATH = _ROOT / "prompts" / "jawa_filter_v0.md"
 
 DATASET = "haipradana/indonesian-twitter-hate-speech-cleaned"
-# 2026-06-08 scale-up: 250 -> 2000 untuk pool hot-Jawa lebih besar (C3 robust,
-# CI sempit). Seed sama -> 250 pertama identik -> resume skip otomatis, hanya
-# proses ~1750 baris baru. Yield ~9.6% Jawa+campuran -> estimasi ~168 teks.
-N_SAMPLE = 2000
+# 2026-06-08 scale-up: 250 -> 2000. 2026-06-10 bulk (Pilot #5): 2000 -> FULL
+# (~12.7K; slicing otomatis cap di ukuran dataset). Seed sama -> baris lama
+# identik -> resume skip otomatis, hanya proses ~10.7K baris baru.
+# Yield hot ~7.5% -> estimasi pool ~950 teks.
+N_SAMPLE = 20000
 SEED = 42
 
 _MENTION = re.compile(r"@\w+")
@@ -85,7 +86,10 @@ def already_done(path: Path) -> set[str]:
             except json.JSONDecodeError:
                 continue
             raw = (rec.get("raw_text") or "").strip()
-            if rec.get("error") or raw:
+            err = rec.get("error") or ""
+            if "429" in err or "insufficient balance" in err.lower():
+                continue  # error kuota/saldo = transient, rerun harus retry
+            if err or raw:
                 done.add(rec["source_id"])
     return done
 

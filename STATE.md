@@ -1,6 +1,6 @@
 # STATE — Ujaran Kebencian Jawa (Fully LLM Pipeline)
 
-**Stage:** Pilot #1, #2, #1b, **#3 DONE** → prompt v2 + vendor mix D15 (ds+grok) FINAL: **α 0.534 → 0.763** (CI [0.624, 0.879]). Next: rancang bulk labeling ATAU codebook v0 ATAU langid baseline
+**Stage:** Pilot #1, #2, #1b, #3 DONE → **Pilot #5 BULK BERJALAN** (filter full 12.7K → label v2 ds+grok → held-out α + consensus dataset). Pipeline idempotent: `scripts\run_bulk_pipeline.ps1`
 **Last update:** 2026-06-10
 
 ---
@@ -41,7 +41,11 @@ Lihat [PRD.md §0 Decisions Log](PRD.md). Ringkas:
    - **v2** (+ slur-identitas-ke-individu = hate, Contoh 9-10): **α ds+grok = 0.763 (CI [0.624, 0.879])**, Δ+0.229 vs v0. Disagreement 36→12. **KEEP — prompt kerja untuk bulk.**
    - Stop di v2: residu 12 = ambigu genuin (meta-komentar, kutipan hate, perbandingan positif); iterasi lanjut di pool sama = overfit risk. Validasi ulang di held-out saat bulk.
    - Infra: `experiments/pilot03_cultural_prompt/` + `src/agreement.py`. Vendor: ds+grok per D15 (Kimi dropped).
-6. **Pilot #4 — AutoResearch loop (Karpathy pattern)** — automate pilot #3, scale ke 50+ variants overnight via agent autonomous loop. Bounded budget ~$12.5/run. Folder `experiments/pilot04_autoresearch_prompts/` sudah ada README + plan. Ref: `~/Documents/autoresearch/` (cloned). Potential paper angle: "AutoResearch Pattern for Cultural Prompt Engineering in Low-Resource NLP".
+6. **Pilot #5 — Bulk labeling (produksi pertama)** 🔄 STARTED 2026-06-10 malam
+   - Pipeline: filter full haipradana 12.7K (Grok, resume dari 2K lama) → pool hot-Jawa ~950 est → label prompt v2 × ds+grok (149 lama di-merge dari Pilot #3) → analisis.
+   - Deliverable: **held-out validation α** (anti-overfit), `data/labeled/bulk_v2_consensus.jsonl` (dataset v1), `bulk_v2_disagreement.jsonl` (bahan codebook), profil taksonomi.
+   - Infra: `experiments/pilot05_bulk_labeling/` + `scripts/run_bulk_pipeline.ps1` (rantai 4 step idempotent). Est total ~15-20 jam, ~$12-15.
+7. **Pilot #4 — AutoResearch loop (Karpathy pattern)** — automate pilot #3, scale ke 50+ variants overnight via agent autonomous loop. Bounded budget ~$12.5/run. Folder `experiments/pilot04_autoresearch_prompts/` sudah ada README + plan. Ref: `~/Documents/autoresearch/` (cloned). Potential paper angle: "AutoResearch Pattern for Cultural Prompt Engineering in Low-Resource NLP". (Catatan: hasil manual Pilot #3 — 2 iterasi cukup — bisa mengubah perlunya pilot ini.)
 
 ## Challenges Log
 

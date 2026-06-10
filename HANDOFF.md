@@ -76,14 +76,32 @@ Catatan dedup: rerun meng-APPEND record baru (responses.jsonl punya 300 unik tap
 
 ## Next Concrete Action
 
-**PILOT #3 SELESAI** — prompt v2 (`prompts/cultural_classification_v2.md`) = prompt kerja, α ds+grok **0.763**. Detail: `experiments/pilot03_cultural_prompt/report_v2.md` + README.
+**PILOT #5 (BULK) BERJALAN sejak 2026-06-10 malam.** Pipeline: filter full haipradana (~12.7K, Grok) → pool hot-Jawa (~950 est) → label prompt v2 × ds+grok → held-out α + consensus dataset. Detail: `experiments/pilot05_bulk_labeling/README.md`.
 
-**Pilihan arah berikutnya (decision Bapak, urutan rekomendasi):**
-1. **Rancang bulk labeling pipeline** (Pilot #5 / fase produksi): scale filter haipradana full (~12.7K) + dump lain → pool ribuan → label v2 ds+grok → consensus-filter (keep yang agree, ~92%) → simpan disagreement untuk analisis. Termasuk **held-out validation** α v2 di teks yang TIDAK dipakai iterasi prompt (jawab kekhawatiran overfit).
-2. **Codebook v0 draft** (paralel, butuh sesi Bapak ~3-5 jam weekend): residu 12 disagreement v2 (meta-komentar, kutipan hate, perbandingan positif) = bahan boundary cases codebook.
-3. **Follow-up Pilot #2:** validasi filter vs langid baseline (cepat, memperkuat klaim C4 di paper).
+**Status saat handoff:** step 1 (filter, ~10.7K call baru) berjalan background, est 8-15 jam. Step 2-4 menyusul otomatis (kalau sesi agent masih hidup) ATAU via `scripts\run_bulk_pipeline.ps1` (idempotent, lihat Panduan di bawah).
 
-**Catatan metodologis penting (materi paper):** α v1 flat (0.554) padahal label membaik nyata — prevalensi skewed menaikkan chance agreement. Selalu laporkan flip table + raw agreement bersama α.
+**Setelah bulk selesai:** baca `experiments/pilot05_bulk_labeling/report.md` — angka kunci = **α held-out** (harapan ≈ 0.763 prompt-iter; jauh di bawah 0.6 = indikasi overfit). Lalu: codebook v0 (disagreement = bahan), langid baseline, atau rancang training BERT.
+
+---
+
+## 📖 PANDUAN BAPAK — bulk run (apa yang perlu dilakukan)
+
+1. **Biarkan komputer menyala** sampai pipeline selesai (total ±15-20 jam). Matikan auto-sleep: Settings → System → Power → "Put my device to sleep: Never" (saat plugged in). Layar boleh mati, yang penting mesin tidak sleep.
+2. **Cek saldo 2 vendor** (estimasi pemakaian total ~$12-15):
+   - DeepSeek: https://platform.deepseek.com (butuh ~$6-8)
+   - xAI/Grok: https://console.x.ai (butuh ~$6-8)
+   - Saldo habis di tengah = run berhenti dengan error 429 → top-up → jalankan ulang (aman, resume otomatis).
+3. **Cek progres kapan saja** (PowerShell di folder proyek):
+   ```powershell
+   # Filter (target 12703):
+   (Get-Content experiments\pilot02_llm_jawa_filter\outputs\pilot02_responses.jsonl | Measure-Object -Line).Lines
+   # Label (muncul setelah filter selesai):
+   (Get-Content experiments\pilot05_bulk_labeling\outputs\bulk_responses.jsonl | Measure-Object -Line).Lines
+   ```
+4. **Kalau mati lampu / crash / run berhenti:** TIDAK ada yang hilang (tersimpan per record). Pilih salah satu:
+   - Buka Claude Code di folder ini, bilang **"lanjut"** (agent baca HANDOFF ini dan resume), ATAU
+   - Manual: jalankan `.\scripts\run_bulk_pipeline.ps1` — script idempotent, lanjut dari posisi terakhir.
+5. **Selesai?** Baca `experiments\pilot05_bulk_labeling\report.md`. Dataset pertama ada di `data\labeled\bulk_v2_consensus.jsonl`. Tidak ada anotasi manual apa pun yang perlu Bapak lakukan (zero-human tetap).
 
 ### ⚡ Ketahanan run (lampu mati / crash)
 

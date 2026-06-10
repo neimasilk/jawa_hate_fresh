@@ -14,7 +14,8 @@ Cross-ref: [`STATE.md` Next milestones](../STATE.md), [`STATE.md` Challenges Log
 | **#2** | LLM-as-Jawa-filter + ekstrak subset Jawa-panas | ✅ DONE 2026-05-25 — yield 9.6%, 24 hot (9 hate) | ~$0.05 | 0 jam | [`pilot02_llm_jawa_filter/`](../experiments/pilot02_llm_jawa_filter/) |
 | **#1b** | C3 re-test (3 LLM × hot-Jawa) — memecah α degenerate | ✅ DONE 2026-06-10 — **scale-up n=149: α=0.587 (CI [0.48, 0.70]), gate YELLOW tipis** | $0.26 + $1.57 | 0 jam | [`pilot01b_c3_retest/`](../experiments/pilot01b_c3_retest/) |
 | **#3** | Cultural prompt manual iteration | ✅ DONE 2026-06-10 — **v2: α ds+grok 0.534 → 0.763** dalam 2 iterasi | ~$2.3 actual | 0 jam | [`pilot03_cultural_prompt/`](../experiments/pilot03_cultural_prompt/) |
-| **#4** | AutoResearch loop (Karpathy pattern) | 📋 PLANNED | ~$12.5/run (bounded) | 0 jam (overnight agent) | [`pilot04_autoresearch_prompts/`](../experiments/pilot04_autoresearch_prompts/) |
+| **#4** | AutoResearch loop (Karpathy pattern) | 📋 PLANNED (mungkin tak perlu — Pilot #3 manual cuma butuh 2 iter) | ~$12.5/run (bounded) | 0 jam (overnight agent) | [`pilot04_autoresearch_prompts/`](../experiments/pilot04_autoresearch_prompts/) |
+| **#5** | Bulk labeling produksi (filter full 12.7K → label v2 ds+grok → held-out α + dataset) | 🔄 RUNNING 2026-06-10 malam | ~$12-15 est | 0 jam (jaga mesin nyala) | [`pilot05_bulk_labeling/`](../experiments/pilot05_bulk_labeling/) |
 
 ---
 
@@ -182,9 +183,24 @@ Filter diperluas 250 → 2000 tweet haipradana. Pool hot-Jawa **24 → 149 teks 
 
 ---
 
+## Pilot #5 — Bulk labeling (produksi pertama)
+
+**Tujuan:** dataset berlabel pertama via pipeline penuh + **held-out validation** α prompt v2 (anti-overfit terhadap pool iterasi 149).
+
+**Pipeline (launched 2026-06-10 malam):** filter full haipradana 12.7K (Grok; resume dari 2K lama → ~10.7K call baru, est 8-15 jam) → regenerate `hot_jawa_subset.jsonl` (~950 est) → label prompt v2 × deepseek+grok (149 lama di-merge dari Pilot #3; ~800 teks baru, est ~6 jam, ~$8) → analisis.
+
+**Output:** α held-out vs prompt-iter vs full; `data/labeled/bulk_v2_consensus.jsonl` (label final = kedua vendor agree; severity hanya kalau sama persis); `bulk_v2_disagreement.jsonl` (bahan codebook); profil taksonomi (severity/register/form/target_group).
+
+**Interpretasi:** α held-out ≈ 0.763 → v2 generalizes ✅; jauh < 0.6 → indikasi overfit, re-iterasi di pool campuran.
+
+**Ketahanan:** semua step resume-aware + 429-aware; rantai idempotent `scripts/run_bulk_pipeline.ps1` (jalankan ulang kapan pun). Panduan user: HANDOFF §Panduan Bapak.
+
+**Status:** 🔄 RUNNING (step 1 filter). Detail: [`pilot05_bulk_labeling/README.md`](../experiments/pilot05_bulk_labeling/README.md).
+
+---
+
 ## Future pilots (potential)
 
-- **Pilot #5:** Bulk labeling 10K (atau gate 3K) pakai best-prompt dari Pilot #4
 - **Pilot #6:** BERT/IndoBERT/XLM-R training di auto-labeled data
 - **Pilot #7:** Adversarial perturbation testing untuk model robustness
 

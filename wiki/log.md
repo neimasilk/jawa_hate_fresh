@@ -54,6 +54,8 @@ Format: `YYYY-MM-DD | OP | sumber/trigger | entities-touched | summary`
 
 | **pilot3-done** | **INGEST** | Eval v2 selesai → α 0.763 | **prompts/cultural_classification_v2.md, experiments/pilot03_cultural_prompt/ (report_v1, report_v2, README), wiki/pilots.md, STATE.md, HANDOFF.md** | **Pilot #3 DONE dalam 2 iterasi: α ds+grok 0.534 → v1 0.554 (flat, prevalensi skewed — lesson: baca flip table bareng α) → v2 0.763 (CI [0.624, 0.879])**, disagreement 36→12. Prompt kerja bulk = v2. Stop sebelum overfit; residu 12 ambigu genuin → codebook + held-out. Next: pilihan Bapak (bulk design / codebook / langid baseline). |
 
+| **pilot5-launch** | **INGEST** | User: "lakukan sesuai rekomendasi + tutorial + jalankan" | **experiments/pilot05_bulk_labeling/ (run_bulk + analyze + README + prompt_iter_sids.json), scripts/run_bulk_pipeline.ps1, pilot02 run_filter.py (N=full + 429-aware), HANDOFF (§Panduan Bapak), STATE, wiki/pilots.md** | **Bulk produksi pertama LAUNCHED:** filter full 12.7K berjalan (resume dari 2K) → label v2 ds+grok → held-out α + consensus dataset ke `data/labeled/`. Snapshot 149 prompt-iter sids untuk held-out split. Pipeline idempotent (1 script, resume-aware semua step). Est ~15-20 jam, ~$12-15. |
+
 ---
 
 ## Convention
