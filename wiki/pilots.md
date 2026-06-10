@@ -13,7 +13,7 @@ Cross-ref: [`STATE.md` Next milestones](../STATE.md), [`STATE.md` Challenges Log
 | **#1** | LLM characterization (3 LLM × 100 sampel Jawa) | ✅ DONE 2026-05-25 — gate GREEN (lihat caveat) | $0.85 actual | 0 jam | [`pilot01_llm_characterization/`](../experiments/pilot01_llm_characterization/) |
 | **#2** | LLM-as-Jawa-filter + ekstrak subset Jawa-panas | ✅ DONE 2026-05-25 — yield 9.6%, 24 hot (9 hate) | ~$0.05 | 0 jam | [`pilot02_llm_jawa_filter/`](../experiments/pilot02_llm_jawa_filter/) |
 | **#1b** | C3 re-test (3 LLM × hot-Jawa) — memecah α degenerate | ✅ DONE 2026-06-10 — **scale-up n=149: α=0.587 (CI [0.48, 0.70]), gate YELLOW tipis** | $0.26 + $1.57 | 0 jam | [`pilot01b_c3_retest/`](../experiments/pilot01b_c3_retest/) |
-| **#3** | Cultural prompt manual iteration v1, v2 (5-10 iter) | 🔄 STARTED 2026-06-10 — v1 ditulis, eval ds+grok berjalan | ~$5-10 | 0 jam (saya iterate) | [`pilot03_cultural_prompt/`](../experiments/pilot03_cultural_prompt/) |
+| **#3** | Cultural prompt manual iteration | ✅ DONE 2026-06-10 — **v2: α ds+grok 0.534 → 0.763** dalam 2 iterasi | ~$2.3 actual | 0 jam | [`pilot03_cultural_prompt/`](../experiments/pilot03_cultural_prompt/) |
 | **#4** | AutoResearch loop (Karpathy pattern) | 📋 PLANNED | ~$12.5/run (bounded) | 0 jam (overnight agent) | [`pilot04_autoresearch_prompts/`](../experiments/pilot04_autoresearch_prompts/) |
 
 ---
@@ -141,9 +141,20 @@ Filter diperluas 250 → 2000 tweet haipradana. Pool hot-Jawa **24 → 149 teks 
 
 **Eval per versi:** pool sama 149 teks (`run_eval.py` parametrized `P3_PROMPT_VERSION`/`P3_VENDORS`, resume-aware); `analyze.py` komparatif vs baseline v0: Δα per vendor-set, **flip table per vendor (T→F vs F→T)**, hate-rate shift, disagreement listing. Keep/discard threshold Δα ±0.05. Metrik bersama di `src/agreement.py`.
 
-**Target v1:** hate-rate Grok turun dari 77%; α ds+grok naik dari 0.534. Red flag yang diawasi: F→T flip besar atau under-flag hate halus.
+### Hasil (2026-06-10, 2 iterasi × 298 call ds+grok, ~$2.3 — vendor per D15)
 
-**Status:** 🔄 STARTED — eval v1 deepseek+grok (298 call) launched background 2026-06-10; kimi menyusul.
+| Versi | Perubahan kunci | α ds+grok | Disagreement | Hate rate (ds / grok) |
+|---|---|---|---|---|
+| v0 (baseline) | — | 0.534 [0.381, 0.674] | 36 | 55% / 77% |
+| v1 | definisi group-directed; profanity ≠ hate | 0.554 [0.382, 0.713] | 21 | 15% / 28% |
+| **v2** | + slur identitas ke individu = hate | **0.763 [0.624, 0.879]** | **12** | 19% / 31% |
+
+- **v1:** koreksi kualitatif sukses besar (flip Grok 74 T→F / **0 F→T**, raw agreement ~79→86%) tapi **α flat** — prevalensi jadi skewed → chance agreement naik → α terkoreksi keras. **Lesson metodologis (paper): α bisa flat walau label membaik; selalu baca flip table + raw agreement bareng α.** Residu v1: deepseek under-flag slur identitas ke individu (lonte/kapir/kaum-rahim-anget/LaGiBeTe).
+- **v2:** blok "slur identitas ke individu = hate" + Contoh 9 (slur gender) & 10 (slur agama) → **Δα +0.229 vs v0**. Flip sehat (F→T: ds 1, grok 2).
+- **Stop di v2 (anti-overfit):** residu 12 disagreement = ambigu genuin (meta-komentar ttg diskriminasi, kutipan hate, perbandingan positif antar-etnis) → bahan codebook + held-out validation saat bulk, BUKAN target prompt berikutnya.
+- Insiden operasional: saldo Kimi habis di run v1 (149 error 429) → D15 drop Kimi; resume logic di-patch (429 ≠ done).
+
+**Status:** ✅ DONE. **Prompt kerja bulk = `prompts/cultural_classification_v2.md`**, vendor = deepseek+grok. Report: [`report_v1.md`](../experiments/pilot03_cultural_prompt/report_v1.md), [`report_v2.md`](../experiments/pilot03_cultural_prompt/report_v2.md).
 
 ---
 

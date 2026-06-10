@@ -1,6 +1,6 @@
 # HANDOFF - Ujaran Kebencian Jawa
 
-**Last updated:** 2026-06-10 — **C3 scale-up SELESAI: α=0.587 (CI [0.475, 0.698]) di n=149 — C3 ROBUST.** Next: Pilot #3.
+**Last updated:** 2026-06-10 — **PILOT #3 SELESAI: prompt v2, α ds+grok 0.534 → 0.763 (CI [0.624, 0.879]).** Vendor mix final D15 (deepseek+grok). Next: pilih arah (bulk design / codebook / langid baseline).
 **Tujuan:** sesi baru langsung tahu status terbaru, blocker, dan next action.
 
 **Cara mulai besok:** cukup bilang **"lanjut"**. Agent: baca CLAUDE.md → HANDOFF.md (ini) → wiki/index.md → STATE.md, lalu kerjakan "Next Concrete Action" di bawah.
@@ -76,13 +76,14 @@ Catatan dedup: rerun meng-APPEND record baru (responses.jsonl punya 300 unik tap
 
 ## Next Concrete Action
 
-**#1 PRIORITAS — Pilot #3: cultural prompt iteration (v1, v2, ...).** C3 sudah robust (α 0.587 baseline v0). Target perbaikan TERFOKUS dari data disagreement n=149:
-1. **Pertegas definisi hate di prompt:** hate = diarahkan ke group/identitas (SARA, gender, dll); **umpatan kasar / kritik politik pedas ≠ otomatis hate**. Ini sumber disagreement #1 (Grok over-flag umpatan → "ringan").
-2. Eval tiap versi prompt di pool 149 yang sama (infra `run_c3.py`/`analyze.py` reusable, ~$1.6/iterasi 3-LLM, atau ~$0.9 tanpa Kimi) → bandingkan α vs baseline 0.587.
-3. **Keputusan vendor mix bulk DITUNDA sampai sesudah Pilot #3** — kalau definisi dipertegas, α deepseek+grok (sekarang 0.534) kemungkinan naik; deepseek+grok unggul di speed/cost/validity (97.7%).
-4. Inspeksi disagreement n=149 (36 teks, sudah ada di `report.md`) = input langsung untuk few-shot baru + draft codebook v0.
+**PILOT #3 SELESAI** — prompt v2 (`prompts/cultural_classification_v2.md`) = prompt kerja, α ds+grok **0.763**. Detail: `experiments/pilot03_cultural_prompt/report_v2.md` + README.
 
-**Follow-up Pilot #2 (belum dikerjakan):** validasi filter vs langid baseline.
+**Pilihan arah berikutnya (decision Bapak, urutan rekomendasi):**
+1. **Rancang bulk labeling pipeline** (Pilot #5 / fase produksi): scale filter haipradana full (~12.7K) + dump lain → pool ribuan → label v2 ds+grok → consensus-filter (keep yang agree, ~92%) → simpan disagreement untuk analisis. Termasuk **held-out validation** α v2 di teks yang TIDAK dipakai iterasi prompt (jawab kekhawatiran overfit).
+2. **Codebook v0 draft** (paralel, butuh sesi Bapak ~3-5 jam weekend): residu 12 disagreement v2 (meta-komentar, kutipan hate, perbandingan positif) = bahan boundary cases codebook.
+3. **Follow-up Pilot #2:** validasi filter vs langid baseline (cepat, memperkuat klaim C4 di paper).
+
+**Catatan metodologis penting (materi paper):** α v1 flat (0.554) padahal label membaik nyata — prevalensi skewed menaikkan chance agreement. Selalu laporkan flip table + raw agreement bersama α.
 
 ### ⚡ Ketahanan run (lampu mati / crash)
 

@@ -137,7 +137,7 @@ TEKS UNTUK DIKLASIFIKASIKAN:
 |-------|-----|-----------|-------------|
 | v0 | 2026-05-07 | Initial draft | Pilot #1: GREEN tapi α degenerate. Pilot #1b n=149: α=0.587 (CI [0.475, 0.698]); disagreement #1 = boundary profanity-vs-hate; Grok over-flag (77% hate rate) |
 | v1 | 2026-06-10 | Definisi hate group-directed eksplisit; buang "kekasaran leksikal = hate"; fix Contoh 1; aturan hate:false→BUK | ds+grok: flip bersih (Grok 74 T→F, 0 F→T; hate-rate 77→28% / 55→15%), disagreement 36→21, TAPI α flat 0.534→0.554 (prevalensi skewed). Residu: deepseek under-flag slur identitas ke individu. |
-| v2 | 2026-06-10 | + blok "slur identitas ke individu = hate" (lonte/kapir/mock-collective); + Contoh 9 (slur gender) & 10 (slur agama) | (pending eval) |
+| v2 | 2026-06-10 | + blok "slur identitas ke individu = hate" (lonte/kapir/mock-collective); + Contoh 9 (slur gender) & 10 (slur agama) | **α ds+grok = 0.763 (CI [0.624, 0.879])** — Δ+0.229 vs v0, Δ+0.209 vs v1. Disagreement 21→12. Flip sehat (F→T: ds 1, grok 2). **KEEP — prompt kerja untuk bulk.** Residu 12 = kasus ambigu genuin (meta-komentar, kutipan hate, perbandingan positif) — TIDAK dikejar via prompt (risiko overfit ke pool eval). |
 
 ## Open questions untuk validasi via eksperimen
 
