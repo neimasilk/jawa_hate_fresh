@@ -13,7 +13,7 @@ Cross-ref: [`STATE.md` Next milestones](../STATE.md), [`STATE.md` Challenges Log
 | **#1** | LLM characterization (3 LLM × 100 sampel Jawa) | ✅ DONE 2026-05-25 — gate GREEN (lihat caveat) | $0.85 actual | 0 jam | [`pilot01_llm_characterization/`](../experiments/pilot01_llm_characterization/) |
 | **#2** | LLM-as-Jawa-filter + ekstrak subset Jawa-panas | ✅ DONE 2026-05-25 — yield 9.6%, 24 hot (9 hate) | ~$0.05 | 0 jam | [`pilot02_llm_jawa_filter/`](../experiments/pilot02_llm_jawa_filter/) |
 | **#1b** | C3 re-test (3 LLM × hot-Jawa) — memecah α degenerate | ✅ DONE 2026-06-10 — **scale-up n=149: α=0.587 (CI [0.48, 0.70]), gate YELLOW tipis** | $0.26 + $1.57 | 0 jam | [`pilot01b_c3_retest/`](../experiments/pilot01b_c3_retest/) |
-| **#3** | Cultural prompt manual iteration v1, v2 (5-10 iter) | 📋 PLANNED | ~$2.50 | 0 jam (saya iterate) | `pilot03_cultural_prompt/` |
+| **#3** | Cultural prompt manual iteration v1, v2 (5-10 iter) | 🔄 STARTED 2026-06-10 — v1 ditulis, eval ds+grok berjalan | ~$5-10 | 0 jam (saya iterate) | [`pilot03_cultural_prompt/`](../experiments/pilot03_cultural_prompt/) |
 | **#4** | AutoResearch loop (Karpathy pattern) | 📋 PLANNED | ~$12.5/run (bounded) | 0 jam (overnight agent) | [`pilot04_autoresearch_prompts/`](../experiments/pilot04_autoresearch_prompts/) |
 
 ---
@@ -133,16 +133,17 @@ Filter diperluas 250 → 2000 tweet haipradana. Pool hot-Jawa **24 → 149 teks 
 
 ## Pilot #3 — Cultural prompt manual iteration
 
-**Tujuan:** Iterate prompt v0 → v1 → v2 secara manual (5-10 versi) untuk dapat baseline experience + finalize composite metric weights sebelum hand-off ke autonomous Pilot #4.
+**Tujuan:** angkat α dengan memperbaiki PROMPT, berdasarkan diagnosis disagreement C3 n=149. Baseline v0: α 3-LLM **0.587**, α deepseek+grok **0.534**. Protokol lengkap: [`pilot03_cultural_prompt/README.md`](../experiments/pilot03_cultural_prompt/README.md).
 
-**Aktivitas saya iterate:**
-- Coba variasi few-shot examples (tambah pasemon coverage, tambah krama violent example, dll)
-- Variasi system prompt framing (forensik vs sosiolinguistik vs moderasi)
-- Variasi schema output JSON
+**Diagnosis v0 (temuan kunci, materi paper):** root cause Grok over-flag ada di **prompt v0 sendiri** — system prompt menyebut "ujaran kebencian bisa muncul lewat kekasaran leksikal" dan Contoh 1 few-shot melabeli umpatan personal murni (`Dasar asu! Kowe ki pancen jancuk!`, target `tidak_ada`) sebagai `hate:true, berat` (kontradiksi internal: hate tanpa target group). Grok mengikuti literal; deepseek/kimi mengabaikan → split sistematis di boundary profanity-vs-hate. **Inkonsistensi internal prompt = sumber inter-LLM disagreement yang terukur.**
 
-**Output:** Best v1/v2 + insight tentang composite metric weights yang sensible.
+**v1 (2026-06-10):** definisi hate group/identity-directed eksplisit + tes cepat "merendahkan kelompok identitas?"; buang kalimat "kekasaran leksikal"; fix Contoh 1 (umpatan personal → BUK); contoh krama polite-violent group-directed (ganti contoh unggah-ungguh murni); kontras kritik-kinerja-pejabat (BUK) vs dehumanisasi+hasutan partai (berat); aturan hate:false → severity BUK. 8 few-shot, semua sintetis (tanpa kontaminasi pool eval).
 
-**Status:** PLANNED setelah Pilot #1.
+**Eval per versi:** pool sama 149 teks (`run_eval.py` parametrized `P3_PROMPT_VERSION`/`P3_VENDORS`, resume-aware); `analyze.py` komparatif vs baseline v0: Δα per vendor-set, **flip table per vendor (T→F vs F→T)**, hate-rate shift, disagreement listing. Keep/discard threshold Δα ±0.05. Metrik bersama di `src/agreement.py`.
+
+**Target v1:** hate-rate Grok turun dari 77%; α ds+grok naik dari 0.534. Red flag yang diawasi: F→T flip besar atau under-flag hate halus.
+
+**Status:** 🔄 STARTED — eval v1 deepseek+grok (298 call) launched background 2026-06-10; kimi menyusul.
 
 ---
 

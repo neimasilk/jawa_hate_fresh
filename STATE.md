@@ -35,7 +35,11 @@ Lihat [PRD.md §0 Decisions Log](PRD.md). Ringkas:
    - Plot twist vendor: di n=149 **Grok = over-flagger** (umpatan kasar → hate ringan); drop-Grok α=0.722. Kimi tetap impraktis (126s/call, validity 73.8%). Disagreement #1 = boundary **profanity vs hate** → masalah definisi prompt, bukan vendor.
    - **NEXT:** Pilot #3 — pertegas definisi hate (group-directed) vs umpatan kasar di prompt, baru putuskan vendor mix bulk.
 4. **Codebook v0 draft** (user effort ~3-5 jam, weekend session) — paralel dengan pilot
-5. **Pilot #3 — Cultural prompt manual iteration** v1, v2 (~5-10 manual iter) untuk baseline experience + finalize composite metric weights
+5. **Pilot #3 — Cultural prompt manual iteration** 🔄 STARTED 2026-06-10
+   - Diagnosis v0: inkonsistensi internal prompt (system prompt "kekasaran leksikal = hate" + Contoh 1 melabeli umpatan personal sebagai hate berat) = root cause Grok over-flag → split sistematis profanity-vs-hate.
+   - **v1 ditulis** (`prompts/cultural_classification_v1.md`): definisi hate group/identity-directed eksplisit, fix Contoh 1, contoh krama polite-violent group-directed, aturan hate:false→BUK. Few-shot semua sintetis (tidak ada kontaminasi pool eval).
+   - Infra: `experiments/pilot03_cultural_prompt/` (run_eval.py parametrized versi+vendor, analyze.py komparatif vs baseline v0 dengan flip table + Δα per vendor-set). Metrik bersama diekstrak ke `src/agreement.py`.
+   - **Eval v1 deepseek+grok (298 call) LAUNCHED background 2026-06-10**; kimi menyusul (resume-aware). Target: α ds+grok naik dari 0.534, hate-rate Grok turun dari 77%.
 6. **Pilot #4 — AutoResearch loop (Karpathy pattern)** — automate pilot #3, scale ke 50+ variants overnight via agent autonomous loop. Bounded budget ~$12.5/run. Folder `experiments/pilot04_autoresearch_prompts/` sudah ada README + plan. Ref: `~/Documents/autoresearch/` (cloned). Potential paper angle: "AutoResearch Pattern for Cultural Prompt Engineering in Low-Resource NLP".
 
 ## Challenges Log
