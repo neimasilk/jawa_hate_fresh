@@ -38,4 +38,5 @@ deepseek+grok ≈ $0.95, +kimi ≈ $0.63. Budget total Pilot #3 (5-10 iterasi, s
 
 | Versi | Tgl run | α ds+grok (Δ vs 0.534) | α 3-LLM (Δ vs 0.587) | Keputusan |
 |---|---|---|---|---|
-| v1 | 2026-06-10 (launched) | pending | pending | pending |
+| v1 | 2026-06-10 | **0.554** (+0.019) 🟡 | pending (kimi berjalan) | KEEP sbg base v2 — α flat TAPI koreksi kualitatif sukses besar: flip Grok 74 T→F / **0 F→T**, hate-rate 77→28% (grok) & 55→15% (ds), disagreement 36→21, raw agreement ~79→86% (α flat krn prevalensi skewed → chance agreement naik; catatan metodologis utk paper). Residu disagreement: deepseek under-flag **slur identitas ke individu** (lonte/kapir/kaum-rahim-anget/LaGiBeTe) → hipotesis v2. |
+| v2 | 2026-06-10 (launched) | pending | — | + blok slur-identitas-ke-individu = hate + Contoh 9-10. Target: deepseek F→T pada slur identitas, Grok stabil. |
