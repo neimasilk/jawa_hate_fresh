@@ -25,6 +25,8 @@ Saldo Moonshot habis (run Kimi v1 gagal 149/149, 429) → keputusan Bapak: **bia
 
 Riset tetap pada framing **"Eliminating Human Bottleneck in Low-Resource Hate Speech Annotation"** untuk paper JINITA Sinta 2 + dataset/codebook HKI.
 
+**🔆 STATUS TERKINI (2026-06-10 malam):** Pilot #3 SELESAI → **prompt v2, α deepseek+grok = 0.763** (CI [0.624, 0.879]); prompt kerja = `prompts/cultural_classification_v2.md`. Bulk (Pilot #5) mulai tapi **xAI/Grok habis** di filter 4351/12703 → **332 hot-Jawa (190 hate) sudah didapat** (cukup). Pivot ke **model lokal Ollama (Pilot #6)** untuk hilangkan Grok mahal: smoke test qwen3:14b `/no_think` kuat di hate classification. 2 validasi α lokal berjalan semalam → cek besok (Next Action Langkah 1). **Keputusan vendor mix final menunggu α lokal.**
+
 **✅ NOVELTY REFRAME (D14, 2026-06-08):** keputusan Bapak — klaim "dataset pertama/from-scratch" **DITINGGALKAN** (dataset hate Jawa sudah ada: UI/WCSE 2021, tak di-release). Novelty utama sekarang 3 pilar: (1) **pipeline fully-automated zero-human**, (2) **taksonomi kultural 4-dimensi register-aware**, (3) **code-mixed realism**. PRD sudah di-update ke v0.3 (D13 retroaktif + D14, Goals G2/G3/G5 sinkron). Dataset tetap deliverable ("first *publicly released*" = fakta sekunder, bukan klaim utama).
 
 **✅ C3 SCALE-UP SELESAI (2026-06-10, n=149, $1.57) — C3 ROBUST:**
@@ -82,34 +84,48 @@ Catatan dedup: rerun meng-APPEND record baru (responses.jsonl punya 300 unik tap
 
 ---
 
-## Next Concrete Action
+## Next Concrete Action (BESOK — urutan)
 
-**PILOT #5 (BULK) BERJALAN sejak 2026-06-10 malam.** Pipeline: filter full haipradana (~12.7K, Grok) → pool hot-Jawa (~950 est) → label prompt v2 × ds+grok → held-out α + consensus dataset. Detail: `experiments/pilot05_bulk_labeling/README.md`.
+Konteks: Pilot #3 selesai (prompt v2 α 0.763). Pilot #5 bulk **tertahan** karena xAI habis (filter 4351/12703, tapi sudah dapat **332 hot-Jawa / 190 hate** = cukup). Sedang eksplorasi **model lokal (Pilot #6)** untuk hilangkan ketergantungan Grok mahal.
 
-**Status saat handoff:** step 1 (filter, ~10.7K call baru) berjalan background, est 8-15 jam. Step 2-4 menyusul otomatis (kalau sesi agent masih hidup) ATAU via `scripts\run_bulk_pipeline.ps1` (idempotent, lihat Panduan di bawah).
+**LANGKAH 1 — ambil hasil 2 background run semalam (HAL PERTAMA):**
+   a. **α(deepseek, qwen3-lokal)** — validasi apakah lokal bisa gantikan Grok di consensus:
+   ```powershell
+   $env:LOCAL_MODEL="qwen3:14b"; $env:LOCAL_NO_THINK="1"; .venv\Scripts\python experiments\pilot06_local_models\run_local_consensus.py
+   ```
+   (resume-aware — kalau run semalam sudah selesai, ini langsung cetak α dari cache; kalau belum, lanjutkan sisanya. **Angka kunci: α vs pembanding 0.763 (ds+grok).** ≥0.6 = lokal layak jadi rater consensus.)
+   b. **SEA-LION** (model Jawa-native) — cek apakah pull selesai: `ollama list | findstr -i sea`. Kalau ada, jalankan validasinya (kandidat consensus TERBAIK karena dilatih Jawa):
+   ```powershell
+   $env:LOCAL_MODEL="aisingapore/Llama-SEA-LION-v3.5-8B-R:q5_k_m"; $env:LOCAL_NO_THINK="1"; .venv\Scripts\python experiments\pilot06_local_models\run_local_consensus.py
+   ```
+   Kalau pull belum selesai/gagal: `ollama pull aisingapore/Llama-SEA-LION-v3.5-8B-R:q5_k_m` (atau coba versi non-reasoning `Llama-SEA-LION-v3-8B-IT` untuk filter cepat).
 
-**Setelah bulk selesai:** baca `experiments/pilot05_bulk_labeling/report.md` — angka kunci = **α held-out** (harapan ≈ 0.763 prompt-iter; jauh di bawah 0.6 = indikasi overfit). Lalu: codebook v0 (disagreement = bahan), langid baseline, atau rancang training BERT.
+**LANGKAH 2 — keputusan vendor mix final (butuh input Bapak):** berdasar α di langkah 1, pilih consensus:
+   - α(ds, lokal) ≈ 0.7+ → **deepseek (cloud murah) + lokal (gratis)** = pipeline tanpa xAI. Ini target ideal (hemat).
+   - α lokal rendah → tetap butuh Grok; isi kredit xAI secukupnya HANYA untuk labeling (~$2-3, bukan filter).
+
+**LANGKAH 3 — selesaikan dataset (Pilot #5)** pakai vendor mix terpilih:
+   - **Pool:** pakai 332 yang sudah ada (cukup), ATAU lanjutkan filter sisa pakai **lokal gratis** (`run_filter.py` perlu di-switch ke `call_ollama` dulu — belum dikerjakan).
+   - Regenerate pool → `run_bulk.py` (perlu di-update ke vendor mix terpilih) → `analyze.py` → held-out α + `data/labeled/bulk_v2_consensus.jsonl`.
+
+**Belum dikerjakan (utang teknis kecil):** `run_filter.py` & `run_bulk.py` masih hardcode vendor cloud — perlu di-parametrize untuk pakai lokal kalau Langkah 2 pilih lokal.
 
 ---
 
-## 📖 PANDUAN BAPAK — bulk run (apa yang perlu dilakukan)
+## 📖 PANDUAN BAPAK (besok)
 
-1. **Biarkan komputer menyala** sampai pipeline selesai (total ±15-20 jam). Matikan auto-sleep: Settings → System → Power → "Put my device to sleep: Never" (saat plugged in). Layar boleh mati, yang penting mesin tidak sleep.
-2. **Cek saldo 2 vendor** (estimasi pemakaian total ~$12-15):
-   - DeepSeek: https://platform.deepseek.com (butuh ~$6-8)
-   - xAI/Grok: https://console.x.ai (butuh ~$6-8)
-   - Saldo habis di tengah = run berhenti dengan error 429 → top-up → jalankan ulang (aman, resume otomatis).
-3. **Cek progres kapan saja** (PowerShell di folder proyek):
-   ```powershell
-   # Filter (target 12703):
-   (Get-Content experiments\pilot02_llm_jawa_filter\outputs\pilot02_responses.jsonl | Measure-Object -Line).Lines
-   # Label (muncul setelah filter selesai):
-   (Get-Content experiments\pilot05_bulk_labeling\outputs\bulk_responses.jsonl | Measure-Object -Line).Lines
-   ```
-4. **Kalau mati lampu / crash / run berhenti:** TIDAK ada yang hilang (tersimpan per record). Pilih salah satu:
-   - Buka Claude Code di folder ini, bilang **"lanjut"** (agent baca HANDOFF ini dan resume), ATAU
-   - Manual: jalankan `.\scripts\run_bulk_pipeline.ps1` — script idempotent, lanjut dari posisi terakhir.
-5. **Selesai?** Baca `experiments\pilot05_bulk_labeling\report.md`. Dataset pertama ada di `data\labeled\bulk_v2_consensus.jsonl`. Tidak ada anotasi manual apa pun yang perlu Bapak lakukan (zero-human tetap).
+1. **Mesin & sleep:** model lokal jalan di GPU RTX 4080 — pastikan mesin tidak sleep saat run lokal. Settings → System → Power → sleep "Never" (plugged in).
+2. **Saldo:** DeepSeek (murah, https://platform.deepseek.com) cukup ~$2-3 untuk labeling. **xAI TIDAK perlu diisi lagi** kecuali Langkah 2 memutuskan butuh Grok. Lokal = gratis.
+3. **Tinggal bilang "lanjut"** — agent baca HANDOFF ini, ambil hasil 2 run lokal semalam (Langkah 1), lalu lapor α + rekomendasi vendor mix. Keputusan akhir di Bapak.
+4. **Zero-human tetap** — tidak ada anotasi manual.
+
+### Cara cek progres background (PowerShell di folder proyek)
+```powershell
+# Hasil validasi lokal qwen3 (cari baris "alpha"):
+Get-Content experiments\pilot06_local_models\outputs\local_v2_qwen3_14b.jsonl | Measure-Object -Line
+# Filter pool (berhenti di 4351, kalau mau lanjut lokal):
+(Get-Content experiments\pilot02_llm_jawa_filter\outputs\pilot02_responses.jsonl | Measure-Object -Line).Lines
+```
 
 ### ⚡ Ketahanan run (lampu mati / crash)
 
