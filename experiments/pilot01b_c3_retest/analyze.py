@@ -333,14 +333,13 @@ def main() -> None:
     if is_degenerate:
         lines.append("⚠️ **Alpha degenerate lagi — cek sumber data.**")
     elif avg_refusal < 20 and avg_validity > 90 and alpha_hate > 0.5:
-        lines.append("✅ **GREEN — C3 terjawab positif: multi-LLM consensus bekerja pada hate Jawa asli (n=24, perlu konfirmasi di pool lebih besar).**")
+        lines.append(f"✅ **GREEN — C3 terjawab positif: multi-LLM consensus bekerja pada hate Jawa asli (n={len(by_source)}).**")
     elif avg_refusal > 50 or avg_validity < 70 or alpha_hate < 0.2:
         lines.append("🔴 **RED — alpha rendah pada hate asli = temuan besar. STOP scale-up, dokumentasikan, diskusikan fallback ladder dengan Bapak.**")
     else:
         lines.append("🟡 **YELLOW — alpha moderat. Inspeksi disagreement (boundary case atau noise?), pertimbangkan iterasi prompt (Pilot #3) sebelum scale-up.**")
     lines.append("")
-    lines.append("**Catatan n kecil:** 24 teks (9 hate orig). CI bootstrap di atas WAJIB dikutip bersama alpha. ")
-    lines.append("Hasil ini sinyal pertama C3, bukan angka final — konfirmasi di pool besar (scale filter Pilot #2) sebelum klaim paper.")
+    lines.append(f"**Catatan:** n={len(by_source)} teks. CI bootstrap di atas WAJIB dikutip bersama alpha.")
 
     report_text = "\n".join(lines)
     REPORT_PATH.write_text(report_text, encoding="utf-8")

@@ -1,25 +1,9 @@
 # HANDOFF - Ujaran Kebencian Jawa
 
-**Last updated:** 2026-06-08 malam — novelty reframe (D14) + Pilot #1b selesai + **C3 scale-up SEDANG BERJALAN** (n=149).
+**Last updated:** 2026-06-10 — **C3 scale-up SELESAI: α=0.587 (CI [0.475, 0.698]) di n=149 — C3 ROBUST.** Next: Pilot #3.
 **Tujuan:** sesi baru langsung tahu status terbaru, blocker, dan next action.
 
 **Cara mulai besok:** cukup bilang **"lanjut"**. Agent: baca CLAUDE.md → HANDOFF.md (ini) → wiki/index.md → STATE.md, lalu kerjakan "Next Concrete Action" di bawah.
-
----
-
-## ⏳ HAL PERTAMA YANG DICEK BESOK
-
-**C3 scale-up (3-LLM × 149 teks) dijalankan background tadi malam.** Saat handoff ini ditulis: **236/447 call (~53%)**, ETA ~1-2 jam → kemungkinan SUDAH SELESAI saat Bapak buka sesi.
-
-Langkah cek (urut):
-1. Lihat apakah ada notifikasi "background command completed" untuk run C3, ATAU cek baris terakhir `experiments/pilot01b_c3_retest/outputs/c3_responses.jsonl` (target: 447 record unik = 149×3).
-2. **Kalau sudah 447 / run selesai:** jalankan
-   `.venv\Scripts\python experiments\pilot01b_c3_retest\analyze.py`
-   → baca `report.md`. **Ini angka C3 robust yang ditunggu** (α di n=149, CI jauh lebih sempit dari n=24). Lalu update STATE/HANDOFF/wiki/pilots.md + commit.
-3. **Kalau run mati di tengah** (mesin tidur / crash): cukup jalankan ulang
-   `.venv\Scripts\python experiments\pilot01b_c3_retest\run_c3.py`
-   — **resume-aware**, skip pasangan (source_id, vendor) yang sudah ada, lanjut dari sisanya. Kimi lambat (~115s/call) jadi penyebab utama durasi.
-4. Interpretasi gate ada di `analyze.py` (GREEN/YELLOW/RED) + tabel sensitivitas drop-1-vendor. **Bandingkan α n=149 vs α n=24 (0.384):** kalau naik & CI sempit → C3 robust ✅; kalau tetap < 0.5 → pertimbangkan iterasi prompt (Pilot #3).
 
 ---
 
@@ -29,11 +13,17 @@ Riset tetap pada framing **"Eliminating Human Bottleneck in Low-Resource Hate Sp
 
 **✅ NOVELTY REFRAME (D14, 2026-06-08):** keputusan Bapak — klaim "dataset pertama/from-scratch" **DITINGGALKAN** (dataset hate Jawa sudah ada: UI/WCSE 2021, tak di-release). Novelty utama sekarang 3 pilar: (1) **pipeline fully-automated zero-human**, (2) **taksonomi kultural 4-dimensi register-aware**, (3) **code-mixed realism**. PRD sudah di-update ke v0.3 (D13 retroaktif + D14, Goals G2/G3/G5 sinkron). Dataset tetap deliverable ("first *publicly released*" = fakta sekunder, bukan klaim utama).
 
-**✅ PILOT #1b SELESAI — C3 TERJAWAB (gate YELLOW, n=24):** re-test 3-LLM (prompt v0 sama) di 24 teks hot-Jawa. **α hate = 0.384 NON-DEGENERATE** (CI [0.01, 0.70]), severity 0.376. Multi-LLM consensus **bekerja moderat** pada hate Jawa asli — beda fundamental dari α=1.000 degenerate Pilot #1. Pairwise deepseek-grok **80%**. **Kimi = noise utama** (validity 62.5%, drop Kimi → α 0.48). CI lebar (n=24) → scale-up dilakukan ↓.
+**✅ C3 SCALE-UP SELESAI (2026-06-10, n=149, $1.57) — C3 ROBUST:**
+- **α hate = 0.587** (bootstrap 95% CI **[0.475, 0.698]**) — naik dari 0.384 (n=24), CI jauh lebih sempit. **Multi-LLM consensus bekerja moderat-baik pada hate Jawa asli dengan prompt v0 tanpa iterasi.** Severity α = 0.480.
+- **Gate YELLOW tipis:** α ✅, refusal 1.8% ✅; hanya validity 89.7% < 90% ❌ — murni diseret Kimi (73.8%); deepseek+grok saja 97.7%.
+- **PLOT TWIST vendor:** di n=24 Kimi tampak noise utama; di n=149 **Grok = over-flagger** (115T/34F = 77% hate rate; umpatan kasar non-group → hate "ringan"). **Drop Grok → α 0.722** (tertinggi); drop Kimi → 0.534. Pairwise tertinggi justru deepseek–kimi 86.1%. Kimi tetap impraktis bulk (126s/call, validity 73.8%).
+- **Disagreement #1 (36/149) = boundary profanity vs hate** — masalah DEFINISI di prompt, bukan capability vendor → **arah Pilot #3 jelas: pertegas hate = group/identity-directed, umpatan kasar ≠ otomatis hate.**
+- **Sinyal kultural (materi paper):** 31/69 teks orig-`neutral` haipradana → LLM majority hate=True (LLM tangkap umpatan Jawa `ngewe/wasu/budek/tae` yang dilewatkan anotasi Indonesia-context).
+- Report lengkap: `experiments/pilot01b_c3_retest/report.md`.
 
-**🔄 SCALE-UP BERJALAN (untuk CI robust):**
-- **Filter scale-up SELESAI:** N=250→2000 tweet haipradana. Pool hot-Jawa **24 → 149 teks (80 hate, 54%)**. Yield Jawa+campuran 7.5% (konsisten dgn 9.6% awal). Tersimpan ulang di `hot_jawa_subset.jsonl`.
-- **C3 scale-up SEDANG BERJALAN** (lihat box ⏳ di atas): 3-LLM × 149 teks → α n=149, CI lebih sempit. Saat handoff ~53%. **Ini deliverable utama besok.**
+**Filter scale-up (selesai sebelumnya):** N=250→2000 tweet haipradana. Pool hot-Jawa **24 → 149 teks (80 hate, 54%)**. Yield 7.5%.
+
+**✅ PILOT #1b n=24 (konteks):** α=0.384 non-degenerate (CI [0.01, 0.70]) — sinyal pertama C3, sudah digantikan angka n=149 di atas.
 
 **Konteks lama (tetap berlaku):**
 - **Pilot #1** gate GREEN tapi α degenerate (FineWeb2 nyaris tanpa hate) → sudah dipecahkan Pilot #1b.
@@ -80,20 +70,17 @@ Catatan dedup: rerun meng-APPEND record baru (responses.jsonl punya 300 unik tap
 
 ## Next Concrete Action
 
-**#1 PRIORITAS — selesaikan C3 scale-up** (lihat box ⏳ di atas). Filter sudah selesai (pool 149). C3 3-LLM tinggal tunggu selesai → `analyze.py` → α robust n=149. Itu deliverable utama.
+**#1 PRIORITAS — Pilot #3: cultural prompt iteration (v1, v2, ...).** C3 sudah robust (α 0.587 baseline v0). Target perbaikan TERFOKUS dari data disagreement n=149:
+1. **Pertegas definisi hate di prompt:** hate = diarahkan ke group/identitas (SARA, gender, dll); **umpatan kasar / kritik politik pedas ≠ otomatis hate**. Ini sumber disagreement #1 (Grok over-flag umpatan → "ringan").
+2. Eval tiap versi prompt di pool 149 yang sama (infra `run_c3.py`/`analyze.py` reusable, ~$1.6/iterasi 3-LLM, atau ~$0.9 tanpa Kimi) → bandingkan α vs baseline 0.587.
+3. **Keputusan vendor mix bulk DITUNDA sampai sesudah Pilot #3** — kalau definisi dipertegas, α deepseek+grok (sekarang 0.534) kemungkinan naik; deepseek+grok unggul di speed/cost/validity (97.7%).
+4. Inspeksi disagreement n=149 (36 teks, sudah ada di `report.md`) = input langsung untuk few-shot baru + draft codebook v0.
 
-**Setelah C3 robust ada — pilih berdasarkan hasil α:**
-- **α n=149 > 0.5, CI sempit** → C3 robust ✅. Lanjut: putuskan vendor mix final bulk pipeline (rekomendasi kuat: **2-LLM deepseek+grok**, Kimi noise + lambat 115s; pairwise 80%, drop-Kimi α 0.48). Lalu mulai rancang Pilot #3 (prompt iteration) atau langsung bulk labeling.
-- **α tetap < 0.5** → iterasi prompt dulu (Pilot #3). CI sempit + α rendah = prompt/task issue, bukan kurang data.
+**Follow-up Pilot #2 (belum dikerjakan):** validasi filter vs langid baseline.
 
-**Inspeksi kualitatif (cepat, bahan paper):** di n=24, 9/15 teks orig-label `neutral` haipradana → LLM majority hate=True (umpatan Jawa `asu/ngewe/tae`). **Sinyal kultural** (gold haipradana Indonesia-context melewatkan kekasaran Jawa) atau **over-flag** LLM? Cek lagi di n=149 (`report.md` majority-vs-orig_label + disagreement). Bahan diskusi kuat untuk paper.
+### ⚡ Ketahanan run (lampu mati / crash)
 
-**Follow-up Pilot #2:** validasi filter vs langid baseline (belum dikerjakan).
-
-### ⚡ Ketahanan run (lampu mati / crash) — penting (ingat insiden petir 2026-04-29)
-
-- **Resume aman.** `run_c3.py` & `run_filter.py` `f.flush()` SETIAP record ke disk → tiap call yang sudah selesai tersimpan permanen. Kalau lampu mati / mesin tidur: proses background mati, TAPI file `outputs/c3_responses.jsonl` lokal selamat. **Cukup jalankan ulang `run_c3.py`** → skip yang sudah ada, lanjut sisanya. Yang hilang hanya 1 call yang lagi in-flight saat mati (akan diulang).
-- **Batas:** file in-progress BELUM di-commit ke Git (tak bisa commit file yang sedang ditulis). Lampu mati biasa → file lokal aman (cuma butuh re-run). Tapi kerusakan disk fatal (skenario petir) → progres C3 lokal bisa hilang. Mitigasi: murah diulang (~$1, resume-aware) DAN hasil di-commit+push begitu run selesai. Kalau Bapak khawatir cuaca buruk, bisa minta agent commit checkpoint parsial sebelum tidur.
+- `run_c3.py` & `run_filter.py` resume-aware (`f.flush()` per record; rerun = skip yang sudah ada). C3 scale-up sudah SELESAI + di-commit, tidak ada run in-flight saat ini. Pattern yang sama dipakai lagi untuk run Pilot #3.
 
 ---
 

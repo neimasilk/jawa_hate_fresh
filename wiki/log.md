@@ -43,6 +43,15 @@ Format: `YYYY-MM-DD | OP | sumber/trigger | entities-touched | summary`
 
 ---
 
+## 2026-06-10
+
+| Time | OP | Trigger | Touched | Summary |
+|------|----|---------|---------|---------|
+| session-start | QUERY | User "lanjutkan" | CLAUDE.md, HANDOFF.md, wiki/index.md, STATE.md (read) | Pickup: cek C3 scale-up (launched background 06-08, ~53% saat handoff) → ternyata SELESAI (447/447 record unik). |
+| **pilot1b-scaleup-done** | **INGEST** | C3 scale-up selesai (447 call, n=149, $1.57) | **experiments/pilot01b_c3_retest/report.md + outputs/, analyze.py (fix stale n=24 footer), STATE.md, HANDOFF.md, wiki/pilots.md** | **α hate=0.587 (CI [0.475, 0.698]) — C3 ROBUST**, severity α 0.480. Gate YELLOW tipis (hanya validity 89.7%<90, diseret Kimi 73.8%). **Plot twist: Grok = over-flagger** (drop-Grok α=0.722; umpatan kasar non-group → hate "ringan"); pairwise tertinggi deepseek–kimi 86.1%. Disagreement #1 (36/149) = boundary profanity-vs-hate → **arah Pilot #3: pertegas definisi hate group-directed**. 31/69 orig-neutral → majority hate=True (sinyal kultural, materi paper). Keputusan vendor mix bulk ditunda sampai sesudah Pilot #3. |
+
+---
+
 ## Convention
 
 - **INGEST:** Source baru di-process ke wiki. Touched = entity pages yang di-update.

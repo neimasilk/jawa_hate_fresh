@@ -12,7 +12,7 @@ Cross-ref: [`STATE.md` Next milestones](../STATE.md), [`STATE.md` Challenges Log
 |---|---|---|---|---|---|
 | **#1** | LLM characterization (3 LLM × 100 sampel Jawa) | ✅ DONE 2026-05-25 — gate GREEN (lihat caveat) | $0.85 actual | 0 jam | [`pilot01_llm_characterization/`](../experiments/pilot01_llm_characterization/) |
 | **#2** | LLM-as-Jawa-filter + ekstrak subset Jawa-panas | ✅ DONE 2026-05-25 — yield 9.6%, 24 hot (9 hate) | ~$0.05 | 0 jam | [`pilot02_llm_jawa_filter/`](../experiments/pilot02_llm_jawa_filter/) |
-| **#1b** | C3 re-test (3 LLM × 24 teks hot-Jawa) — memecah α degenerate | ✅ DONE 2026-06-08 — **α=0.384 non-degenerate, gate YELLOW** | $0.26 | 0 jam | [`pilot01b_c3_retest/`](../experiments/pilot01b_c3_retest/) |
+| **#1b** | C3 re-test (3 LLM × hot-Jawa) — memecah α degenerate | ✅ DONE 2026-06-10 — **scale-up n=149: α=0.587 (CI [0.48, 0.70]), gate YELLOW tipis** | $0.26 + $1.57 | 0 jam | [`pilot01b_c3_retest/`](../experiments/pilot01b_c3_retest/) |
 | **#3** | Cultural prompt manual iteration v1, v2 (5-10 iter) | 📋 PLANNED | ~$2.50 | 0 jam (saya iterate) | `pilot03_cultural_prompt/` |
 | **#4** | AutoResearch loop (Karpathy pattern) | 📋 PLANNED | ~$12.5/run (bounded) | 0 jam (overnight agent) | [`pilot04_autoresearch_prompts/`](../experiments/pilot04_autoresearch_prompts/) |
 
@@ -76,6 +76,10 @@ Cross-ref: [`STATE.md` Next milestones](../STATE.md), [`STATE.md` Challenges Log
 
 **Implikasi:** 24 teks (9 hate) cukup untuk C3 re-test PERTAMA (non-degenerate, α akan punya variasi label), tapi tipis untuk angka robust. Untuk pool lebih besar: scale filter ke lebih banyak baris haipradana (~12.7K → estimasi ~460 hot-Jawa).
 
+### Scale-up (2026-06-08, N=2000)
+
+Filter diperluas 250 → 2000 tweet haipradana. Pool hot-Jawa **24 → 149 teks (80 hate orig, 54%)**. Yield Jawa+campuran 7.5% — konsisten dengan 9.6% awal. `hot_jawa_subset.jsonl` ditulis ulang berisi 149 teks → input C3 scale-up Pilot #1b.
+
 **Status:** ✅ DONE. Detail: [`pilot02_llm_jawa_filter/README.md`](../experiments/pilot02_llm_jawa_filter/README.md), report: [`report.md`](../experiments/pilot02_llm_jawa_filter/report.md).
 
 ---
@@ -103,7 +107,27 @@ Cross-ref: [`STATE.md` Next milestones](../STATE.md), [`STATE.md` Challenges Log
 2. **Kimi K2.6 = sumber noise utama** (validity 62.5% karena reasoning-model empty, 5/7 disagreement = Kimi dissenter melabeli BUK). Menguatkan temuan vendor Pilot #1 → pertimbangkan **2-LLM deepseek+grok** untuk bulk (lebih murah, agreement 80%).
 3. **CI sangat lebar (n=24)** → angka belum robust. Masalah = ukuran sampel, bukan prompt. **Scale-up filter pool besar wajib sebelum klaim paper.**
 
-**Status:** ✅ DONE. Detail: [`pilot01b_c3_retest/README.md`](../experiments/pilot01b_c3_retest/README.md), report: [`report.md`](../experiments/pilot01b_c3_retest/report.md).
+### Scale-up n=149 (2026-06-08 → 06-10, $1.57, prompt v0 sama)
+
+| Vendor | Refusal | JSON Valid | Latency mean | Hate dist | Cost |
+|---|---|---|---|---|---|
+| DeepSeek V4 Pro | 4.7% | 95.3% | 30s | 76T/61F | $0.66 |
+| Grok 4.3 | 0% | 100% | **7s** | **115T/34F** | $0.28 |
+| Kimi K2.6 | 0.7% | **73.8%** | **126s** | 55T/55F | $0.63 |
+
+- **α hate = 0.587** (bootstrap 95% CI **[0.475, 0.698]**) — naik dari 0.384 (n=24), CI jauh lebih sempit dan seluruhnya ≈ di atas 0.5-batas-bawah. **Angka C3 robust.** Severity α = 0.480 (CI [0.387, 0.571]).
+- **Pairwise:** deepseek–kimi **86.1%** (tertinggi!), deepseek–grok 78.8%, grok–kimi 77.3%.
+- **Drop-1-vendor:** drop **Grok** → α **0.722** (CI [0.580, 0.856]) — tertinggi; drop Kimi → 0.534; drop DeepSeek → 0.527.
+- **Gate YELLOW tipis:** α ✅ 0.587 > 0.5, refusal ✅ 1.8%, validity ❌ 89.7% < 90% — satu-satunya yang gagal, murni diseret Kimi (73.8%); deepseek+grok saja = 97.7%.
+- **PLOT TWIST vendor vs n=24:** di n=24 Kimi tampak noise utama; di n=149 **Grok = outlier over-flagger** (77% teks dilabel hate vs deepseek 51% / kimi 50%). Pola di 36 disagreement: mayoritas = **Grok sendirian melabeli hate `ringan`/`sedang` pada umpatan kasar non-group-directed** (asw, bodo anjir, mencla-mencle, kritik politik kasar). Kimi tetap impraktis untuk bulk (126s/call, validity 73.8%, out-tok 475K).
+- **Majority vs orig haipradana:** 66/80 orig-`hate` → majority True (82.5%); **31/69 orig-`neutral` → majority True (45%)** — LLM menangkap umpatan Jawa (`ngewe`, `wasu`, `budek`, `tae`) yang dilewatkan anotasi Indonesia-context. Sinyal kultural kuat untuk paper, tapi sebagian besar kasus ini = profanity, bukan group-directed hate → tergantung definisi taksonomi.
+
+**Lesson scale-up (materi paper):**
+1. **C3 ROBUST: α 0.587 dengan CI sempit** — consensus moderat-baik dengan prompt v0 tanpa iterasi apapun.
+2. **Boundary "profanity vs hate" = sumber disagreement #1**, bukan vendor capability. Grok memperlakukan umpatan kasar sebagai hate ringan; deepseek/kimi tidak. Ini **masalah definisi di prompt** → perbaikan paling menjanjikan ada di **Pilot #3** (pertegas definisi hate = group/identity-directed, umpatan kasar ≠ otomatis hate), bukan ganti vendor.
+3. **Tidak ada 2-LLM combo yang menang semua aspek:** deepseek+kimi α tertinggi (0.722) tapi Kimi lambat+invalid; deepseek+grok cepat+murah+validity 97.7% tapi α 0.534. Rekomendasi: **iterasi prompt dulu (Pilot #3), baru putuskan vendor mix** — kalau definisi hate dipertegas, α deepseek+grok kemungkinan naik signifikan.
+
+**Status:** ✅ DONE (termasuk scale-up). Detail: [`pilot01b_c3_retest/README.md`](../experiments/pilot01b_c3_retest/README.md), report: [`report.md`](../experiments/pilot01b_c3_retest/report.md).
 
 ---
 
