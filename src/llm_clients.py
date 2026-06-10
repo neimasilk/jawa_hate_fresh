@@ -123,6 +123,52 @@ def call_grok(system: str, user: str, model: str = "grok-4.3") -> LLMResponse:
     )
 
 
+def call_ollama(system: str, user: str, model: str = "qwen3:14b") -> LLMResponse:
+    """Local model via Ollama OpenAI-compat endpoint (localhost:11434/v1).
+
+    Gratis (lokal, RTX 4080). Tidak butuh API key — pakai dummy. base_url
+    override via OLLAMA_BASE_URL. vendor di-tag "ollama:<model>" supaya
+    analisis bisa bedakan tiap model lokal sebagai rater independen.
+
+    Catatan: model "R"/reasoning (SEA-LION v3.5-R, qwen3) bisa keluarkan
+    <think>...</think> sebelum JSON — parse_llm_output sudah ambil objek {..}
+    pertama, jadi aman. max_tokens besar untuk akomodasi reasoning token.
+    """
+    base_url = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434/v1")
+    client = openai.OpenAI(api_key="ollama", base_url=base_url)
+    t0 = time.monotonic()
+    try:
+        resp = client.chat.completions.create(
+            model=model,
+            messages=[
+                {"role": "system", "content": system},
+                {"role": "user", "content": user},
+            ],
+            max_tokens=4096,
+            temperature=0.0,
+        )
+        latency = int((time.monotonic() - t0) * 1000)
+        text = resp.choices[0].message.content or ""
+        usage = resp.usage
+        return LLMResponse(
+            vendor=f"ollama:{model}",
+            model=model,
+            raw_text=text,
+            latency_ms=latency,
+            input_tokens=getattr(usage, "prompt_tokens", None),
+            output_tokens=getattr(usage, "completion_tokens", None),
+            extra={"finish_reason": resp.choices[0].finish_reason, "local": True},
+        )
+    except Exception as e:
+        return LLMResponse(
+            vendor=f"ollama:{model}",
+            model=model,
+            raw_text="",
+            latency_ms=int((time.monotonic() - t0) * 1000),
+            error=f"{type(e).__name__}: {e}",
+        )
+
+
 def call_kimi(system: str, user: str, model: str = "kimi-k2.6") -> LLMResponse:
     # Kimi K2.6 hanya menerima temperature=1.0 (per error API). Determinism
     # diandalkan dari few-shot + structured output prompt, bukan low temp.

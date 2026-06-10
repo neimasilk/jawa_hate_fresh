@@ -1,9 +1,17 @@
 # HANDOFF - Ujaran Kebencian Jawa
 
-**Last updated:** 2026-06-10 — **PILOT #3 SELESAI: prompt v2, α ds+grok 0.534 → 0.763 (CI [0.624, 0.879]).** Vendor mix final D15 (deepseek+grok). Next: pilih arah (bulk design / codebook / langid baseline).
+**Last updated:** 2026-06-10 — Pilot #3 selesai (v2 α 0.763). **Pilot #5 bulk filter berhenti (xAI habis di 4351/12703 → 332 hot-Jawa didapat). Pilot #6 eksplorasi model LOKAL pengganti Grok BERJALAN.**
 **Tujuan:** sesi baru langsung tahu status terbaru, blocker, dan next action.
 
 **Cara mulai besok:** cukup bilang **"lanjut"**. Agent: baca CLAUDE.md → HANDOFF.md (ini) → wiki/index.md → STATE.md, lalu kerjakan "Next Concrete Action" di bawah.
+
+---
+
+## 💸 xAI/Grok HABIS → eksplorasi model LOKAL (Pilot #6, BERJALAN)
+
+Filter bulk (Pilot #5) berhenti di **4.351/12.703** karena kredit xAI nol (2.225 error 403). **Sudah dapat 332 hot-Jawa (190 hate)** — 2.2× pool lama, cukup untuk dataset. Eksplorasi model lokal Ollama (RTX 4080) pengganti Grok. Smoke test (Pilot #6): **qwen3:14b `/no_think` kuat di hate classification** (JSON 100%, agree vs grok 100%, 11s/call) tapi ceroboh di filter; qwen2.5:7b tercepat (3.4s). Sedang validasi **α(deepseek, qwen3-lokal)** di 149 pool → kalau ≈0.763, consensus = deepseek(murah)+lokal(gratis), xAI tak perlu lagi. SEA-LION (Jawa-native) masih download. Detail: `experiments/pilot06_local_models/`.
+
+**Pending keputusan Bapak:** vendor mix final (cloud+lokal) menunggu α. Filter sisa: lokal (gratis overnight) atau berhenti di 332.
 
 ---
 
