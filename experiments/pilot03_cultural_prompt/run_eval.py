@@ -62,7 +62,11 @@ def load_hot_subset() -> list[dict]:
 
 
 def already_processed(out_path: Path) -> set[tuple[str, str]]:
-    """Return set (source_id, vendor) yang sudah sukses di-log, untuk resume."""
+    """Return set (source_id, vendor) yang sudah sukses di-log, untuk resume.
+
+    Error kuota/saldo (429) TIDAK dihitung done — rerun setelah top-up harus
+    retry (lesson: saldo Kimi habis di tengah run v1, 149 record error).
+    """
     done: set[tuple[str, str]] = set()
     if not out_path.exists():
         return done
@@ -71,7 +75,10 @@ def already_processed(out_path: Path) -> set[tuple[str, str]]:
             try:
                 rec = json.loads(line)
                 raw_text = (rec.get("raw_text") or "").strip()
-                if rec.get("error") or raw_text:
+                err = rec.get("error") or ""
+                if "429" in err or "insufficient balance" in err.lower():
+                    continue
+                if err or raw_text:
                     done.add((rec["source_id"], rec["vendor"]))
             except (json.JSONDecodeError, KeyError):
                 continue

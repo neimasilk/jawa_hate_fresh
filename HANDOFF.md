@@ -7,6 +7,12 @@
 
 ---
 
+## ⚠️ BLOCKER USER ACTION: saldo Kimi (Moonshot) HABIS
+
+Run Kimi v1 Pilot #3 gagal total: 149/149 call kena **429 insufficient balance** (akun `org-fd4daff...` suspended). **Perlu Bapak top-up akun Moonshot** kalau mau triangulasi 3-LLM lanjut. Iterasi Pilot #3 TIDAK terblokir (jalan dengan deepseek+grok, pair kunci); Kimi hanya dibutuhkan untuk α 3-LLM final vs baseline 0.587. Record error sudah dibersihkan + resume logic di-patch (429 tidak dihitung done) — setelah top-up tinggal rerun `run_eval.py` dengan `P3_VENDORS=kimi`.
+
+---
+
 ## TL;DR
 
 Riset tetap pada framing **"Eliminating Human Bottleneck in Low-Resource Hate Speech Annotation"** untuk paper JINITA Sinta 2 + dataset/codebook HKI.

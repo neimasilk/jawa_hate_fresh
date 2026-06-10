@@ -26,7 +26,7 @@ def load_records(path: Path) -> list[dict]:
     if not path.exists():
         raise FileNotFoundError(f"No log file at {path}.")
     latest: dict[tuple[str, str], dict] = {}
-    with path.open(encoding="utf-8") as f:
+    with path.open(encoding="utf-8-sig") as f:
         for line in f:
             rec = json.loads(line)
             latest[(rec["source_id"], rec["vendor"])] = rec
