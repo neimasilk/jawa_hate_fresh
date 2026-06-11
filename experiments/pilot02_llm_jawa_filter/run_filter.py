@@ -44,6 +44,10 @@ OUT_DIR.mkdir(exist_ok=True)
 LOG_PATH = OUT_DIR / "pilot02_responses.jsonl"
 PROMPT_PATH = _ROOT / "prompts" / "jawa_filter_v0.md"
 
+# Filter lokal = PRE-SCREEN (cascade Pilot #6b), bukan otoritas pool.
+# Tulis ke log terpisah supaya pool regeneration (analyze.py) tetap murni
+# grok-confirmed. Resume lokal: skip yang sudah valid di log grok ATAU log lokal.
+
 DATASET = "haipradana/indonesian-twitter-hate-speech-cleaned"
 # 2026-06-08 scale-up: 250 -> 2000. 2026-06-10 bulk (Pilot #5): 2000 -> FULL
 # (~12.7K; slicing otomatis cap di ukuran dataset). Seed sama -> baris lama
@@ -117,13 +121,18 @@ def already_done(path: Path) -> set[str]:
 def main() -> None:
     system, user_tpl = load_prompt_template(PROMPT_PATH)
     rows = sample_rows()
-    done = already_done(LOG_PATH)
+    if FILTER_VENDOR == "ollama":
+        out_path = OUT_DIR / f"pilot02_responses_local_{LOCAL_MODEL.replace('/', '_').replace(':', '_')}.jsonl"
+        done = already_done(LOG_PATH) | already_done(out_path)
+    else:
+        out_path = LOG_PATH
+        done = already_done(LOG_PATH)
     vendor_desc = f"ollama:{LOCAL_MODEL}" if FILTER_VENDOR == "ollama" else "grok"
-    print(f"Filter vendor: {vendor_desc}", flush=True)
+    print(f"Filter vendor: {vendor_desc} -> {out_path.name}", flush=True)
     if done:
         print(f"Resume mode: {len(done)} sudah selesai", flush=True)
 
-    with LOG_PATH.open("a", encoding="utf-8") as f:
+    with out_path.open("a", encoding="utf-8") as f:
         for row in tqdm(rows, desc="Jawa filter"):
             if row["source_id"] in done:
                 continue
@@ -147,7 +156,7 @@ def main() -> None:
             f.write(json.dumps(rec, ensure_ascii=False) + "\n")
             f.flush()
 
-    print(f"Done. Logged to {LOG_PATH}", flush=True)
+    print(f"Done. Logged to {out_path}", flush=True)
 
 
 if __name__ == "__main__":
