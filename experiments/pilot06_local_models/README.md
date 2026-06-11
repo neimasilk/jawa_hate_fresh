@@ -43,9 +43,19 @@ $env:SMOKE_MODELS="aisingapore/Llama-SEA-LION-v3.5-8B-R:q5_k_m,qwen3:14b"
 - **Filter: local lebih ceroboh.** qwen2.5 lewatkan penanda Jawa nyata (`lengser keprabon`, `wong`), `penanda_jawa` banyak halusinasi. Kategori bahasa mostly benar tapi ~25% borderline akan ke-drop. Untuk filter, kualitas < Grok.
 - **`/no_think` wajib** untuk reasoning model (qwen3 61s→11s). qwen2.5 (non-reasoning) tercepat 3.4s.
 
-## Validasi consensus (149 pool)
+## Validasi consensus (149 pool) — HASIL
 
-`run_local_consensus.py`: jalankan model lokal prompt v2 di 149 pool → α(deepseek, lokal) vs pembanding α(deepseek, grok)=0.763. Pakai ulang label deepseek v2 yang ada → cuma butuh run lokal (gratis).
+`run_local_consensus.py`: model lokal prompt v2 di 149 pool → α(deepseek, lokal). Pembanding **α(deepseek, grok) v2 = 0.763**.
+
+| Rater ke-2 (vs deepseek) | JSON valid | Pairwise | α | 95% CI | Biaya |
+|---|---|---|---|---|---|
+| grok (cloud, pembanding) | — | — | 0.763 | [0.624, 0.879] | $ (mahal) |
+| **qwen3:14b /no_think (lokal)** | 100% | 90% | **0.660** | [0.480, 0.807] | **gratis** |
+| SEA-LION v3.5-8B-R /no_think (lokal, Jawa-native) | 100% | 80% | 0.422 | [0.238, 0.581] | gratis |
+
+**qwen3 verdict:** α 0.660 — moderat-baik, CI overlap kuat dengan 0.763. **deepseek(murah)+qwen3(gratis) = consensus viable tanpa xAI.** Sedikit di bawah Grok tapi gratis + reproducible.
+
+**SEA-LION verdict (2026-06-11): GAGAL gate consensus.** α 0.422 jauh di bawah qwen3 (0.660), CI tidak overlap dengan 0.763. Disagreement dua arah (18 over-flag + 10 miss dari 140) = noise, bukan bias sistematis. **Temuan paper menarik: model region-specific Jawa-native ≠ otomatis rater lebih baik** — kapabilitas instruksi-following umum (qwen3 14B > SEA-LION 8B) lebih menentukan daripada language-specificity untuk tugas klasifikasi terstruktur. JSON tetap 100% valid & cepat (2.2s/call) → SEA-LION masih kandidat untuk tugas FILTER (deteksi bahasa, lebih mudah), bukan untuk consensus labeling.
 
 ## Status
 
@@ -53,7 +63,8 @@ $env:SMOKE_MODELS="aisingapore/Llama-SEA-LION-v3.5-8B-R:q5_k_m,qwen3:14b"
 |---|---|
 | `call_ollama` + `/no_think` support | ✅ |
 | Smoke test qwen3 + qwen2.5 | ✅ — local kuat di hate, ceroboh di filter |
-| Validasi α(deepseek, qwen3-local) di 149 | 🔄 running |
-| Pull SEA-LION v3.5-8B-R | 🔄 downloading (lambat) |
-| Validasi α SEA-LION | ⏳ tunggu pull |
-| Keputusan vendor mix final | ⏳ tunggu α |
+| Validasi α(deepseek, qwen3-local) di 149 | ✅ — α 0.660, CI [0.480, 0.807] |
+| Pull SEA-LION v3.5-8B-R | ✅ |
+| Validasi α SEA-LION | ✅ — α 0.422, GAGAL gate consensus |
+| Parametrize `run_filter.py` + `run_bulk.py` ke lokal | ✅ — env `FILTER_VENDOR` / `BULK_VENDORS` |
+| Keputusan vendor mix final | ⏳ rekomendasi: deepseek+qwen3, tunggu keputusan Bapak |

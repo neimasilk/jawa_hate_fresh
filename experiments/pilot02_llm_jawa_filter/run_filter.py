@@ -11,11 +11,18 @@ Sumber: `haipradana/indonesian-twitter-hate-speech-cleaned` (HF, public).
   - Kita pakai RAW TEXT saja; label asli (hate/neutral) cuma untuk cross-tab,
     BUKAN sebagai label pipeline kita. Re-labeling kultural dilakukan terpisah.
 
-Single-LLM filter (Grok 4.3 — paling cepat & murah di Pilot #1). Resume-aware.
+Single-LLM filter. Default Grok 4.3 (tercepat/termurah di Pilot #1); sejak
+Pilot #6 bisa di-switch ke model lokal Ollama (gratis, RTX 4080):
+
+  $env:FILTER_VENDOR="ollama"; $env:LOCAL_MODEL="qwen3:14b"; $env:LOCAL_NO_THINK="1"
+  .venv\Scripts\python experiments\pilot02_llm_jawa_filter\run_filter.py
+
+Resume-aware: error kuota/saldo (429/403) dianggap transient dan di-retry.
 """
 from __future__ import annotations
 
 import json
+import os
 import random
 import re
 import sys
@@ -30,7 +37,7 @@ _ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(_ROOT))
 
 from src.cultural_prompt import load_prompt_template, parse_llm_output, render_user_prompt  # noqa: E402
-from src.llm_clients import call_grok  # noqa: E402
+from src.llm_clients import call_grok, call_ollama  # noqa: E402
 
 OUT_DIR = Path(__file__).resolve().parent / "outputs"
 OUT_DIR.mkdir(exist_ok=True)
@@ -44,6 +51,18 @@ DATASET = "haipradana/indonesian-twitter-hate-speech-cleaned"
 # Yield hot ~7.5% -> estimasi pool ~950 teks.
 N_SAMPLE = 20000
 SEED = 42
+
+# Vendor filter: "grok" (default, cloud) atau "ollama" (lokal, gratis).
+FILTER_VENDOR = os.environ.get("FILTER_VENDOR", "grok")
+LOCAL_MODEL = os.environ.get("LOCAL_MODEL", "qwen3:14b")
+NO_THINK = os.environ.get("LOCAL_NO_THINK") == "1"
+
+
+def call_filter_llm(system: str, user: str):
+    if FILTER_VENDOR == "ollama":
+        suffix = "\n\n/no_think" if NO_THINK else ""
+        return call_ollama(system + suffix, user, model=LOCAL_MODEL)
+    return call_grok(system, user)
 
 _MENTION = re.compile(r"@\w+")
 _URL = re.compile(r"https?://\S+|www\.\S+")
@@ -87,8 +106,9 @@ def already_done(path: Path) -> set[str]:
                 continue
             raw = (rec.get("raw_text") or "").strip()
             err = rec.get("error") or ""
-            if "429" in err or "insufficient balance" in err.lower():
-                continue  # error kuota/saldo = transient, rerun harus retry
+            err_l = err.lower()
+            if "429" in err or "403" in err or "insufficient balance" in err_l or "permission-denied" in err_l:
+                continue  # error kuota/saldo/kredit-habis = transient, rerun harus retry
             if err or raw:
                 done.add(rec["source_id"])
     return done
@@ -98,6 +118,8 @@ def main() -> None:
     system, user_tpl = load_prompt_template(PROMPT_PATH)
     rows = sample_rows()
     done = already_done(LOG_PATH)
+    vendor_desc = f"ollama:{LOCAL_MODEL}" if FILTER_VENDOR == "ollama" else "grok"
+    print(f"Filter vendor: {vendor_desc}", flush=True)
     if done:
         print(f"Resume mode: {len(done)} sudah selesai", flush=True)
 
@@ -106,7 +128,7 @@ def main() -> None:
             if row["source_id"] in done:
                 continue
             user = render_user_prompt(user_tpl, row["text"])
-            resp = call_grok(system, user)
+            resp = call_filter_llm(system, user)
             parsed = parse_llm_output(resp.raw_text)
             rec = {
                 "ts": datetime.now(timezone.utc).isoformat(),

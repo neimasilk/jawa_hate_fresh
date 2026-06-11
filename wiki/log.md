@@ -58,6 +58,15 @@ Format: `YYYY-MM-DD | OP | sumber/trigger | entities-touched | summary`
 
 ---
 
+## 2026-06-11
+
+| Time | OP | Trigger | Touched | Summary |
+|------|----|---------|---------|---------|
+| session-start | QUERY | User "lanjutkan" | CLAUDE.md, HANDOFF.md, wiki/index.md (read) | Pickup: Langkah 1 = ambil hasil 2 run lokal semalam. qwen3 ternyata SELESAI (α 0.660); SEA-LION ter-download tapi run baru 61/140 → di-resume. |
+| **pilot6-done** | **INGEST** | Resume run SEA-LION selesai (140/140) → α final kedua model lokal | **wiki/pilots.md (section Pilot #6 + status #5/#6), pilot06 README, STATE.md (C8 + sesi log), HANDOFF.md, run_filter.py + run_bulk.py** | **Pilot #6 DONE: qwen3:14b α(ds, lokal) 0.660 (CI [0.480, 0.807]) LOLOS — consensus deepseek+lokal viable tanpa xAI. SEA-LION (Jawa-native) α 0.422 (CI [0.238, 0.581]) GAGAL** — noise dua arah (18 over + 10 miss); temuan paper: region-specific ≠ rater lebih baik. Utang teknis: run_filter/run_bulk diparametrize lokal (`FILTER_VENDOR`/`BULK_VENDORS`) + resume 403=transient. Pending keputusan Bapak: vendor mix final (rekomendasi deepseek+qwen3). |
+
+---
+
 ## Convention
 
 - **INGEST:** Source baru di-process ke wiki. Touched = entity pages yang di-update.

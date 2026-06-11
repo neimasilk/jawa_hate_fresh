@@ -9,11 +9,18 @@ Teks yang sudah dilabel v2 di Pilot #3 (149 pool prompt-iteration,
 responses_v2.jsonl) TIDAK diulang — analyze.py menggabungkan keduanya.
 Held-out = semua sid di luar 149 itu (snapshot prompt_iter_sids.json).
 
-Resume-aware + 429-aware (error kuota di-retry saat rerun).
+Resume-aware + 429/403-aware (error kuota/kredit di-retry saat rerun).
+
+Vendor mix via env BULK_VENDORS (default "deepseek,grok"). Entry "ollama"
+memakai model lokal LOCAL_MODEL (+ LOCAL_NO_THINK="1" untuk reasoning model):
+
+  $env:BULK_VENDORS="deepseek,ollama"; $env:LOCAL_MODEL="qwen3:14b"; $env:LOCAL_NO_THINK="1"
+  .venv\Scripts\python experiments\pilot05_bulk_labeling\run_bulk.py
 """
 from __future__ import annotations
 
 import json
+import os
 import sys
 import time
 from datetime import datetime, timezone
@@ -29,7 +36,7 @@ from src.cultural_prompt import (  # noqa: E402
     parse_llm_output,
     render_user_prompt,
 )
-from src.llm_clients import call_deepseek, call_grok  # noqa: E402
+from src.llm_clients import call_deepseek, call_grok, call_ollama  # noqa: E402
 
 PROMPT_VERSION = "v2"  # pemenang Pilot #3 (alpha ds+grok 0.763)
 PROMPT_PATH = ROOT / "prompts" / f"cultural_classification_{PROMPT_VERSION}.md"
@@ -40,7 +47,35 @@ OUTPUT_DIR = Path(__file__).resolve().parent / "outputs"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 OUT_PATH = OUTPUT_DIR / "bulk_responses.jsonl"
 
-VENDORS = [("deepseek", call_deepseek), ("grok", call_grok)]  # D15: Kimi dropped
+LOCAL_MODEL = os.environ.get("LOCAL_MODEL", "qwen3:14b")
+NO_THINK = os.environ.get("LOCAL_NO_THINK") == "1"
+
+
+def _make_ollama_caller():
+    suffix = "\n\n/no_think" if NO_THINK else ""
+
+    def call_local(system: str, user: str):
+        return call_ollama(system + suffix, user, model=LOCAL_MODEL)
+
+    # nama vendor harus sama dengan resp.vendor ("ollama:<model>") agar resume match
+    return f"ollama:{LOCAL_MODEL}", call_local
+
+
+def build_vendors() -> list[tuple]:
+    names = [v.strip() for v in os.environ.get("BULK_VENDORS", "deepseek,grok").split(",") if v.strip()]
+    registry = {"deepseek": ("deepseek", call_deepseek), "grok": ("grok", call_grok)}
+    vendors = []
+    for name in names:
+        if name == "ollama":
+            vendors.append(_make_ollama_caller())
+        elif name in registry:
+            vendors.append(registry[name])
+        else:
+            raise SystemExit(f"BULK_VENDORS tidak dikenal: {name!r} (pilihan: deepseek, grok, ollama)")
+    return vendors
+
+
+VENDORS = build_vendors()  # default deepseek+grok (D15: Kimi dropped)
 
 
 def load_hot_subset() -> list[dict]:
@@ -71,7 +106,8 @@ def already_processed(*paths: Path) -> set[tuple[str, str]]:
                     rec = json.loads(line)
                     raw_text = (rec.get("raw_text") or "").strip()
                     err = rec.get("error") or ""
-                    if "429" in err or "insufficient balance" in err.lower():
+                    err_l = err.lower()
+                    if "429" in err or "403" in err or "insufficient balance" in err_l or "permission-denied" in err_l:
                         continue
                     if err or raw_text:
                         done.add((rec["source_id"], rec["vendor"]))
@@ -83,7 +119,8 @@ def already_processed(*paths: Path) -> set[tuple[str, str]]:
 def main() -> None:
     timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
     samples = load_hot_subset()
-    print(f"Bulk labeling prompt {PROMPT_VERSION} | pool {len(samples)} teks hot-Jawa", flush=True)
+    vendor_names = ", ".join(name for name, _ in VENDORS)
+    print(f"Bulk labeling prompt {PROMPT_VERSION} | pool {len(samples)} teks hot-Jawa | vendors: {vendor_names}", flush=True)
 
     system_prompt, user_template = load_prompt_template(PROMPT_PATH)
     done = already_processed(OUT_PATH, PILOT03_PATH)

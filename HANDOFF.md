@@ -1,17 +1,27 @@
 # HANDOFF - Ujaran Kebencian Jawa
 
-**Last updated:** 2026-06-10 — Pilot #3 selesai (v2 α 0.763). **Pilot #5 bulk filter berhenti (xAI habis di 4351/12703 → 332 hot-Jawa didapat). Pilot #6 eksplorasi model LOKAL pengganti Grok BERJALAN.**
+**Last updated:** 2026-06-11 — **Pilot #6 SELESAI: qwen3:14b lokal LOLOS (α 0.660), SEA-LION GAGAL (α 0.422).** Pipeline tanpa xAI viable. **Menunggu keputusan Bapak: vendor mix final.**
 **Tujuan:** sesi baru langsung tahu status terbaru, blocker, dan next action.
 
 **Cara mulai besok:** cukup bilang **"lanjut"**. Agent: baca CLAUDE.md → HANDOFF.md (ini) → wiki/index.md → STATE.md, lalu kerjakan "Next Concrete Action" di bawah.
 
 ---
 
-## 💸 xAI/Grok HABIS → eksplorasi model LOKAL (Pilot #6, BERJALAN)
+## ✅ PILOT #6 SELESAI (2026-06-11): lokal bisa gantikan Grok
 
-Filter bulk (Pilot #5) berhenti di **4.351/12.703** karena kredit xAI nol (2.225 error 403). **Sudah dapat 332 hot-Jawa (190 hate)** — 2.2× pool lama, cukup untuk dataset. Eksplorasi model lokal Ollama (RTX 4080) pengganti Grok. Smoke test (Pilot #6): **qwen3:14b `/no_think` kuat di hate classification** (JSON 100%, agree vs grok 100%, 11s/call) tapi ceroboh di filter; qwen2.5:7b tercepat (3.4s). Sedang validasi **α(deepseek, qwen3-lokal)** di 149 pool → kalau ≈0.763, consensus = deepseek(murah)+lokal(gratis), xAI tak perlu lagi. SEA-LION (Jawa-native) masih download. Detail: `experiments/pilot06_local_models/`.
+Validasi penuh di pool 149 (prompt v2, pembanding α ds+grok = 0.763):
 
-**Pending keputusan Bapak:** vendor mix final (cloud+lokal) menunggu α. Filter sisa: lokal (gratis overnight) atau berhenti di 332.
+| Rater ke-2 vs deepseek | JSON valid | Pairwise | α | 95% CI | Biaya |
+|---|---|---|---|---|---|
+| grok (pembanding) | — | — | 0.763 | [0.624, 0.879] | $ mahal |
+| **qwen3:14b /no_think** | 100% | 90% | **0.660** | [0.480, 0.807] | **gratis** |
+| SEA-LION v3.5-8B-R | 100% | 80% | 0.422 | [0.238, 0.581] | gratis |
+
+- **qwen3 LOLOS** — CI overlap kuat dengan 0.763. **deepseek(murah) + qwen3(gratis) = consensus viable tanpa xAI.**
+- **SEA-LION GAGAL** gate consensus (noise dua arah: 18 over-flag + 10 miss). Temuan paper menarik: model Jawa-native ≠ otomatis rater lebih baik. Masih kandidat untuk tugas FILTER (2.2s/call).
+- Infra bulk SIAP untuk lokal: `run_filter.py` (`FILTER_VENDOR="ollama"`) & `run_bulk.py` (`BULK_VENDORS="deepseek,ollama"`) sudah diparametrize; 2.225 record error 403 (xAI habis) sekarang dihitung transient → rerun otomatis retry.
+
+**Pending keputusan Bapak (satu-satunya blocker):** vendor mix final — lihat Next Concrete Action.
 
 ---
 
@@ -25,7 +35,7 @@ Saldo Moonshot habis (run Kimi v1 gagal 149/149, 429) → keputusan Bapak: **bia
 
 Riset tetap pada framing **"Eliminating Human Bottleneck in Low-Resource Hate Speech Annotation"** untuk paper JINITA Sinta 2 + dataset/codebook HKI.
 
-**🔆 STATUS TERKINI (2026-06-10 malam):** Pilot #3 SELESAI → **prompt v2, α deepseek+grok = 0.763** (CI [0.624, 0.879]); prompt kerja = `prompts/cultural_classification_v2.md`. Bulk (Pilot #5) mulai tapi **xAI/Grok habis** di filter 4351/12703 → **332 hot-Jawa (190 hate) sudah didapat** (cukup). Pivot ke **model lokal Ollama (Pilot #6)** untuk hilangkan Grok mahal: smoke test qwen3:14b `/no_think` kuat di hate classification. 2 validasi α lokal berjalan semalam → cek besok (Next Action Langkah 1). **Keputusan vendor mix final menunggu α lokal.**
+**🔆 STATUS TERKINI (2026-06-11):** Pilot #6 SELESAI — **qwen3:14b lokal α(ds, qwen3) = 0.660 LOLOS** (CI overlap dengan pembanding ds+grok 0.763); **SEA-LION α 0.422 GAGAL**. Pipeline tanpa xAI viable: deepseek(cloud murah)+qwen3(lokal gratis). Prompt kerja tetap `prompts/cultural_classification_v2.md`. Pilot #5 bulk PAUSED di filter 4351/12703 (**332 hot-Jawa / 190 hate sudah didapat**, cukup); infra `run_filter.py`/`run_bulk.py` sudah siap vendor lokal. **Satu-satunya blocker: keputusan Bapak vendor mix final.**
 
 **✅ NOVELTY REFRAME (D14, 2026-06-08):** keputusan Bapak — klaim "dataset pertama/from-scratch" **DITINGGALKAN** (dataset hate Jawa sudah ada: UI/WCSE 2021, tak di-release). Novelty utama sekarang 3 pilar: (1) **pipeline fully-automated zero-human**, (2) **taksonomi kultural 4-dimensi register-aware**, (3) **code-mixed realism**. PRD sudah di-update ke v0.3 (D13 retroaktif + D14, Goals G2/G3/G5 sinkron). Dataset tetap deliverable ("first *publicly released*" = fakta sekunder, bukan klaim utama).
 
@@ -84,40 +94,37 @@ Catatan dedup: rerun meng-APPEND record baru (responses.jsonl punya 300 unik tap
 
 ---
 
-## Next Concrete Action (BESOK — urutan)
+## Next Concrete Action (urutan)
 
-Konteks: Pilot #3 selesai (prompt v2 α 0.763). Pilot #5 bulk **tertahan** karena xAI habis (filter 4351/12703, tapi sudah dapat **332 hot-Jawa / 190 hate** = cukup). Sedang eksplorasi **model lokal (Pilot #6)** untuk hilangkan ketergantungan Grok mahal.
+Konteks: Pilot #6 selesai — α lokal sudah final (qwen3 0.660 ✅, SEA-LION 0.422 ❌). Infra bulk sudah diparametrize ke lokal. Tinggal keputusan Bapak lalu eksekusi.
 
-**LANGKAH 1 — ambil hasil 2 background run semalam (HAL PERTAMA):**
-   a. **α(deepseek, qwen3-lokal)** — validasi apakah lokal bisa gantikan Grok di consensus:
+**LANGKAH 1 — keputusan vendor mix final (BUTUH INPUT BAPAK):**
+   - **Opsi A (rekomendasi): deepseek + qwen3:14b lokal.** α 0.660 sedikit di bawah Grok (0.763) tapi CI overlap kuat, gratis, reproducible (siapa pun bisa rerun tanpa API xAI), zero risiko kredit habis. Biaya tersisa cuma deepseek ~$2-3.
+   - **Opsi B: isi kredit xAI ~$2-3** → tetap deepseek+grok (α tertinggi), labeling 332 pool saja (bukan filter).
+   - Sub-keputusan: **filter sisa 8.352 teks** — lanjut pakai lokal gratis overnight (pool bisa ~950) atau berhenti di 332 (sudah 2.2× pool lama)?
+
+**LANGKAH 2 — jalankan bulk labeling (Pilot #5) sesuai keputusan.** Contoh Opsi A + lanjut filter:
    ```powershell
-   $env:LOCAL_MODEL="qwen3:14b"; $env:LOCAL_NO_THINK="1"; .venv\Scripts\python experiments\pilot06_local_models\run_local_consensus.py
+   # (opsional) selesaikan filter sisa pakai lokal — gratis, overnight:
+   $env:FILTER_VENDOR="ollama"; $env:LOCAL_MODEL="qwen3:14b"; $env:LOCAL_NO_THINK="1"
+   .venv\Scripts\python experiments\pilot02_llm_jawa_filter\run_filter.py
+   # regenerate pool hot-Jawa, lalu label:
+   $env:BULK_VENDORS="deepseek,ollama"
+   .venv\Scripts\python experiments\pilot05_bulk_labeling\run_bulk.py
    ```
-   (resume-aware — kalau run semalam sudah selesai, ini langsung cetak α dari cache; kalau belum, lanjutkan sisanya. **Angka kunci: α vs pembanding 0.763 (ds+grok).** ≥0.6 = lokal layak jadi rater consensus.)
-   b. **SEA-LION** (model Jawa-native) — cek apakah pull selesai: `ollama list | findstr -i sea`. Kalau ada, jalankan validasinya (kandidat consensus TERBAIK karena dilatih Jawa):
-   ```powershell
-   $env:LOCAL_MODEL="aisingapore/Llama-SEA-LION-v3.5-8B-R:q5_k_m"; $env:LOCAL_NO_THINK="1"; .venv\Scripts\python experiments\pilot06_local_models\run_local_consensus.py
-   ```
-   Kalau pull belum selesai/gagal: `ollama pull aisingapore/Llama-SEA-LION-v3.5-8B-R:q5_k_m` (atau coba versi non-reasoning `Llama-SEA-LION-v3-8B-IT` untuk filter cepat).
+   (Resume-aware semua; record 403 lama otomatis di-retry. Label deepseek 149 lama di-merge dari Pilot #3.)
 
-**LANGKAH 2 — keputusan vendor mix final (butuh input Bapak):** berdasar α di langkah 1, pilih consensus:
-   - α(ds, lokal) ≈ 0.7+ → **deepseek (cloud murah) + lokal (gratis)** = pipeline tanpa xAI. Ini target ideal (hemat).
-   - α lokal rendah → tetap butuh Grok; isi kredit xAI secukupnya HANYA untuk labeling (~$2-3, bukan filter).
-
-**LANGKAH 3 — selesaikan dataset (Pilot #5)** pakai vendor mix terpilih:
-   - **Pool:** pakai 332 yang sudah ada (cukup), ATAU lanjutkan filter sisa pakai **lokal gratis** (`run_filter.py` perlu di-switch ke `call_ollama` dulu — belum dikerjakan).
-   - Regenerate pool → `run_bulk.py` (perlu di-update ke vendor mix terpilih) → `analyze.py` → held-out α + `data/labeled/bulk_v2_consensus.jsonl`.
-
-**Belum dikerjakan (utang teknis kecil):** `run_filter.py` & `run_bulk.py` masih hardcode vendor cloud — perlu di-parametrize untuk pakai lokal kalau Langkah 2 pilih lokal.
+**LANGKAH 3 — analisis + dataset:** `analyze.py` → held-out α (vs 0.763/0.660) + `data/labeled/bulk_v2_consensus.jsonl` + `bulk_v2_disagreement.jsonl` (bahan codebook). Catatan: `analyze.py` pilot05 mungkin perlu penyesuaian nama vendor `ollama:qwen3:14b` — cek saat jalan.
 
 ---
 
-## 📖 PANDUAN BAPAK (besok)
+## 📖 PANDUAN BAPAK
 
-1. **Mesin & sleep:** model lokal jalan di GPU RTX 4080 — pastikan mesin tidak sleep saat run lokal. Settings → System → Power → sleep "Never" (plugged in).
-2. **Saldo:** DeepSeek (murah, https://platform.deepseek.com) cukup ~$2-3 untuk labeling. **xAI TIDAK perlu diisi lagi** kecuali Langkah 2 memutuskan butuh Grok. Lokal = gratis.
-3. **Tinggal bilang "lanjut"** — agent baca HANDOFF ini, ambil hasil 2 run lokal semalam (Langkah 1), lalu lapor α + rekomendasi vendor mix. Keputusan akhir di Bapak.
-4. **Zero-human tetap** — tidak ada anotasi manual.
+1. **Keputusan yang ditunggu (Langkah 1):** vendor mix — Opsi A deepseek+qwen3 lokal (rekomendasi, gratis) atau Opsi B isi xAI ~$2-3; plus: lanjutkan filter sisa pakai lokal (overnight) atau cukup 332 pool.
+2. **Mesin & sleep:** model lokal jalan di GPU RTX 4080 — pastikan mesin tidak sleep saat run lokal. Settings → System → Power → sleep "Never" (plugged in).
+3. **Saldo:** DeepSeek (murah, https://platform.deepseek.com) cukup ~$2-3 untuk labeling. **xAI TIDAK perlu diisi** kecuali Bapak pilih Opsi B.
+4. **Tinggal bilang "lanjut" + sebut pilihan** (mis. "lanjut, opsi A, filter lanjutkan") — agent langsung eksekusi Langkah 2-3.
+5. **Zero-human tetap** — tidak ada anotasi manual.
 
 ### Cara cek progres background (PowerShell di folder proyek)
 ```powershell

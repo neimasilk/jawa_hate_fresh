@@ -15,7 +15,8 @@ Cross-ref: [`STATE.md` Next milestones](../STATE.md), [`STATE.md` Challenges Log
 | **#1b** | C3 re-test (3 LLM × hot-Jawa) — memecah α degenerate | ✅ DONE 2026-06-10 — **scale-up n=149: α=0.587 (CI [0.48, 0.70]), gate YELLOW tipis** | $0.26 + $1.57 | 0 jam | [`pilot01b_c3_retest/`](../experiments/pilot01b_c3_retest/) |
 | **#3** | Cultural prompt manual iteration | ✅ DONE 2026-06-10 — **v2: α ds+grok 0.534 → 0.763** dalam 2 iterasi | ~$2.3 actual | 0 jam | [`pilot03_cultural_prompt/`](../experiments/pilot03_cultural_prompt/) |
 | **#4** | AutoResearch loop (Karpathy pattern) | 📋 PLANNED (mungkin tak perlu — Pilot #3 manual cuma butuh 2 iter) | ~$12.5/run (bounded) | 0 jam (overnight agent) | [`pilot04_autoresearch_prompts/`](../experiments/pilot04_autoresearch_prompts/) |
-| **#5** | Bulk labeling produksi (filter full 12.7K → label v2 ds+grok → held-out α + dataset) | 🔄 RUNNING 2026-06-10 malam | ~$12-15 est | 0 jam (jaga mesin nyala) | [`pilot05_bulk_labeling/`](../experiments/pilot05_bulk_labeling/) |
+| **#5** | Bulk labeling produksi (filter full 12.7K → label v2 → held-out α + dataset) | ⏸️ PAUSED — xAI habis di filter 4351/12703; **332 hot-Jawa (190 hate) didapat** | ~$12-15 est | 0 jam (jaga mesin nyala) | [`pilot05_bulk_labeling/`](../experiments/pilot05_bulk_labeling/) |
+| **#6** | Model lokal Ollama sbg pengganti Grok (RTX 4080, gratis) | ✅ DONE 2026-06-11 — **qwen3:14b α 0.660 LOLOS; SEA-LION α 0.422 GAGAL** | $0 | 0 jam | [`pilot06_local_models/`](../experiments/pilot06_local_models/) |
 
 ---
 
@@ -195,13 +196,37 @@ Filter diperluas 250 → 2000 tweet haipradana. Pool hot-Jawa **24 → 149 teks 
 
 **Ketahanan:** semua step resume-aware + 429-aware; rantai idempotent `scripts/run_bulk_pipeline.ps1` (jalankan ulang kapan pun). Panduan user: HANDOFF §Panduan Bapak.
 
-**Status:** 🔄 RUNNING (step 1 filter). Detail: [`pilot05_bulk_labeling/README.md`](../experiments/pilot05_bulk_labeling/README.md).
+**Insiden (2026-06-10 malam):** kredit xAI habis di filter **4351/12703** (2.225 error 403). Hasil parsial: **332 hot-Jawa (190 hate orig)** = 2.2× pool lama — cukup untuk dataset pertama. Memicu Pilot #6 (model lokal pengganti Grok).
+
+**Status:** ⏸️ PAUSED — menunggu keputusan vendor mix (Pilot #6). `run_filter.py` + `run_bulk.py` sudah diparametrize ke lokal (`FILTER_VENDOR` / `BULK_VENDORS`); record error 403 dihitung transient → rerun lokal akan retry otomatis. Detail: [`pilot05_bulk_labeling/README.md`](../experiments/pilot05_bulk_labeling/README.md).
+
+---
+
+## Pilot #6 — Model lokal (Ollama) sebagai pengganti Grok
+
+**Tujuan:** hilangkan ketergantungan xAI/Grok (mahal, kredit habis di tengah Pilot #5) dengan model lokal di RTX 4080 — gratis, reproducible, vendor independen sah untuk consensus.
+
+**Metode:** smoke test 12 teks (filter + hate v2) → validasi penuh α(deepseek, lokal) di pool 149 yang sama dengan Pilot #3. Pembanding: α(deepseek, grok) v2 = **0.763**.
+
+### Hasil validasi α (140 unit valid deepseek-v2)
+
+| Rater ke-2 vs deepseek | JSON valid | Pairwise | α | 95% CI | Biaya |
+|---|---|---|---|---|---|
+| grok (cloud, pembanding) | — | — | 0.763 | [0.624, 0.879] | $ |
+| **qwen3:14b /no_think** | 100% | 90% | **0.660** | [0.480, 0.807] | gratis |
+| SEA-LION v3.5-8B-R /no_think | 100% | 80% | 0.422 | [0.238, 0.581] | gratis |
+
+- **qwen3:14b LOLOS:** α 0.660, CI overlap kuat dengan 0.763 → **deepseek(cloud murah) + qwen3(lokal gratis) = consensus viable tanpa xAI**. Latency ~11s/call.
+- **SEA-LION GAGAL gate consensus:** α 0.422, disagreement dua arah (18 over + 10 miss) = noise, bukan bias sistematis. **Temuan paper: model region-specific Jawa-native ≠ otomatis rater lebih baik** — kapabilitas instruction-following umum (qwen3 14B) lebih menentukan daripada language-specificity untuk klasifikasi terstruktur. Masih kandidat untuk tugas filter (lebih mudah, 2.2s/call, JSON 100%).
+- Smoke test: `/no_think` wajib untuk reasoning model (qwen3 61s→11s); lokal ceroboh di tugas filter vs Grok (penanda_jawa halusinasi) tapi kuat di klasifikasi hate.
+
+**Status:** ✅ DONE 2026-06-11. Keputusan vendor mix final = keputusan user (rekomendasi: deepseek+qwen3). Detail: [`pilot06_local_models/README.md`](../experiments/pilot06_local_models/README.md).
 
 ---
 
 ## Future pilots (potential)
 
-- **Pilot #6:** BERT/IndoBERT/XLM-R training di auto-labeled data
-- **Pilot #7:** Adversarial perturbation testing untuk model robustness
+- **Pilot #7:** BERT/IndoBERT/XLM-R training di auto-labeled data
+- **Pilot #8:** Adversarial perturbation testing untuk model robustness
 
 (Update sesuai eksperimen progress + insight baru.)
