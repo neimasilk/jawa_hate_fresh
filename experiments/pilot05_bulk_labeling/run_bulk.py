@@ -43,6 +43,8 @@ PROMPT_PATH = ROOT / "prompts" / f"cultural_classification_{PROMPT_VERSION}.md"
 
 INPUT_PATH = ROOT / "experiments" / "pilot02_llm_jawa_filter" / "outputs" / "hot_jawa_subset.jsonl"
 PILOT03_PATH = ROOT / "experiments" / "pilot03_cultural_prompt" / "outputs" / f"responses_{PROMPT_VERSION}.jsonl"
+# Label v2 qwen3 lokal di 140 teks pool-149 (Pilot #6 validasi) — di-merge, tidak diulang.
+PILOT06_LOCAL_PATH = ROOT / "experiments" / "pilot06_local_models" / "outputs" / "local_v2_qwen3_14b.jsonl"
 OUTPUT_DIR = Path(__file__).resolve().parent / "outputs"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 OUT_PATH = OUTPUT_DIR / "bulk_responses.jsonl"
@@ -123,7 +125,7 @@ def main() -> None:
     print(f"Bulk labeling prompt {PROMPT_VERSION} | pool {len(samples)} teks hot-Jawa | vendors: {vendor_names}", flush=True)
 
     system_prompt, user_template = load_prompt_template(PROMPT_PATH)
-    done = already_processed(OUT_PATH, PILOT03_PATH)
+    done = already_processed(OUT_PATH, PILOT03_PATH, PILOT06_LOCAL_PATH)
     if done:
         print(f"Resume/merge mode: {len(done)} (sample, vendor) pairs sudah ada", flush=True)
 

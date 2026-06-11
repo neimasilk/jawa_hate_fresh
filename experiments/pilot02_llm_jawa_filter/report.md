@@ -1,30 +1,30 @@
 # Pilot #2 — LLM-as-Jawa-filter Report
 
 **Sumber:** haipradana/indonesian-twitter-hate-speech-cleaned (raw text)
-**Total diproses:** 2000  |  **valid JSON:** 1999  |  **invalid:** 1
+**Total diproses:** 6579  |  **valid JSON:** 4354  |  **invalid:** 2225
 **Filter LLM:** Grok 4.3, prompt jawa_filter_v0
 
 ## Distribusi kategori bahasa
 
 | Kategori | N | % dari valid |
 |---|---|---|
-| jawa | 15 | 0.8% |
-| campuran | 134 | 6.7% |
-| indonesia | 1800 | 90.0% |
-| lainnya | 50 | 2.5% |
+| jawa | 34 | 0.8% |
+| campuran | 298 | 6.8% |
+| indonesia | 3912 | 89.8% |
+| lainnya | 110 | 2.5% |
 
-**Yield Jawa+campuran:** 149/1999 = **7.5%**
+**Yield Jawa+campuran:** 332/4354 = **7.6%**
 
 ## Cross-tab bahasa × label hate asli
 
 | Kategori | hate | neutral |
 |---|---|---|
-| jawa | 6 | 9 |
-| campuran | 74 | 60 |
-| indonesia | 897 | 903 |
-| lainnya | 7 | 43 |
+| jawa | 15 | 19 |
+| campuran | 175 | 123 |
+| indonesia | 1961 | 1951 |
+| lainnya | 20 | 90 |
 
-**Subset panas (Jawa+campuran):** 149 teks, di antaranya **80 berlabel hate** (54%).
+**Subset panas (Jawa+campuran):** 332 teks, di antaranya **190 berlabel hate** (57%).
 Disimpan ke `outputs/hot_jawa_subset.jsonl`.
 
 ## Contoh per kategori (max 4)
