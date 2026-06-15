@@ -1,6 +1,6 @@
 # HANDOFF - Ujaran Kebencian Jawa
 
-**Last updated:** 2026-06-15 — **Pilot #5 SELESAI: dataset berlabel pertama jadi (331 consensus, 74 hate). Held-out validation LULUS — prompt v2 GENERALIZES** (α ds+grok held-out 0.670 vs iter 0.747, CI overlap). Pipeline fully-LLM zero-human terbukti end-to-end. Vendor mix final = **ds+grok+qwen3** (D16). **Blocker hilang — keputusan berikut: perbesar pool (cascade filter) atau ship dataset v1 + modeling.**
+**Last updated:** 2026-06-15 — **Pilot #5 SELESAI** (dataset 331 consensus, held-out validation LULUS). **⏳ SEDANG BERJALAN: Opsi A (perbesar pool via cascade filter) — pipeline overnight `scripts/run_cascade_pipeline.ps1` di-launch background 2026-06-15.** Tujuan: pool 332 → ~950 (perbaiki ketimpangan gender, perkaya dimensi SARA). Resume-safe; kalau sesi fresh & pipeline masih jalan, JANGAN relaunch — cek dulu `experiments/pilot05_bulk_labeling/report.md` apakah sudah update. Vendor mix final = **ds+grok+qwen3** (D16).
 **Tujuan:** sesi baru langsung tahu status terbaru, blocker, dan next action.
 
 **Cara mulai:** cukup bilang **"lanjut"**. Agent: baca CLAUDE.md → HANDOFF.md (ini) → wiki/index.md → STATE.md, lalu kerjakan "Next Concrete Action" di bawah.

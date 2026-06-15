@@ -1,6 +1,6 @@
 # STATE — Ujaran Kebencian Jawa (Fully LLM Pipeline)
 
-**Stage:** Pilot #1, #2, #1b, #3, #6 DONE. **Pilot #5 DONE (2026-06-15): dataset berlabel pertama 331 consensus (74 hate) + held-out validation LULUS** (ds+grok held-out α 0.670 vs iter 0.747 → prompt v2 generalizes; pipeline fully-LLM zero-human terbukti end-to-end). Vendor mix final = **3-rater ds+grok+qwen3** (D16). Analisis terverifikasi adversarial (formula α dikanonikkan ke Krippendorff coincidence-matrix; 2 bug diperbaiki). **Next: keputusan Bapak — perbesar pool (cascade filter Pilot #6b, dataset 331 masih kecil vs target D7) atau ship v1 + modeling/codebook.**
+**Stage:** Pilot #1, #2, #1b, #3, #6 DONE. **Pilot #5 DONE (2026-06-15): dataset berlabel pertama 331 consensus (74 hate) + held-out validation LULUS** (ds+grok held-out α 0.670 vs iter 0.747 → prompt v2 generalizes; pipeline fully-LLM zero-human terbukti end-to-end). Vendor mix final = **3-rater ds+grok+qwen3** (D16). Analisis terverifikasi adversarial (formula α dikanonikkan ke Krippendorff coincidence-matrix; 2 bug diperbaiki). **⏳ SEDANG BERJALAN: Opsi A (perbesar pool, cascade filter Pilot #6b) — `scripts/run_cascade_pipeline.ps1` overnight, pool 332→~950. Resume-safe; jangan relaunch kalau masih jalan.**
 **Last update:** 2026-06-15
 
 ---
