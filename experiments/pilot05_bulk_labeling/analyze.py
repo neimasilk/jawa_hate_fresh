@@ -57,13 +57,24 @@ VENDORS = [v.strip() for v in os.environ.get(
 
 
 def main() -> None:
-    records = load_records(BULK_PATH) + load_records(PILOT03_PATH)
+    # Urutan load = pilot03/pilot06 DULU, bulk TERAKHIR, supaya keep-last =
+    # "bulk menang" (sesuai intent). bulk = re-run yang memperbaiki record
+    # empty_response lama di pilot03 (run_bulk tak menganggap empty=done).
+    # Memuat bulk terakhir bug-fix 2026-06-15: sebelumnya bulk dimuat pertama
+    # -> record stale pilot03 menimpa label valid bulk (6 sid deepseek iter-pool).
+    records = load_records(PILOT03_PATH)
     if PILOT06_LOCAL_PATH.exists():
         records += load_records(PILOT06_LOCAL_PATH)
-    # dedup lintas file: keep-last per (sid, vendor) — bulk menang atas pilot03
+    records += load_records(BULK_PATH)
+    # dedup lintas file: keep-last per (sid, vendor), TAPI jangan timpa record
+    # valid dengan yang invalid (defensif untuk run cascade di masa depan).
     latest: dict[tuple[str, str], dict] = {}
     for rec in records:
-        latest[(rec["source_id"], rec["vendor"])] = rec
+        key = (rec["source_id"], rec["vendor"])
+        prev = latest.get(key)
+        if prev is not None and is_valid_json(prev) and not is_valid_json(rec):
+            continue
+        latest[key] = rec
     records = list(latest.values())
 
     hot_sids = {json.loads(l)["source_id"] for l in HOT_PATH.open(encoding="utf-8")}
@@ -121,26 +132,49 @@ def main() -> None:
         ci = bootstrap_alpha_ci(units)
         lines.append(f"| {name} | {len(sids)} | **{a:.3f}** | [{ci[0]:.3f}, {ci[1]:.3f}] |")
     lines.append("")
-    lines.append("(Held-out alpha ≈ prompt-iter alpha → prompt v2 generalizes, bukan overfit ke pool 149.)")
+    lines.append("(Catatan: alpha 3-rater di atas lebih rendah daripada pembanding ds+grok 0.763 karena "
+                 "rater ke-3 (qwen3 lokal) lebih bising — lihat sensitivity di bawah. Pembanding 0.763 = "
+                 "**2-rater ds+grok**, jadi tes overfit yang adil = baris ds+grok held-out di tabel berikut, "
+                 "BUKAN angka 3-rater.)")
     lines.append("")
 
-    if len(VENDORS) >= 3:
-        lines.append("## Sensitivity rater (full pool): pairwise + drop-1")
+    # ── Tes overfit yang adil: pasangan rater PRIMER (ds+grok), held-out vs iter ──
+    primary = [v for v in ("deepseek", "grok") if v in VENDORS]
+    if len(primary) == 2:
+        lines.append(f"## Tes overfit ADIL — pasangan primer {' + '.join(primary)} (apples-to-apples vs Pilot #3 0.763)")
         lines.append("")
-        lines.append("| Rater set | alpha | 95% CI |")
-        lines.append("|---|---|---|")
-        for pair in combinations(VENDORS, 2):
-            units = hate_units(by_source, list(pair), all_sids)
+        lines.append("| Subset | n teks | alpha | 95% CI |")
+        lines.append("|---|---|---|---|")
+        for name, sids in (("**Held-out** (di luar pool iterasi)", heldout_sids),
+                           ("Prompt-iter pool (= Pilot #3, harus ≈ 0.763)", iter_pool_sids),
+                           ("Full pool", all_sids)):
+            units = hate_units(by_source, primary, sids)
             a = krippendorff_alpha_nominal(units)
             ci = bootstrap_alpha_ci(units)
-            lines.append(f"| {' + '.join(pair)} | {a:.3f} | [{ci[0]:.3f}, {ci[1]:.3f}] |")
+            lines.append(f"| {name} | {len(sids)} | **{a:.3f}** | [{ci[0]:.3f}, {ci[1]:.3f}] |")
+        lines.append("")
+        lines.append("(Held-out ds+grok ≥ ~0.6 dan CI overlap dengan iter-pool → prompt v2 GENERALIZES, "
+                     "bukan overfit. iter-pool harus ≈ 0.763 = sanity-check bahwa merge/komputasi benar.)")
+        lines.append("")
+
+    if len(VENDORS) >= 3:
+        lines.append("## Sensitivity rater: pairwise (held-out + full) + drop-1")
+        lines.append("")
+        lines.append("| Rater set | subset | alpha | 95% CI |")
+        lines.append("|---|---|---|---|")
+        for pair in combinations(VENDORS, 2):
+            for sub_name, sids in (("held-out", heldout_sids), ("full", all_sids)):
+                units = hate_units(by_source, list(pair), sids)
+                a = krippendorff_alpha_nominal(units)
+                ci = bootstrap_alpha_ci(units)
+                lines.append(f"| {' + '.join(pair)} | {sub_name} | {a:.3f} | [{ci[0]:.3f}, {ci[1]:.3f}] |")
         for drop in VENDORS:
             kept = [v for v in VENDORS if v != drop]
             if len(kept) >= 2 and len(VENDORS) > 3:
                 units = hate_units(by_source, kept, all_sids)
                 a = krippendorff_alpha_nominal(units)
                 ci = bootstrap_alpha_ci(units)
-                lines.append(f"| drop {drop} | {a:.3f} | [{ci[0]:.3f}, {ci[1]:.3f}] |")
+                lines.append(f"| drop {drop} | full | {a:.3f} | [{ci[0]:.3f}, {ci[1]:.3f}] |")
         lines.append("")
 
     # ── Consensus split + dataset files ─────────────────────────────────
@@ -194,8 +228,12 @@ def main() -> None:
     lines.append(f"- **Consensus (majority hate):** {len(consensus_rows)} teks ({len(consensus_rows) / len(all_sids) * 100:.1f}%) → `data/labeled/bulk_v2_consensus.jsonl`")
     lines.append(f"  - hate=True: {n_hate} | hate=False: {len(consensus_rows) - n_hate}")
     lines.append(f"  - unanimous: {n_unanimous} | majority non-unanimous: {len(consensus_rows) - n_unanimous}")
-    sev_agree = sum(1 for r in consensus_rows if r["severity_agreement"])
-    lines.append(f"  - severity juga agree (di antara rater yang vote consensus): {sev_agree}/{len(consensus_rows)}")
+    hate_cons = [r for r in consensus_rows if r["consensus_hate"]]
+    nonhate_cons = [r for r in consensus_rows if not r["consensus_hate"]]
+    sev_agree_hate = sum(1 for r in hate_cons if r["severity_agreement"])
+    sev_agree_buk = sum(1 for r in nonhate_cons if r["severity_agreement"])
+    lines.append(f"  - severity-level agree DI ANTARA baris hate: {sev_agree_hate}/{len(hate_cons)} "
+                 f"(baris non-hate {sev_agree_buk}/{len(nonhate_cons)} cuma sepakat BUK — bukan severity sungguhan)")
     lines.append(f"- **Tie/invalid:** {len(disagree_rows)} teks → `data/labeled/bulk_v2_disagreement.jsonl` (bahan codebook + analisis)")
     by_reason = Counter(r["reason"] for r in disagree_rows)
     lines.append(f"  - breakdown: {dict(by_reason)}")
@@ -210,7 +248,18 @@ def main() -> None:
         for r in hate_rows:
             for v in VENDORS:
                 p = r["vendors"].get(v) or {}
-                c[p.get(dim, "?")] += 1
+                val = p.get(dim, "?")
+                # sebagian vendor sesekali kembalikan list (form=["sarcastic","code_switched"])
+                # ATAU string ber-koma ("direct, code_switched"); pecah keduanya jadi item
+                # terpisah (konsisten dgn target_group) supaya profil tidak crash / bias.
+                if isinstance(val, list):
+                    items = val
+                elif isinstance(val, str) and "," in val:
+                    items = [s.strip() for s in val.split(",")]
+                else:
+                    items = [val]
+                for item in items:
+                    c[item] += 1
         lines.append(f"- **{dim}** (vote {len(VENDORS)} rater): {dict(c.most_common())}")
     tg: Counter = Counter()
     for r in hate_rows:
