@@ -17,8 +17,8 @@
 
 ## Krippendorff's alpha (CORE metric C3)
 
-- **Binary hate:** alpha = **0.587** (bootstrap 95% CI [0.475, 0.698], n_boot=2000)
-- **Severity (4 kategori):** alpha = **0.480** (95% CI [0.387, 0.571])
+- **Binary hate:** alpha = **0.613** (bootstrap 95% CI [0.507, 0.717], n_boot=2000)
+- **Severity (4 kategori):** alpha = **0.469** (95% CI [0.376, 0.555])
 - Label distribution (hate): {False: 150, True: 246} — non-degenerate, alpha bermakna
 
 | Pair | N pairs | Agreement % |
@@ -129,7 +129,7 @@
 
 - Avg refusal rate: **1.8%** (target < 20%)
 - Avg JSON validity: **89.7%** (target > 90%)
-- Krippendorff's alpha (hate): **0.587** (target > 0.5) 
+- Krippendorff's alpha (hate): **0.613** (target > 0.5) 
 
 🟡 **YELLOW — alpha moderat. Inspeksi disagreement (boundary case atau noise?), pertimbangkan iterasi prompt (Pilot #3) sebelum scale-up.**
 

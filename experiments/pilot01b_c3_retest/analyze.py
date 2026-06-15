@@ -59,45 +59,42 @@ def is_valid_json(rec: dict) -> bool:
 
 
 def krippendorff_alpha_nominal(units: list[list]) -> float:
-    """Krippendorff's alpha untuk nominal data, units = list per-item per-rater values."""
+    """Krippendorff's alpha (nominal), bentuk KANONIK coincidence-matrix.
+
+    Disinkronkan dengan src/agreement.py pada 2026-06-15 (koreksi verifikasi
+    Pilot #5): bobot per-unit 1/(m_u-1). Untuk data ini (Kimi validity rendah
+    -> banyak unit 2-rater bercampur 3-rater) angka 3-rater bergeser 0.587 -> 0.613;
+    kesimpulan (YELLOW, consensus moderat) tak berubah. Divalidasi vs dataset
+    rujukan Krippendorff (alpha = 0.743). Angka pairwise 2-rater identik.
+    """
     pairable = [u for u in units if sum(1 for v in u if v is not None) >= 2]
     if not pairable:
         return float("nan")
 
-    all_vals = [v for u in pairable for v in u if v is not None]
-    if not all_vals:
-        return float("nan")
-
-    categories = sorted(set(str(v) for v in all_vals))
-    n_total = len(all_vals)
-
-    do_num = 0.0
-    do_den = 0.0
+    o: dict[tuple[str, str], float] = {}
     for u in pairable:
         ratings = [str(v) for v in u if v is not None]
         m = len(ratings)
         if m < 2:
             continue
-        for i in range(len(ratings)):
-            for j in range(len(ratings)):
-                if i != j and ratings[i] != ratings[j]:
-                    do_num += 1
-        do_den += m * (m - 1)
+        w = 1.0 / (m - 1)
+        for i in range(m):
+            for j in range(m):
+                if i != j:
+                    key = (ratings[i], ratings[j])
+                    o[key] = o.get(key, 0.0) + w
 
-    do = do_num / do_den if do_den else 0.0
+    categories = sorted({c for c, _ in o} | {k for _, k in o})
+    n_c = {c: sum(o.get((c, k), 0.0) for k in categories) for c in categories}
+    n_total = sum(n_c.values())
+    if n_total < 2:
+        return float("nan")
 
-    counts = Counter(str(v) for v in all_vals)
-    de_num = 0.0
-    for c1 in categories:
-        for c2 in categories:
-            if c1 != c2:
-                de_num += counts[c1] * counts[c2]
-    de_den = n_total * (n_total - 1)
-    de = de_num / de_den if de_den else 0.0
-
-    if de == 0:
-        return 1.0 if do == 0 else float("nan")
-    return 1.0 - (do / de)
+    do_sum = sum(o.get((c, k), 0.0) for c in categories for k in categories if c != k)
+    de_sum = sum(n_c[c] * n_c[k] for c in categories for k in categories if c != k)
+    if de_sum == 0:
+        return 1.0 if do_sum == 0 else float("nan")
+    return 1.0 - (n_total - 1) * do_sum / de_sum
 
 
 def bootstrap_alpha_ci(units: list[list], n_boot: int = BOOTSTRAP_N, seed: int = BOOTSTRAP_SEED) -> tuple[float, float]:
