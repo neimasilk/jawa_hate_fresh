@@ -64,6 +64,18 @@ Format: `YYYY-MM-DD | OP | sumber/trigger | entities-touched | summary`
 |------|----|---------|---------|---------|
 | session-start | QUERY | User "lanjutkan" | CLAUDE.md, HANDOFF.md, wiki/index.md (read) | Pickup: Langkah 1 = ambil hasil 2 run lokal semalam. qwen3 ternyata SELESAI (α 0.660); SEA-LION ter-download tapi run baru 61/140 → di-resume. |
 | **pilot6-done** | **INGEST** | Resume run SEA-LION selesai (140/140) → α final kedua model lokal | **wiki/pilots.md (section Pilot #6 + status #5/#6), pilot06 README, STATE.md (C8 + sesi log), HANDOFF.md, run_filter.py + run_bulk.py** | **Pilot #6 DONE: qwen3:14b α(ds, lokal) 0.660 (CI [0.480, 0.807]) LOLOS — consensus deepseek+lokal viable tanpa xAI. SEA-LION (Jawa-native) α 0.422 (CI [0.238, 0.581]) GAGAL** — noise dua arah (18 over + 10 miss); temuan paper: region-specific ≠ rater lebih baik. Utang teknis: run_filter/run_bulk diparametrize lokal (`FILTER_VENDOR`/`BULK_VENDORS`) + resume 403=transient. Pending keputusan Bapak: vendor mix final (rekomendasi deepseek+qwen3). |
+| **D16 + bulk + cascade** | **INGEST** (di-log retroaktif 2026-06-15) | Keputusan Bapak vendor mix + eksekusi (commits `3fa1411`/`39acb20`/`3207869`) | **(saat itu BELUM di-log) src 3-rater infra, pilot05 outputs, pilot06 run_cascade.py, run_filter.py** | **D16: vendor mix 3-rater ds+grok+qwen3** (tambah qwen3, bukan ganti grok). Labeling cloud ds+grok pool 332 selesai (373 call, 0 error). Cascade filter Pilot #6b dibangun (SEA-LION→qwen3 pre-screen → grok verify, pool grok-confirmed). 3 commit ini tak sempat di-log → disusulkan sesi 2026-06-15. |
+
+---
+
+## 2026-06-15
+
+| Time | OP | Trigger | Touched | Summary |
+|------|----|---------|---------|---------|
+| session-start | QUERY | User "lanjutkan" | CLAUDE.md, HANDOFF.md, wiki/index.md, wiki/decisions.md, wiki/pilots.md, STATE.md (read) + git log | **Drift 4-hari terdeteksi:** doc bilang "blocker = keputusan vendor", tapi git sudah jauh (D16 dibuat, cloud labeling selesai, cascade infra ada) + qwen3 rater ke-3 (192 record) uncommitted. Rekonsiliasi: keputusan sudah dibuat & dieksekusi, tinggal finalisasi analisis. |
+| **pilot5-finalize** | **INGEST** | Jalankan analisis Pilot #5 (pertama kali) | **experiments/pilot05_bulk_labeling/ (analyze.py + report.md + bulk_responses.jsonl), data/labeled/ (gitignored)** | Fix crash list-valued `form` → `analyze.py` jalan → **dataset 331 consensus (74 hate) + held-out validation: ds+grok held-out α 0.670 vs iter 0.747 → prompt v2 GENERALIZES**. Tambah tabel tes-overfit-adil (same-rater-set). |
+| **verify-adversarial** | **LINT** | Verifikasi sebelum commit (workflow 3 agent: 2 code-audit + 1 recompute independen) | **src/agreement.py, experiments/pilot01b_c3_retest/ (analyze + report), pilot05 analyze.py** | Recompute verdict "confirmed" TAPI code-audit menemukan **2 bug**: (1) dedup load-order (record stale menimpa label valid → consensus 330/2→331/1, ds+grok iter 0.763 = artefak bug, sebenarnya 0.747); (2) formula α non-kanonik → diperbaiki ke **coincidence-matrix Krippendorff** (validasi vs 0.743). **D17.** Sync pilot01b 0.587→0.613. Lesson: recompute meniru bug yang sama → butuh code-audit terpisah. |
+| **ingest-docs** | **INGEST** | Susulkan D16 + log Pilot #5 final ke wiki | **HANDOFF.md, STATE.md (stage/milestone/C9/sesi log), wiki/decisions.md (D16+D17+D-OPEN-2), wiki/pilots.md (#5 DONE + #6b), wiki/log.md (ini)** | Doc disinkronkan ke git reality. Commits `fbd59a2`+`2ac5db3`. **Next: D-OPEN-2 keputusan Bapak — perbesar pool (cascade) vs ship v1 + modeling/codebook.** |
 
 ---
 

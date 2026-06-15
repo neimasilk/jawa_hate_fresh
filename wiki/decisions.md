@@ -1,6 +1,6 @@
 # Decisions Log
 
-_Last touched: 2026-06-10 (D15 vendor mix final). Source-of-truth untuk decision rationale._
+_Last touched: 2026-06-15 (D16 3-rater mix + D17 koreksi α). Source-of-truth untuk decision rationale._
 
 Cross-ref: [`PRD.md` §0](../PRD.md) (kanonik), [STATE.md sesi log](../STATE.md), [memory project files](../../.claude/projects/C--Users-Mukhlis-Amien-Documents-ujaran-kebencian-jawa-fresh/memory/MEMORY.md).
 
@@ -208,8 +208,44 @@ Dataset tetap deliverable (HKI + release HF/Zenodo) — boleh disebut "first *pu
 
 ---
 
+## D16 — Vendor mix final: 3-rater DeepSeek + Grok + qwen3:14b lokal
+
+**Date:** 2026-06-11 (di-log retroaktif 2026-06-15)
+**Decision:** Cross-LLM consistency memakai **3 rater**: DeepSeek V4 Pro + Grok 4.3 (cloud) + **qwen3:14b lokal** (Ollama, RTX 4080). **Memperluas** D15 (yang 2-LLM ds+grok) — qwen3 **ditambah** sebagai rater independen ke-3, bukan pengganti Grok.
+
+**Rationale:**
+1. Pilot #6 membuktikan qwen3:14b LOLOS sebagai rater (α(ds,qwen3) 0.660, CI overlap dengan ds+grok 0.763).
+2. Rater ke-3 independen = triangulasi consensus lebih kuat (3 vendor, 2 keluarga arsitektur, 2 lokasi cloud+lokal).
+3. qwen3 gratis + lokal → sebagian pipeline **reproducible tanpa API berbayar**; mengurangi risiko kredit habis (insiden Kimi D15 + xAI Pilot #5).
+4. Cascade filter (Pilot #6b) pakai lokal untuk pre-screen murah, grok untuk verify (pool tetap grok-confirmed).
+
+**Konsekuensi:**
+- Consensus = majority vote 3 rater (≥2 label valid). Dataset Pilot #5 pakai aturan ini (331 consensus / 1 tie).
+- qwen3 = rater paling bising (lone-dissenter 31/64 non-unanimous) → klaim α utama paper pakai **pasangan primer ds+grok** (held-out 0.670); 3-rater (held-out 0.565) dilaporkan sebagai consensus konservatif + bukti reproducibility.
+- Data Kimi v0 (D15) tetap dipakai sebagai sensitivity 3-vs-2 vendor di paper.
+
+**See also:** [pilots.md Pilot #5 + #6](pilots.md), [D15](#d15--vendor-mix-final-2-llm-deepseekgrok-kimi-dropped), STATE.md C8/C9.
+
+---
+
+## D17 — Metrik α dikanonikkan (Krippendorff coincidence-matrix) + verifikasi adversarial = SOP
+
+**Date:** 2026-06-15
+**Decision:** (1) `src/agreement.py krippendorff_alpha_nominal` diubah ke **bentuk kanonik coincidence-matrix** dengan bobot per-unit 1/(m_u−1) (sebelumnya "pooled pairs" tanpa bobot). (2) Sebelum angka analisis masuk paper/commit, jalankan **verifikasi adversarial** (code-audit + recompute independen).
+
+**Rationale:**
+- Temuan verifikasi Pilot #5: formula lama membiaskan Do saat coverage rater tak rata (unit 2 vs 3 rater). Identik untuk 2-rater (semua angka headline ds+grok TAK berubah); 3-rater bergeser (pilot01b 0.587→0.613, Pilot #5 held-out 0.558→0.565). Reviewer yang pakai library standar akan dapat angka kanonik → wajib konsisten. Divalidasi vs dataset rujukan Krippendorff (α=0.743).
+- Verifikasi menangkap bug dedup yang **recompute independen sendiri lewatkan** (ia meniru urutan dedup yang sama) → butuh DUA jalur: code-audit (logika) + recompute (angka). Ini sendiri = materi metodologi paper ("rigor tanpa human gold").
+
+**Konsekuensi:** `is_valid_json` kini wajib key 'hate' (refusal ≠ valid label; tak pengaruh α). pilot01b copy lokal disinkronkan. Semua α baru (Pilot #5+) kanonik. Angka 2-rater historis (0.763, 0.660, 0.747) tetap sah.
+
+**See also:** STATE.md C9, `experiments/pilot05_bulk_labeling/report.md`, commit `fbd59a2`.
+
+---
+
 ## Open decisions
 
 - **D-OPEN-1:** HKI batch placement di tridarma tracker UBHINUS — tunggu input user.
+- **D-OPEN-2:** Perbesar pool (cascade filter Pilot #6b → ~950) untuk modeling BERT, atau ship dataset v1 (331) + fokus codebook/paper? Dataset 331 < target D7 (10K, gate 3K). Tunggu keputusan Bapak.
 
 (Decisions yang sudah resolved tapi minor / default-approved tidak ditulis di sini supaya lean. Lihat [`PRD.md` §9](../PRD.md) untuk full open decisions list.)

@@ -1,9 +1,34 @@
 # HANDOFF - Ujaran Kebencian Jawa
 
-**Last updated:** 2026-06-11 — **Pilot #6 SELESAI: qwen3:14b lokal LOLOS (α 0.660), SEA-LION GAGAL (α 0.422).** Pipeline tanpa xAI viable. **Menunggu keputusan Bapak: vendor mix final.**
+**Last updated:** 2026-06-15 — **Pilot #5 SELESAI: dataset berlabel pertama jadi (331 consensus, 74 hate). Held-out validation LULUS — prompt v2 GENERALIZES** (α ds+grok held-out 0.670 vs iter 0.747, CI overlap). Pipeline fully-LLM zero-human terbukti end-to-end. Vendor mix final = **ds+grok+qwen3** (D16). **Blocker hilang — keputusan berikut: perbesar pool (cascade filter) atau ship dataset v1 + modeling.**
 **Tujuan:** sesi baru langsung tahu status terbaru, blocker, dan next action.
 
-**Cara mulai besok:** cukup bilang **"lanjut"**. Agent: baca CLAUDE.md → HANDOFF.md (ini) → wiki/index.md → STATE.md, lalu kerjakan "Next Concrete Action" di bawah.
+**Cara mulai:** cukup bilang **"lanjut"**. Agent: baca CLAUDE.md → HANDOFF.md (ini) → wiki/index.md → STATE.md, lalu kerjakan "Next Concrete Action" di bawah.
+
+---
+
+## ✅ PILOT #5 SELESAI (2026-06-15): dataset berlabel pertama + held-out validation
+
+Pipeline produksi penuh dijalankan sampai tuntas (3-rater **ds + grok + qwen3-lokal** = D16) di pool **332 teks hot-Jawa**. `analyze.py` menghasilkan dataset + report + validasi anti-overfit.
+
+**HELD-OUT VALIDATION (klaim kunci paper — prompt v2 tidak overfit ke pool iterasi 149):**
+- Tes ADIL same-rater-set ds+grok: **held-out α = 0.670 [0.525, 0.792]** vs iter-pool **0.747** → di atas ambang 0.6 + CI overlap = **GENERALIZES ✅**.
+- α 3-rater (ds+grok+qwen3): held-out 0.565, full 0.610. Lebih rendah karena **qwen3 = rater paling bising** (lone-dissenter 31/64 baris non-unanimous; konsisten Pilot #6). Pakai angka ds+grok untuk klaim utama, qwen3 = rater ke-3 gratis/reproducible.
+
+**DATASET v1** (`data/labeled/`, gitignored → rilis HF/Zenodo nanti):
+- `bulk_v2_consensus.jsonl`: **331 teks** (74 hate / 257 non-hate, ~22% hate stabil held-out vs iter) — majority-vote ≥2 rater valid.
+- `bulk_v2_disagreement.jsonl`: **1 tie** (sid 3009, "komunis Rusia" — borderline politis) = bahan codebook.
+- Target group teratas: gender_wanita 60, gender_lgbtq 33, politik 44, suku_tionghoa 18, agama_islam 18. Severity sepakat hanya 41/74 baris hate → **label inti tetap binary**, severity noisier.
+
+**⚠️ Ukuran:** 331 label (74 hate) = bukti pipeline solid + held-out valid, TAPI jauh di bawah target D7 (10K, gate 3K) untuk training BERT. Pool perlu diperbesar (lihat Next Action).
+
+**Verifikasi adversarial (materi paper metodologi):** sebelum commit, analisis di-audit multi-agent + recompute independen. Menemukan **2 bug nyata** yang sudah diperbaiki: (1) dedup load-order (record stale menimpa label valid → consensus 330/2 jadi 331/1, ds+grok iter 0.763→0.747); (2) formula α non-kanonik (diperbaiki ke coincidence-matrix Krippendorff, validasi vs dataset rujukan 0.743). Lesson: recompute independen *meniru* bug yang sama → hanya **code-audit** yang menangkapnya. Detail: `experiments/pilot05_bulk_labeling/report.md` + commit `fbd59a2`/`2ac5db3`.
+
+---
+
+## ✅ D16 (2026-06-11): vendor mix final = 3-rater ds + grok + qwen3-lokal
+
+Setelah Pilot #6, Bapak putuskan pakai **3 rater**: deepseek + grok (cloud) + qwen3:14b (lokal gratis). Bukan ganti Grok, tapi **tambah** qwen3 sebagai rater independen ke-3 → triangulasi lebih kuat + sebagian reproducible tanpa API berbayar. Cascade filter (Pilot #6b) dibangun untuk perbesar pool murah: lokal pre-screen → grok verify (pool tetap grok-confirmed). Catatan: kredit xAI sudah terisi (labeling pool 332 cloud sukses 0 error).
 
 ---
 
@@ -35,7 +60,7 @@ Saldo Moonshot habis (run Kimi v1 gagal 149/149, 429) → keputusan Bapak: **bia
 
 Riset tetap pada framing **"Eliminating Human Bottleneck in Low-Resource Hate Speech Annotation"** untuk paper JINITA Sinta 2 + dataset/codebook HKI.
 
-**🔆 STATUS TERKINI (2026-06-11):** Pilot #6 SELESAI — **qwen3:14b lokal α(ds, qwen3) = 0.660 LOLOS** (CI overlap dengan pembanding ds+grok 0.763); **SEA-LION α 0.422 GAGAL**. Pipeline tanpa xAI viable: deepseek(cloud murah)+qwen3(lokal gratis). Prompt kerja tetap `prompts/cultural_classification_v2.md`. Pilot #5 bulk PAUSED di filter 4351/12703 (**332 hot-Jawa / 190 hate sudah didapat**, cukup); infra `run_filter.py`/`run_bulk.py` sudah siap vendor lokal. **Satu-satunya blocker: keputusan Bapak vendor mix final.**
+**🔆 STATUS TERKINI (2026-06-15):** **Pilot #5 SELESAI** — dataset berlabel pertama (331 consensus, 74 hate) + held-out validation **LULUS** (ds+grok held-out α 0.670 vs iter 0.747 → prompt v2 generalizes). Vendor mix final 3-rater ds+grok+qwen3 (D16). Prompt kerja `prompts/cultural_classification_v2.md`. Analisis sudah diverifikasi adversarial (2 bug diperbaiki, formula α dikanonikkan). **Blocker hilang.** Pilot #6 sebelumnya: qwen3 LOLOS (0.660), SEA-LION GAGAL (0.422).
 
 **✅ NOVELTY REFRAME (D14, 2026-06-08):** keputusan Bapak — klaim "dataset pertama/from-scratch" **DITINGGALKAN** (dataset hate Jawa sudah ada: UI/WCSE 2021, tak di-release). Novelty utama sekarang 3 pilar: (1) **pipeline fully-automated zero-human**, (2) **taksonomi kultural 4-dimensi register-aware**, (3) **code-mixed realism**. PRD sudah di-update ke v0.3 (D13 retroaktif + D14, Goals G2/G3/G5 sinkron). Dataset tetap deliverable ("first *publicly released*" = fakta sekunder, bukan klaim utama).
 
@@ -96,35 +121,33 @@ Catatan dedup: rerun meng-APPEND record baru (responses.jsonl punya 300 unik tap
 
 ## Next Concrete Action (urutan)
 
-Konteks: Pilot #6 selesai — α lokal sudah final (qwen3 0.660 ✅, SEA-LION 0.422 ❌). Infra bulk sudah diparametrize ke lokal. Tinggal keputusan Bapak lalu eksekusi.
+Konteks: Pilot #5 tuntas — pipeline fully-LLM zero-human terbukti end-to-end, held-out validation lulus, dataset v1 (331 teks) jadi & terverifikasi. Tinggal **keputusan arah** dari Bapak.
 
-**LANGKAH 1 — keputusan vendor mix final (BUTUH INPUT BAPAK):**
-   - **Opsi A (rekomendasi): deepseek + qwen3:14b lokal.** α 0.660 sedikit di bawah Grok (0.763) tapi CI overlap kuat, gratis, reproducible (siapa pun bisa rerun tanpa API xAI), zero risiko kredit habis. Biaya tersisa cuma deepseek ~$2-3.
-   - **Opsi B: isi kredit xAI ~$2-3** → tetap deepseek+grok (α tertinggi), labeling 332 pool saja (bukan filter).
-   - Sub-keputusan: **filter sisa 8.352 teks** — lanjut pakai lokal gratis overnight (pool bisa ~950) atau berhenti di 332 (sudah 2.2× pool lama)?
+**KEPUTUSAN UTAMA (BUTUH INPUT BAPAK): perbesar pool atau ship + modeling?**
 
-**LANGKAH 2 — jalankan bulk labeling (Pilot #5) sesuai keputusan.** Contoh Opsi A + lanjut filter:
-   ```powershell
-   # (opsional) selesaikan filter sisa pakai lokal — gratis, overnight:
-   $env:FILTER_VENDOR="ollama"; $env:LOCAL_MODEL="qwen3:14b"; $env:LOCAL_NO_THINK="1"
-   .venv\Scripts\python experiments\pilot02_llm_jawa_filter\run_filter.py
-   # regenerate pool hot-Jawa, lalu label:
-   $env:BULK_VENDORS="deepseek,ollama"
-   .venv\Scripts\python experiments\pilot05_bulk_labeling\run_bulk.py
-   ```
-   (Resume-aware semua; record 403 lama otomatis di-retry. Label deepseek 149 lama di-merge dari Pilot #3.)
+- **Opsi A (rekomendasi): perbesar pool via cascade filter (Pilot #6b).** Dataset sekarang cuma 331 (74 hate) — jauh di bawah target D7 (10K, gate 3K) untuk training BERT. Cascade filter sudah siap: SEA-LION (pass 1) → qwen3 (pass 2) lokal gratis pre-screen → grok verify (pass 3, ~$1.2 est) sisa ~8.3K teks. Estimasi pool jadi **~950 teks**. Jalan overnight (GPU RTX 4080 — pastikan mesin tidak sleep). Lalu rerun bulk label 3-rater + analyze (semua resume-aware). **Butuh: mesin nyala + kredit grok + xAI.**
+  ```powershell
+  # pass 1+2 lokal gratis (pre-screen) lalu pass 3 grok verify:
+  .venv\Scripts\python experiments\pilot06_local_models\run_cascade.py
+  # regenerate pool, lalu label 3-rater (resume-aware, 332 lama di-skip):
+  $env:BULK_VENDORS="deepseek,grok"; .venv\Scripts\python experiments\pilot05_bulk_labeling\run_bulk.py
+  $env:BULK_VENDORS="ollama"; $env:LOCAL_MODEL="qwen3:14b"; $env:LOCAL_NO_THINK="1"
+  .venv\Scripts\python experiments\pilot05_bulk_labeling\run_bulk.py
+  .venv\Scripts\python experiments\pilot05_bulk_labeling\analyze.py
+  ```
+- **Opsi B: ship dataset v1 (331) sekarang + mulai paralel:** (1) **codebook** dari `bulk_v2_disagreement.jsonl` + profil taksonomi (deliverable HKI), (2) draft section metodologi paper (held-out validation + verifikasi adversarial = materi kuat). Modeling BERT ditunda sampai pool cukup.
 
-**LANGKAH 3 — analisis + dataset:** `analyze.py` → held-out α (vs 0.763/0.660) + `data/labeled/bulk_v2_consensus.jsonl` + `bulk_v2_disagreement.jsonl` (bahan codebook). Catatan: `analyze.py` pilot05 mungkin perlu penyesuaian nama vendor `ollama:qwen3:14b` — cek saat jalan.
+**Catatan teknis untuk eksekusi Opsi A:** `run_cascade.py` (Pilot #6b) menulis pre-screen lokal ke log terpisah; pool regeneration tetap grok-confirmed. Cek `experiments/pilot06_local_models/run_cascade.py` + commit `3207869` sebelum jalan. `analyze.py` default 3-rater `deepseek,grok,ollama:qwen3:14b` (override via `ANALYZE_VENDORS`).
 
 ---
 
 ## 📖 PANDUAN BAPAK
 
-1. **Keputusan yang ditunggu (Langkah 1):** vendor mix — Opsi A deepseek+qwen3 lokal (rekomendasi, gratis) atau Opsi B isi xAI ~$2-3; plus: lanjutkan filter sisa pakai lokal (overnight) atau cukup 332 pool.
-2. **Mesin & sleep:** model lokal jalan di GPU RTX 4080 — pastikan mesin tidak sleep saat run lokal. Settings → System → Power → sleep "Never" (plugged in).
-3. **Saldo:** DeepSeek (murah, https://platform.deepseek.com) cukup ~$2-3 untuk labeling. **xAI TIDAK perlu diisi** kecuali Bapak pilih Opsi B.
-4. **Tinggal bilang "lanjut" + sebut pilihan** (mis. "lanjut, opsi A, filter lanjutkan") — agent langsung eksekusi Langkah 2-3.
-5. **Zero-human tetap** — tidak ada anotasi manual.
+1. **Keputusan yang ditunggu:** arah berikutnya — **Opsi A** perbesar pool via cascade filter (overnight, rekomendasi — dataset 331 masih kecil) atau **Opsi B** ship dataset v1 + mulai codebook/paper paralel. Lihat Next Concrete Action.
+2. **Mesin & sleep:** cascade filter & qwen3 jalan di GPU RTX 4080 — kalau pilih Opsi A pastikan mesin tidak sleep. Settings → System → Power → sleep "Never" (plugged in).
+3. **Saldo:** Opsi A butuh DeepSeek (~$2-3) + grok/xAI (~$1-2 untuk verify pass + labeling pool baru). Opsi B tidak butuh saldo.
+4. **Tinggal bilang "lanjut" + sebut pilihan** (mis. "lanjut, opsi A") — agent langsung eksekusi.
+5. **Zero-human tetap** — tidak ada anotasi manual. Dataset v1 (331) sudah siap di `data/labeled/` (lokal, belum dirilis).
 
 ### Cara cek progres background (PowerShell di folder proyek)
 ```powershell

@@ -154,7 +154,9 @@ def main() -> None:
             lines.append(f"| {name} | {len(sids)} | **{a:.3f}** | [{ci[0]:.3f}, {ci[1]:.3f}] |")
         lines.append("")
         lines.append("(Held-out ds+grok ≥ ~0.6 dan CI overlap dengan iter-pool → prompt v2 GENERALIZES, "
-                     "bukan overfit. iter-pool harus ≈ 0.763 = sanity-check bahwa merge/komputasi benar.)")
+                     "bukan overfit. iter-pool ds+grok ≈ Pilot #3 0.763 [sedikit turun: 6 label deepseek "
+                     "yang dulu empty_response di Pilot #3 kini diperbaiki dari bulk & dimasukkan] = "
+                     "sanity-check merge/dedup benar.)")
         lines.append("")
 
     if len(VENDORS) >= 3:

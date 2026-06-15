@@ -12,11 +12,12 @@ Cross-ref: [`STATE.md` Next milestones](../STATE.md), [`STATE.md` Challenges Log
 |---|---|---|---|---|---|
 | **#1** | LLM characterization (3 LLM × 100 sampel Jawa) | ✅ DONE 2026-05-25 — gate GREEN (lihat caveat) | $0.85 actual | 0 jam | [`pilot01_llm_characterization/`](../experiments/pilot01_llm_characterization/) |
 | **#2** | LLM-as-Jawa-filter + ekstrak subset Jawa-panas | ✅ DONE 2026-05-25 — yield 9.6%, 24 hot (9 hate) | ~$0.05 | 0 jam | [`pilot02_llm_jawa_filter/`](../experiments/pilot02_llm_jawa_filter/) |
-| **#1b** | C3 re-test (3 LLM × hot-Jawa) — memecah α degenerate | ✅ DONE 2026-06-10 — **scale-up n=149: α=0.587 (CI [0.48, 0.70]), gate YELLOW tipis** | $0.26 + $1.57 | 0 jam | [`pilot01b_c3_retest/`](../experiments/pilot01b_c3_retest/) |
+| **#1b** | C3 re-test (3 LLM × hot-Jawa) — memecah α degenerate | ✅ DONE 2026-06-10 — **scale-up n=149: α=0.613 (kanonik D17; 0.587 formula lama), CI [0.51, 0.72], gate YELLOW tipis** | $0.26 + $1.57 | 0 jam | [`pilot01b_c3_retest/`](../experiments/pilot01b_c3_retest/) |
 | **#3** | Cultural prompt manual iteration | ✅ DONE 2026-06-10 — **v2: α ds+grok 0.534 → 0.763** dalam 2 iterasi | ~$2.3 actual | 0 jam | [`pilot03_cultural_prompt/`](../experiments/pilot03_cultural_prompt/) |
 | **#4** | AutoResearch loop (Karpathy pattern) | 📋 PLANNED (mungkin tak perlu — Pilot #3 manual cuma butuh 2 iter) | ~$12.5/run (bounded) | 0 jam (overnight agent) | [`pilot04_autoresearch_prompts/`](../experiments/pilot04_autoresearch_prompts/) |
-| **#5** | Bulk labeling produksi (filter full 12.7K → label v2 → held-out α + dataset) | ⏸️ PAUSED — xAI habis di filter 4351/12703; **332 hot-Jawa (190 hate) didapat** | ~$12-15 est | 0 jam (jaga mesin nyala) | [`pilot05_bulk_labeling/`](../experiments/pilot05_bulk_labeling/) |
-| **#6** | Model lokal Ollama sbg pengganti Grok (RTX 4080, gratis) | ✅ DONE 2026-06-11 — **qwen3:14b α 0.660 LOLOS; SEA-LION α 0.422 GAGAL** | $0 | 0 jam | [`pilot06_local_models/`](../experiments/pilot06_local_models/) |
+| **#5** | Bulk labeling produksi (3-rater ds+grok+qwen3 → held-out α + dataset) | ✅ DONE 2026-06-15 — **dataset 331 consensus (74 hate); held-out ds+grok α 0.670 → GENERALIZES** | ~$2.75 actual | 0 jam | [`pilot05_bulk_labeling/`](../experiments/pilot05_bulk_labeling/) |
+| **#6** | Model lokal Ollama sbg rater (RTX 4080, gratis) | ✅ DONE 2026-06-11 — **qwen3:14b α 0.660 LOLOS; SEA-LION α 0.422 GAGAL** | $0 | 0 jam | [`pilot06_local_models/`](../experiments/pilot06_local_models/) |
+| **#6b** | Cascade filter (SEA-LION→qwen3 lokal pre-screen → grok verify) | 📋 INFRA SIAP — belum dijalankan; perbesar pool 332→~950 | ~$1.2 est | 0 jam (overnight GPU) | [`pilot06_local_models/run_cascade.py`](../experiments/pilot06_local_models/) |
 
 ---
 
@@ -111,6 +112,8 @@ Filter diperluas 250 → 2000 tweet haipradana. Pool hot-Jawa **24 → 149 teks 
 
 ### Scale-up n=149 (2026-06-08 → 06-10, $1.57, prompt v0 sama)
 
+> **Koreksi 2026-06-15 (D17):** α 3-rater di bawah ditulis 0.587 (formula α lama "pooled-pairs"). Setelah formula dikanonikkan (Krippendorff coincidence-matrix), **α 3-rater = 0.613** (CI [0.507, 0.717]) — geser naik karena coverage rater tak rata (Kimi validity rendah). Angka **2-rater (drop-1, pairwise, ds+grok 0.534) TIDAK berubah**. Kesimpulan (C3 robust, YELLOW) tetap.
+
 | Vendor | Refusal | JSON Valid | Latency mean | Hate dist | Cost |
 |---|---|---|---|---|---|
 | DeepSeek V4 Pro | 4.7% | 95.3% | 30s | 76T/61F | $0.66 |
@@ -196,9 +199,30 @@ Filter diperluas 250 → 2000 tweet haipradana. Pool hot-Jawa **24 → 149 teks 
 
 **Ketahanan:** semua step resume-aware + 429-aware; rantai idempotent `scripts/run_bulk_pipeline.ps1` (jalankan ulang kapan pun). Panduan user: HANDOFF §Panduan Bapak.
 
-**Insiden (2026-06-10 malam):** kredit xAI habis di filter **4351/12703** (2.225 error 403). Hasil parsial: **332 hot-Jawa (190 hate orig)** = 2.2× pool lama — cukup untuk dataset pertama. Memicu Pilot #6 (model lokal pengganti Grok).
+**Insiden (2026-06-10 malam):** kredit xAI habis di filter **4351/12703** (2.225 error 403). Hasil parsial: **332 hot-Jawa (190 hate orig)** = 2.2× pool lama — cukup untuk dataset pertama. Memicu Pilot #6 (model lokal). Kredit xAI kemudian terisi → labeling cloud lanjut.
 
-**Status:** ⏸️ PAUSED — menunggu keputusan vendor mix (Pilot #6). `run_filter.py` + `run_bulk.py` sudah diparametrize ke lokal (`FILTER_VENDOR` / `BULK_VENDORS`); record error 403 dihitung transient → rerun lokal akan retry otomatis. Detail: [`pilot05_bulk_labeling/README.md`](../experiments/pilot05_bulk_labeling/README.md).
+### Hasil final (2026-06-15, 3-rater ds+grok+qwen3, prompt v2, ~$2.75)
+
+| Vendor | N | Refusal % | JSON valid % | Latency mean | Cost | Hate rate |
+|---|---|---|---|---|---|---|
+| deepseek | 332 | 0.6 | 97.3 | 17.2s | $1.62 | 20% |
+| grok | 332 | 0.3 | 99.7 | 5.6s | $1.13 | 30% |
+| ollama:qwen3:14b | 332 | 0.0 | 99.7 | 11.1s | $0.00 | 17% |
+
+**HELD-OUT VALIDATION (klaim anti-overfit utama):**
+
+| Subset | ds+grok α (tes adil) | α 3-rater |
+|---|---|---|
+| **Held-out** (n=183, di luar pool iterasi) | **0.670** [0.525, 0.792] | 0.565 [0.450, 0.669] |
+| Prompt-iter pool (n=149) | 0.747 [0.611, 0.861] | 0.662 |
+| Full (n=332) | 0.706 | 0.610 |
+
+- **Held-out ds+grok 0.670 ≥ ambang 0.6 + CI overlap dengan iter 0.747 → prompt v2 GENERALIZES, bukan overfit.** Klaim utama pakai pasangan primer ds+grok (same-rater-set vs Pilot #3); 3-rater lebih rendah karena qwen3 = rater paling bising (lone-dissenter 31/64 non-unanimous).
+- **Dataset v1:** `data/labeled/bulk_v2_consensus.jsonl` 331 teks (74 hate / 257 non-hate, ~22% hate stabil held-out vs iter) + `bulk_v2_disagreement.jsonl` 1 tie. Target group: gender_wanita 60, gender_lgbtq 33, politik 44, suku_tionghoa 18, agama_islam 18. Severity sepakat 41/74 baris hate → **label inti binary**.
+- **Verifikasi adversarial sebelum commit** (2 code-audit + 1 recompute independen) → 2 bug diperbaiki: dedup load-order (consensus 330/2→331/1; ds+grok iter 0.763 ternyata **artefak bug**, sebenarnya 0.747) + formula α dikanonikkan ([D17](decisions.md#d17--metrik--dikanonikkan-krippendorff-coincidence-matrix--verifikasi-adversarial--sop)). Lesson: recompute independen meniru bug yang sama → hanya code-audit yang menangkap.
+- **⚠️ Ukuran:** 331 label (74 hate) < target D7 (10K, gate 3K) untuk training BERT → Pilot #6b (cascade) untuk perbesar pool.
+
+**Status:** ✅ DONE 2026-06-15. Report: [`pilot05_bulk_labeling/report.md`](../experiments/pilot05_bulk_labeling/report.md). Commits `fbd59a2` (koreksi α) + `2ac5db3` (dataset). Next: keputusan Bapak (D-OPEN-2: perbesar pool vs ship+modeling).
 
 ---
 

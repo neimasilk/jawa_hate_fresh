@@ -30,7 +30,7 @@
 | Prompt-iter pool (= Pilot #3, harus ≈ 0.763) | 149 | **0.747** | [0.611, 0.861] |
 | Full pool | 332 | **0.706** | [0.610, 0.793] |
 
-(Held-out ds+grok ≥ ~0.6 dan CI overlap dengan iter-pool → prompt v2 GENERALIZES, bukan overfit. iter-pool harus ≈ 0.763 = sanity-check bahwa merge/komputasi benar.)
+(Held-out ds+grok ≥ ~0.6 dan CI overlap dengan iter-pool → prompt v2 GENERALIZES, bukan overfit. iter-pool ds+grok ≈ Pilot #3 0.763 [sedikit turun: 6 label deepseek yang dulu empty_response di Pilot #3 kini diperbaiki dari bulk & dimasukkan] = sanity-check merge/dedup benar.)
 
 ## Sensitivity rater: pairwise (held-out + full) + drop-1
 
