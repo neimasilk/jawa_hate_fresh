@@ -1,6 +1,6 @@
 # Decisions Log
 
-_Last touched: 2026-06-15 (D16 3-rater mix + D17 koreksi α). Source-of-truth untuk decision rationale._
+_Last touched: 2026-06-22 (D18 Opsi A dieksekusi — pool 332→735). Source-of-truth untuk decision rationale._
 
 Cross-ref: [`PRD.md` §0](../PRD.md) (kanonik), [STATE.md sesi log](../STATE.md), [memory project files](../../.claude/projects/C--Users-Mukhlis-Amien-Documents-ujaran-kebencian-jawa-fresh/memory/MEMORY.md).
 
@@ -243,9 +243,25 @@ Dataset tetap deliverable (HKI + release HF/Zenodo) — boleh disebut "first *pu
 
 ---
 
+## D18 — Opsi A dieksekusi: perbesar pool via cascade (resolve D-OPEN-2)
+
+**Date:** 2026-06-22
+**Decision:** Pilih **perbesar pool via cascade filter (Pilot #6b)** daripada ship dataset 331 apa adanya. Dataset diperbesar **332 → 735 teks** (728 consensus). Vendor mix tetap 3-rater ds+grok+qwen3 (D16).
+
+**Rationale:**
+- Cascade (SEA-LION→qwen3 lokal pre-screen → grok verify) sudah dijalankan: pass1/pass2 lokal selesai, tapi pass3 grok verify **terblokir xAI 403** (kredit habis 2026-06-18) di 389/1687 → pool sempat mentok 431.
+- Sesi 2026-06-22: Bapak konfirmasi kredit xAI terisi ($4.55). Live test grok ✅ → lanjutkan verify 1298 sisa. Confirm-rate grok di pass2-keeps = **25%** (1687→+304 keeps) → local pre-screen over-keep (temuan cascade-design untuk paper). **Dump haipradana habis** (12.7K terfilter penuh) → 735 ≈ ceiling sumber ini.
+- Held-out validation justru **MENGUAT** di skala lebih besar: ds+grok held-out α **0.688** [0.614, 0.759] di 586 teks (vs Pilot #5 0.670 di held-out lebih kecil), CI lebih sempit → klaim anti-overfit lebih kuat. Worth it.
+
+**Konsekuensi:** Dataset jadi 728 consensus (158 hate / 570 non-hate). SARA lebih kaya (tambah agama_kristen 18, suku_arab 11, agama_kepercayaan 12, hindu/rohingya/jepang). Tetap < gate D7 BERT (3K) → modeling perlu sumber tambahan ATAU framing dataset sebagai deliverable (bukan F1-chase). Biaya sesi ~$2.8 grok dari $4.55. Held-out α 3-rater 0.513 / full 0.545 (qwen3 tetap rater paling bising; ds+qwen3 0.462, grok+qwen3 0.438). Angka headline ds+grok diverifikasi recompute independen (cocok persis).
+
+**See also:** [pilots.md Pilot #6b](pilots.md), STATE.md C10, `experiments/pilot05_bulk_labeling/report.md`.
+
+---
+
 ## Open decisions
 
 - **D-OPEN-1:** HKI batch placement di tridarma tracker UBHINUS — tunggu input user.
-- **D-OPEN-2:** Perbesar pool (cascade filter Pilot #6b → ~950) untuk modeling BERT, atau ship dataset v1 (331) + fokus codebook/paper? Dataset 331 < target D7 (10K, gate 3K). Tunggu keputusan Bapak.
+- **D-OPEN-3:** Arah setelah pool 735: (a) codebook + draft paper metodologi (held-out + cascade findings = materi kuat), (b) cari sumber data tambahan untuk dekati gate BERT 3K, atau (c) modeling BERT di 728 + framing future-work. Tunggu keputusan Bapak. (D-OPEN-2 RESOLVED oleh D18.)
 
 (Decisions yang sudah resolved tapi minor / default-approved tidak ditulis di sini supaya lean. Lihat [`PRD.md` §9](../PRD.md) untuk full open decisions list.)

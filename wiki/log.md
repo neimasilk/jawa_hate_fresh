@@ -79,6 +79,18 @@ Format: `YYYY-MM-DD | OP | sumber/trigger | entities-touched | summary`
 
 ---
 
+## 2026-06-22
+
+| Time | OP | Trigger | Touched | Summary |
+|------|----|---------|---------|---------|
+| session-start | QUERY | User "lanjutkan" | CLAUDE.md, HANDOFF.md, wiki/index.md, STATE.md (read) + cek state cascade | Pickup: cascade overnight (launched 06-15) → pass1/pass2 lokal selesai tapi **pass3 grok 403 kredit habis** (06-18), pool mentok 431, tidak ada proses in-flight. |
+| **opsiA-pivot** | QUERY | User info kredit xAI terisi ($4.55) | (live grok test) | Premis "tanpa uang" (pilihan sementara 2-rater) gugur → live test grok ✅ → konfirmasi Bapak: pivot balik ke **Opsi A penuh** (pool ~761, 3-rater). |
+| **pilot6b-cascade-done** | **INGEST** | `scripts/run_cascade_remaining_pipeline.ps1` tuntas | **experiments/pilot02_*/outputs (pilot02_responses, hot_jawa_subset 735, cascade_pass2, SEA-LION filter), pilot02 report.md, pilot05 bulk_responses + report.md, data/labeled/ (gitignored)** | Verify 1298 sisa (confirm-rate 25.4% → +304 keeps) → **pool 332→735** (dump habis, ceiling). Label 3-rater 735 → **dataset 728 consensus (158 hate)**, 7 ties. **Held-out ds+grok α 0.688** [0.614,0.759] di 586 teks (menguat vs 0.670), full 0.701; 3-rater held-out 0.513/full 0.545 (qwen3 bising). SARA lebih kaya (+kristen/arab/kepercayaan/hindu/rohingya). Biaya ~$2.8 grok. |
+| **verify-recompute** | **LINT** | Sanity angka headline sebelum commit | (recompute independen from-scratch) | Coincidence-matrix Krippendorff jalur terpisah → **cocok persis** report (0.688/0.701/0.513/0.545). Kode sudah kanonik sejak D17 → tak ada bug baru. Recompute = sanity cepat (bukan ganti audit penuh; risiko bug rendah karena reuse kode tervalidasi). |
+| **ingest-docs** | **INGEST** | Log Opsi A selesai ke wiki + docs | **wiki/decisions.md (D18 + resolve D-OPEN-2 → D-OPEN-3), wiki/pilots.md (#6b DONE + section hasil), wiki/index.md, STATE.md (stage/6c/C10/sesi log), HANDOFF.md, .gitignore (run *.log), wiki/log.md (ini)** | Doc disinkronkan. **Next: D-OPEN-3 keputusan Bapak — codebook/paper (rekomendasi) vs sumber data baru vs modeling+future-work.** |
+
+---
+
 ## Convention
 
 - **INGEST:** Source baru di-process ke wiki. Touched = entity pages yang di-update.

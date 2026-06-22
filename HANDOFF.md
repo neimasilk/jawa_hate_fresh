@@ -1,9 +1,22 @@
 # HANDOFF - Ujaran Kebencian Jawa
 
-**Last updated:** 2026-06-15 — **Pilot #5 SELESAI** (dataset 331 consensus, held-out validation LULUS). **⏳ SEDANG BERJALAN: Opsi A (perbesar pool via cascade filter) — pipeline overnight `scripts/run_cascade_pipeline.ps1` di-launch background 2026-06-15.** Tujuan: pool 332 → ~950 (perbaiki ketimpangan gender, perkaya dimensi SARA). Resume-safe; kalau sesi fresh & pipeline masih jalan, JANGAN relaunch — cek dulu `experiments/pilot05_bulk_labeling/report.md` apakah sudah update. Vendor mix final = **ds+grok+qwen3** (D16).
+**Last updated:** 2026-06-22 — **✅ OPSI A (cascade perbesar pool) SELESAI.** Pool **332 → 735**, dataset **728 consensus (158 hate)**. **Held-out ds+grok α 0.688** [0.614, 0.759] di 586 teks → prompt v2 generalizes MENGUAT (vs Pilot #5 0.670). Dump haipradana habis → 735 ≈ ceiling. **Blocker hilang, tidak ada run in-flight.** Next = D-OPEN-3 (codebook/paper vs sumber data baru vs modeling). Vendor mix = **3-rater ds+grok+qwen3** (D16).
 **Tujuan:** sesi baru langsung tahu status terbaru, blocker, dan next action.
 
 **Cara mulai:** cukup bilang **"lanjut"**. Agent: baca CLAUDE.md → HANDOFF.md (ini) → wiki/index.md → STATE.md, lalu kerjakan "Next Concrete Action" di bawah.
+
+---
+
+## ✅ OPSI A / PILOT #6b SELESAI (2026-06-22): pool diperbesar 332 → 735
+
+Cascade filter (SEA-LION→qwen3 lokal pre-screen → grok verify) dijalankan tuntas. Sempat terblokir xAI **403 kredit habis** (2026-06-18) di pass3 verify (pool mentok 431); resume 2026-06-22 setelah Bapak konfirmasi kredit terisi ($4.55) + live grok test ✅. `scripts/run_cascade_remaining_pipeline.ps1` jalan sampai selesai (verify 1298 sisa → regenerate pool → label 3-rater → analyze).
+
+**Hasil kunci:**
+- **Pool 332 → 735** (held-out 586 | prompt-iter 149). Grok confirm-rate di pass2-keeps cuma **25.4%** (1687→+304) → local pre-screen over-keep (temuan cascade-design). **Dump 12.7K habis → 735 ≈ ceiling** sumber ini (estimasi ~950 optimis).
+- **Held-out validation MENGUAT:** ds+grok held-out α **0.688** [0.614, 0.759] di 586 teks (vs Pilot #5 0.670 di held-out lebih kecil, CI lebih sempit), full 0.701, iter 0.747 → prompt v2 generalizes robust. 3-rater held-out 0.513 / full 0.545 (qwen3 tetap rater paling bising: ds+qwen3 0.462, grok+qwen3 0.438). **Pakai ds+grok untuk klaim utama.** Angka diverifikasi **recompute independen** (cocok persis).
+- **Dataset (`data/labeled/`, gitignored):** `bulk_v2_consensus.jsonl` **728 teks** (158 hate / 570 non-hate, ~22% stabil; unanimous 569) + `bulk_v2_disagreement.jsonl` 7 ties. Dataset 331 lama di-backup `_backup_pilot05_3rater_20260622_*`.
+- **SARA lebih kaya:** gender_wanita 111, politik 112, gender_lgbtq 55, tionghoa 37, islam 31, **+ kristen 18, arab 11, kepercayaan 12, hindu 3, rohingya 3**. Register ngoko dominan; form direct/code_switched/sarcastic/pasemon.
+- Biaya sesi ~$2.8 grok (verify + label) dari $4.55. **⚠️ 728 < gate D7 BERT (3K)** → lihat Next Action (D-OPEN-3).
 
 ---
 
@@ -60,7 +73,7 @@ Saldo Moonshot habis (run Kimi v1 gagal 149/149, 429) → keputusan Bapak: **bia
 
 Riset tetap pada framing **"Eliminating Human Bottleneck in Low-Resource Hate Speech Annotation"** untuk paper JINITA Sinta 2 + dataset/codebook HKI.
 
-**🔆 STATUS TERKINI (2026-06-15):** **Pilot #5 SELESAI** — dataset berlabel pertama (331 consensus, 74 hate) + held-out validation **LULUS** (ds+grok held-out α 0.670 vs iter 0.747 → prompt v2 generalizes). Vendor mix final 3-rater ds+grok+qwen3 (D16). Prompt kerja `prompts/cultural_classification_v2.md`. Analisis sudah diverifikasi adversarial (2 bug diperbaiki, formula α dikanonikkan). **Blocker hilang.** Pilot #6 sebelumnya: qwen3 LOLOS (0.660), SEA-LION GAGAL (0.422).
+**🔆 STATUS TERKINI (2026-06-22):** **OPSI A / Pilot #6b SELESAI** — pool diperbesar **332 → 735**, dataset **728 consensus (158 hate)**, **held-out ds+grok α 0.688** (menguat vs Pilot #5 0.670). Dump habis → 735 ceiling. Vendor mix 3-rater ds+grok+qwen3 (D16), prompt `prompts/cultural_classification_v2.md`. Angka diverifikasi recompute independen. **Tidak ada run in-flight, blocker hilang.** Pilot #5 (2026-06-15): dataset 331 + held-out 0.670. Pilot #6: qwen3 LOLOS (0.660), SEA-LION GAGAL (0.422).
 
 **✅ NOVELTY REFRAME (D14, 2026-06-08):** keputusan Bapak — klaim "dataset pertama/from-scratch" **DITINGGALKAN** (dataset hate Jawa sudah ada: UI/WCSE 2021, tak di-release). Novelty utama sekarang 3 pilar: (1) **pipeline fully-automated zero-human**, (2) **taksonomi kultural 4-dimensi register-aware**, (3) **code-mixed realism**. PRD sudah di-update ke v0.3 (D13 retroaktif + D14, Goals G2/G3/G5 sinkron). Dataset tetap deliverable ("first *publicly released*" = fakta sekunder, bukan klaim utama).
 
@@ -121,33 +134,25 @@ Catatan dedup: rerun meng-APPEND record baru (responses.jsonl punya 300 unik tap
 
 ## Next Concrete Action (urutan)
 
-Konteks: Pilot #5 tuntas — pipeline fully-LLM zero-human terbukti end-to-end, held-out validation lulus, dataset v1 (331 teks) jadi & terverifikasi. Tinggal **keputusan arah** dari Bapak.
+Konteks: Opsi A SELESAI — pool diperbesar 332→735, dataset 728 consensus, held-out validation menguat (ds+grok 0.688). **Dump haipradana habis → 735 ≈ ceiling sumber ini.** Pipeline fully-LLM zero-human terbukti solid end-to-end + di-scale. Tinggal **keputusan arah (D-OPEN-3)** dari Bapak.
 
-**KEPUTUSAN UTAMA (BUTUH INPUT BAPAK): perbesar pool atau ship + modeling?**
+**KEPUTUSAN UTAMA (BUTUH INPUT BAPAK): 728 < gate D7 BERT (3K) tapi dump habis — ke mana?**
 
-- **Opsi A (rekomendasi): perbesar pool via cascade filter (Pilot #6b).** Dataset sekarang cuma 331 (74 hate) — jauh di bawah target D7 (10K, gate 3K) untuk training BERT. Cascade filter sudah siap: SEA-LION (pass 1) → qwen3 (pass 2) lokal gratis pre-screen → grok verify (pass 3, ~$1.2 est) sisa ~8.3K teks. Estimasi pool jadi **~950 teks**. Jalan overnight (GPU RTX 4080 — pastikan mesin tidak sleep). Lalu rerun bulk label 3-rater + analyze (semua resume-aware). **Butuh: mesin nyala + kredit grok + xAI.**
-  ```powershell
-  # pass 1+2 lokal gratis (pre-screen) lalu pass 3 grok verify:
-  .venv\Scripts\python experiments\pilot06_local_models\run_cascade.py
-  # regenerate pool, lalu label 3-rater (resume-aware, 332 lama di-skip):
-  $env:BULK_VENDORS="deepseek,grok"; .venv\Scripts\python experiments\pilot05_bulk_labeling\run_bulk.py
-  $env:BULK_VENDORS="ollama"; $env:LOCAL_MODEL="qwen3:14b"; $env:LOCAL_NO_THINK="1"
-  .venv\Scripts\python experiments\pilot05_bulk_labeling\run_bulk.py
-  .venv\Scripts\python experiments\pilot05_bulk_labeling\analyze.py
-  ```
-- **Opsi B: ship dataset v1 (331) sekarang + mulai paralel:** (1) **codebook** dari `bulk_v2_disagreement.jsonl` + profil taksonomi (deliverable HKI), (2) draft section metodologi paper (held-out validation + verifikasi adversarial = materi kuat). Modeling BERT ditunda sampai pool cukup.
+- **Opsi 1 (rekomendasi): codebook + draft paper metodologi.** Bahan sudah sangat kuat tanpa modeling: held-out validation (0.688 di 586 teks), verifikasi adversarial 2-jalur (D17), temuan cascade-design (local over-keep 25% confirm-rate), taksonomi 4-dimensi register-aware. Codebook dari `bulk_v2_disagreement.jsonl` (7 ties + 12 residu Pilot #3) + profil taksonomi 728. **Tidak butuh saldo.** Sesuai novelty D14 (pipeline + taksonomi + code-mixed, BUKAN F1/ukuran).
+- **Opsi 2: cari sumber data tambahan** untuk dekati gate BERT 3K (haipradana habis). Butuh survei dump hate Indonesia lain / scraping (live scraping dihindari per kebijakan). Risiko: yield hot-Jawa rendah (~3-4%) → butuh filter banyak. Tunda modeling.
+- **Opsi 3: modeling BERT di 728 sekarang + framing future-work.** 728 (158 hate) kecil untuk fine-tune tapi bisa demo proof-of-concept + framing "scaling = future work". Risiko overfit/F1 lemah → bisa melemahkan paper kalau jadi klaim utama.
 
-**Catatan teknis untuk eksekusi Opsi A:** `run_cascade.py` (Pilot #6b) menulis pre-screen lokal ke log terpisah; pool regeneration tetap grok-confirmed. Cek `experiments/pilot06_local_models/run_cascade.py` + commit `3207869` sebelum jalan. `analyze.py` default 3-rater `deepseek,grok,ollama:qwen3:14b` (override via `ANALYZE_VENDORS`).
+**Catatan teknis:** dataset final di `data/labeled/bulk_v2_consensus.jsonl` (728) + `_disagreement.jsonl` (7). Pool `experiments/pilot02_llm_jawa_filter/outputs/hot_jawa_subset.jsonl` (735, grok-confirmed). Report `experiments/pilot05_bulk_labeling/report.md`. `analyze.py` default 3-rater (override `ANALYZE_VENDORS`); re-run aman (idempotent). Backup dataset 331 lama: `data/labeled/_backup_pilot05_3rater_20260622_*`.
 
 ---
 
 ## 📖 PANDUAN BAPAK
 
-1. **Keputusan yang ditunggu:** arah berikutnya — **Opsi A** perbesar pool via cascade filter (overnight, rekomendasi — dataset 331 masih kecil) atau **Opsi B** ship dataset v1 + mulai codebook/paper paralel. Lihat Next Concrete Action.
-2. **Mesin & sleep:** cascade filter & qwen3 jalan di GPU RTX 4080 — kalau pilih Opsi A pastikan mesin tidak sleep. Settings → System → Power → sleep "Never" (plugged in).
-3. **Saldo:** Opsi A butuh DeepSeek (~$2-3) + grok/xAI (~$1-2 untuk verify pass + labeling pool baru). Opsi B tidak butuh saldo.
-4. **Tinggal bilang "lanjut" + sebut pilihan** (mis. "lanjut, opsi A") — agent langsung eksekusi.
-5. **Zero-human tetap** — tidak ada anotasi manual. Dataset v1 (331) sudah siap di `data/labeled/` (lokal, belum dirilis).
+1. **Keputusan yang ditunggu (D-OPEN-3):** arah setelah pool 735 — **Opsi 1** codebook + draft paper metodologi (rekomendasi, tidak butuh saldo), **Opsi 2** cari sumber data tambahan (dump habis), atau **Opsi 3** modeling BERT di 728 + future-work. Lihat Next Concrete Action.
+2. **Tidak ada run in-flight** — Opsi A sudah tuntas, mesin boleh sleep. Kredit xAI sisa ~$1.7 (dari $4.55, sesi pakai ~$2.8).
+3. **Saldo:** Opsi 1 tidak butuh saldo. Opsi 2 butuh grok/deepseek untuk filter sumber baru. Opsi 3 butuh GPU lokal (gratis).
+4. **Tinggal bilang "lanjut" + sebut pilihan** (mis. "lanjut, opsi 1") — agent langsung eksekusi.
+5. **Zero-human tetap** — tidak ada anotasi manual. Dataset 728 sudah siap di `data/labeled/` (lokal, belum dirilis; backup 331 lama tersimpan).
 
 ### Cara cek progres background (PowerShell di folder proyek)
 ```powershell
@@ -159,7 +164,7 @@ Get-Content experiments\pilot06_local_models\outputs\local_v2_qwen3_14b.jsonl | 
 
 ### ⚡ Ketahanan run (lampu mati / crash)
 
-- `run_c3.py` & `run_filter.py` resume-aware (`f.flush()` per record; rerun = skip yang sudah ada). C3 scale-up sudah SELESAI + di-commit, tidak ada run in-flight saat ini. Pattern yang sama dipakai lagi untuk run Pilot #3.
+- Semua runner (`run_cascade.py`, `run_bulk.py`, `run_filter.py`, `analyze.py`) resume-aware (`f.flush()` per record; rerun = skip yang sudah ada; 403/429 dihitung transient → di-retry). Pipeline `scripts/run_cascade_remaining_pipeline.ps1` idempotent end-to-end. **Tidak ada run in-flight saat ini** (Opsi A tuntas 2026-06-22).
 
 ---
 

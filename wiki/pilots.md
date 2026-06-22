@@ -1,6 +1,6 @@
 # Pilots Index
 
-_Last touched: 2026-05-07 saat wiki creation. Status hidup tiap pilot._
+_Last touched: 2026-06-22 (Pilot #6b cascade DONE — pool 332→735). Status hidup tiap pilot._
 
 Cross-ref: [`STATE.md` Next milestones](../STATE.md), [`STATE.md` Challenges Log](../STATE.md), tiap pilot folder di [`experiments/`](../experiments/).
 
@@ -17,7 +17,7 @@ Cross-ref: [`STATE.md` Next milestones](../STATE.md), [`STATE.md` Challenges Log
 | **#4** | AutoResearch loop (Karpathy pattern) | 📋 PLANNED (mungkin tak perlu — Pilot #3 manual cuma butuh 2 iter) | ~$12.5/run (bounded) | 0 jam (overnight agent) | [`pilot04_autoresearch_prompts/`](../experiments/pilot04_autoresearch_prompts/) |
 | **#5** | Bulk labeling produksi (3-rater ds+grok+qwen3 → held-out α + dataset) | ✅ DONE 2026-06-15 — **dataset 331 consensus (74 hate); held-out ds+grok α 0.670 → GENERALIZES** | ~$2.75 actual | 0 jam | [`pilot05_bulk_labeling/`](../experiments/pilot05_bulk_labeling/) |
 | **#6** | Model lokal Ollama sbg rater (RTX 4080, gratis) | ✅ DONE 2026-06-11 — **qwen3:14b α 0.660 LOLOS; SEA-LION α 0.422 GAGAL** | $0 | 0 jam | [`pilot06_local_models/`](../experiments/pilot06_local_models/) |
-| **#6b** | Cascade filter (SEA-LION→qwen3 lokal pre-screen → grok verify) | 📋 INFRA SIAP — belum dijalankan; perbesar pool 332→~950 | ~$1.2 est | 0 jam (overnight GPU) | [`pilot06_local_models/run_cascade.py`](../experiments/pilot06_local_models/) |
+| **#6b** | Cascade filter (SEA-LION→qwen3 lokal pre-screen → grok verify) | ✅ DONE 2026-06-22 — **pool 332→735; ds+grok held-out α 0.688** (3-rater label ulang) | ~$2.8 actual | 0 jam (overnight) | [`pilot06_local_models/run_cascade.py`](../experiments/pilot06_local_models/) |
 
 ---
 
@@ -222,7 +222,7 @@ Filter diperluas 250 → 2000 tweet haipradana. Pool hot-Jawa **24 → 149 teks 
 - **Verifikasi adversarial sebelum commit** (2 code-audit + 1 recompute independen) → 2 bug diperbaiki: dedup load-order (consensus 330/2→331/1; ds+grok iter 0.763 ternyata **artefak bug**, sebenarnya 0.747) + formula α dikanonikkan ([D17](decisions.md#d17--metrik--dikanonikkan-krippendorff-coincidence-matrix--verifikasi-adversarial--sop)). Lesson: recompute independen meniru bug yang sama → hanya code-audit yang menangkap.
 - **⚠️ Ukuran:** 331 label (74 hate) < target D7 (10K, gate 3K) untuk training BERT → Pilot #6b (cascade) untuk perbesar pool.
 
-**Status:** ✅ DONE 2026-06-15. Report: [`pilot05_bulk_labeling/report.md`](../experiments/pilot05_bulk_labeling/report.md). Commits `fbd59a2` (koreksi α) + `2ac5db3` (dataset). Next: keputusan Bapak (D-OPEN-2: perbesar pool vs ship+modeling).
+**Status:** ✅ DONE 2026-06-15. Report: [`pilot05_bulk_labeling/report.md`](../experiments/pilot05_bulk_labeling/report.md). Commits `fbd59a2` (koreksi α) + `2ac5db3` (dataset). **Dataset 331 ini kemudian DIPERBESAR ke 728 oleh Pilot #6b (2026-06-22) — lihat section #6b di bawah.** Report `pilot05/report.md` sekarang berisi angka pool 735 (re-run dengan pool diperbesar).
 
 ---
 
@@ -245,6 +245,46 @@ Filter diperluas 250 → 2000 tweet haipradana. Pool hot-Jawa **24 → 149 teks 
 - Smoke test: `/no_think` wajib untuk reasoning model (qwen3 61s→11s); lokal ceroboh di tugas filter vs Grok (penanda_jawa halusinasi) tapi kuat di klasifikasi hate.
 
 **Status:** ✅ DONE 2026-06-11. Keputusan vendor mix final = keputusan user (rekomendasi: deepseek+qwen3). Detail: [`pilot06_local_models/README.md`](../experiments/pilot06_local_models/README.md).
+
+---
+
+## Pilot #6b — Cascade filter (perbesar pool) + re-label 3-rater
+
+**Tujuan:** perbesar pool hot-Jawa di luar 332 (Pilot #5) dengan biaya grok minimal, lewat pre-screen lokal gratis sebelum verifikasi grok. Pool authority TETAP grok-confirmed (homogen dengan 332).
+
+**Desain cascade:**
+- **Pass 1** SEA-LION (Jawa-native, 8B, lokal gratis) pre-screen ~8.3K sisa dump → 3088 keeps
+- **Pass 2** qwen3:14b re-screen 3088 → 1687 keeps
+- **Pass 3** Grok verify 1687 pass2-keeps (yang belum pernah difilter grok) → append ke `pilot02_responses.jsonl` (pool authority)
+- Lalu regenerate pool + label 3-rater ds+grok+qwen3 + analyze (semua resume-aware, `scripts/run_cascade_remaining_pipeline.ps1`)
+
+**Insiden xAI (2026-06-18):** pass3 grok verify terblokir **403 permission-denied** (kredit habis) di 389/1687 → pool sempat mentok 431. Sesi 2026-06-22 Bapak konfirmasi kredit terisi ($4.55) → live test grok ✅ → resume pipeline sampai tuntas.
+
+### Hasil (2026-06-22, pool 735, 3-rater prompt v2, ~$2.8 grok sesi ini)
+
+- **Cascade yield:** grok confirm-rate di pass2-keeps = **25.4%** (1687 verified → 304 keeps baru). **Local pre-screen over-keep** (SEA-LION+qwen3 longgar, grok ketat) = temuan cascade-design untuk paper. Dump haipradana 12.7K **terfilter penuh** → pool 735 ≈ ceiling sumber ini (estimasi awal ~950 terlalu optimis).
+- **Pool 332 → 735** (held-out 586 | prompt-iter 149).
+
+| Vendor | N | Refusal % | JSON valid % | Latency mean | Cost (kumulatif) | Hate rate |
+|---|---|---|---|---|---|---|
+| deepseek | 735 | 0.7 | 96.5 | 15.4s | $3.63 | 22% |
+| grok | 735 | 0.1 | 99.9 | 5.2s | $2.49 | 28% |
+| ollama:qwen3:14b | 735 | 0.1 | 99.7 | 10.9s | $0.00 | 14% |
+
+**HELD-OUT VALIDATION (klaim anti-overfit — MENGUAT di skala lebih besar):**
+
+| Subset | ds+grok α (tes adil) | α 3-rater |
+|---|---|---|
+| **Held-out** (586, di luar pool iterasi) | **0.688** [0.614, 0.759] | 0.513 [0.450, 0.575] |
+| Prompt-iter pool (149) | 0.747 [0.611, 0.861] | 0.662 |
+| Full (735) | 0.701 [0.637, 0.765] | 0.545 |
+
+- **Held-out ds+grok 0.688 ≥ 0.6 + CI overlap iter 0.747 → prompt v2 GENERALIZES**, lebih kuat dari Pilot #5 (0.670 di held-out lebih kecil) — CI lebih sempit dengan 586 teks held-out. Angka headline **diverifikasi recompute independen** (coincidence-matrix from-scratch, cocok persis 0.688/0.701/0.513/0.545).
+- qwen3 tetap rater paling bising: ds+qwen3 0.462, grok+qwen3 0.438 (full) → klaim utama pakai ds+grok; qwen3 = rater ke-3 gratis/reproducible.
+- **Dataset (data/labeled/, gitignored):** `bulk_v2_consensus.jsonl` **728 teks** (158 hate / 570 non-hate, ~22% stabil; unanimous 569, majority 159) + `bulk_v2_disagreement.jsonl` 7 ties (codebook). Dataset 331 Pilot #5 di-backup ke `_backup_pilot05_3rater_*`.
+- **SARA lebih kaya** (vs 331): gender_wanita 111, politik (partai/tokoh/ormas) 112, gender_lgbtq 55, suku_tionghoa 37, agama_islam 31, **+ agama_kristen 18, agama_kepercayaan 12, suku_arab 11, hindu 3, rohingya 3, jepang 2** (dimensi baru). Register ngoko dominan (434); form direct 356 / code_switched 74 / sarcastic 29 / idiomatic_pasemon 7. Severity hate: sedang 224 / ringan 133 / berat 24 → severity tetap noisier dari binary.
+
+**Status:** ✅ DONE 2026-06-22. **⚠️ 728 < gate D7 BERT (3K)** + dump habis → D-OPEN-3 (codebook/paper vs sumber tambahan vs modeling+future-work). Report: [`pilot05_bulk_labeling/report.md`](../experiments/pilot05_bulk_labeling/report.md). [D18](decisions.md#d18--opsi-a-dieksekusi-perbesar-pool-via-cascade-resolve-d-open-2).
 
 ---
 

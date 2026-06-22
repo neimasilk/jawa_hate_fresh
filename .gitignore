@@ -9,6 +9,9 @@ data/golden/*.parquet
 logs/raw/
 logs/llm_responses/
 
+# Run transcripts / pipeline logs (PowerShell Start-Transcript, UTF-16 noisy — bukan artefak reproducible)
+experiments/**/outputs/*.log
+
 # Python
 __pycache__/
 *.py[cod]

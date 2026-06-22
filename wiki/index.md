@@ -1,6 +1,6 @@
 # Wiki Index — Ujaran Kebencian Jawa
 
-_Last touched: 2026-06-15 (Pilot #5 selesai + D16/D17)._
+_Last touched: 2026-06-22 (Opsi A/Pilot #6b selesai — pool 332→735, dataset 728 + D18)._
 
 Catalog dari semua knowledge proyek. **Bapak baca dari sini — agent maintain seluruh konten.**
 
@@ -36,7 +36,7 @@ Catalog dari semua knowledge proyek. **Bapak baca dari sini — agent maintain s
 | [`src/cultural_prompt.py`](../src/cultural_prompt.py) | Loader prompt template + parser JSON output |
 | [`src/agreement.py`](../src/agreement.py) | Metrik bersama: Krippendorff α kanonik (D17) + bootstrap CI + hate_units (dipakai Pilot #3/#5/#6) |
 | [`prompts/cultural_classification_v2.md`](../prompts/cultural_classification_v2.md) | Prompt kerja produksi (pemenang Pilot #3, α ds+grok 0.763) |
-| [`data/labeled/bulk_v2_consensus.jsonl`](../data/labeled/) | Dataset v1 Pilot #5 (331 teks, gitignored → rilis HF/Zenodo) |
+| [`data/labeled/bulk_v2_consensus.jsonl`](../data/labeled/) | Dataset Pilot #6b (**728 teks**, 158 hate; diperbesar dari 331 Pilot #5; gitignored → rilis HF/Zenodo) |
 | [`scripts/test_apis.py`](../scripts/test_apis.py) | Connectivity test 3 LLM (verified ✅ 3/3 per 2026-05-07) |
 | [`experiments/pilot01_llm_characterization/`](../experiments/pilot01_llm_characterization/) | Pilot #1 ready to run (run_pilot.py + analyze.py) |
 | [`experiments/pilot04_autoresearch_prompts/`](../experiments/pilot04_autoresearch_prompts/) | Pilot #4 plan (Karpathy autoresearch adaptation) |
