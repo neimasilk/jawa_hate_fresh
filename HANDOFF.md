@@ -1,6 +1,18 @@
 # HANDOFF - Ujaran Kebencian Jawa
 
-**Last updated:** 2026-06-23 (sesi 2, ultracode) — **✅ AUDIT ADVERSARIAL MENYELURUH + PERBAIKAN.** Workflow 8-reviewer (51 agen) audit codebook+paper+dataset vs data nyata → verdict jujur: **as-is REJECT/major-revision** (cross-LLM≠kebenaran; headline 2-rater 0.688≠label 3-rater 0.513; "generalizes" fallacy; PII bocor; register "novelty" kosong). **17/18 temuan do-now SUDAH DIPERBAIKI** (paper v3 + codebook v1.0a + scrub PII + `audit.py` reproducible). Detail+status: **`paper/AUDIT_RESPONSE.md`**. **5 keputusan tersisa untuk Bapak (A-E)** — terpenting: **spot-check pakar ~100 item** (ubah κ0.19 jadi kekuatan). Sebelumnya sesi ini: D-OPEN-3 Opsi 1 (codebook + draft paper conform JINITA). Tidak ada run in-flight, tidak butuh saldo.
+**Last updated:** 2026-06-23 (sesi 3) — **🔄 PIVOT BESAR: LABELER → GENERATOR.**
+
+**Inti pivot (BACA INI DULU):** Seluruh kerja lama = **LLM melabeli data Indonesia yang ADA** (`haipradana/indonesian-twitter-hate-speech-cleaned`, HF publik) yang difilter buat cari Jawa. Tapi yield Jawa cuma **0,9%** (8.269 tweet difilter → 74 "jawa", 62% Indonesia). **Maksud asli Bapak SELALU = GENERATOR** (bikin hate Jawa *fresh* pakai LLM), bukan filter+label. Niat itu tak pernah masuk PRD ("annotation"=labeling) → drift. Bapak kecewa sadar ini. **KEPUTUSAN: pivot ke LLM-as-GENERATOR.**
+
+**Arah baru:** GENERATE (LLM, prompt kultural) → consensus-label + spot-check native (QC) → dataset. **Kerja lama ganti peran (TIDAK dibuang):** taksonomi + prompt v2 = otak generator; pipeline labeling 3-LLM = QC; dataset 728 = jangkar realisme + **bukti kelangkaan** (section Motivasi paper: "collection gagal, 0,9% yield → generation perlu").
+
+**Novelty inti yang ketemu sesi ini:** **register-pragmatik hate Jawa** (`experiments/register_probe/FINDINGS.md`) — register menyandi SUHU benci (panas→ngoko, dingin/contempt/ironis→krama); LLM TERNYATA bisa generate krama otentik (DeepSeek dinilai Bapak "sangat bagus"); blind-spot deteksi = **ironi/pasemon**, bukan kesopanan (qwen3 lolos krama sarkastik).
+
+**⏭️ LANGKAH PERTAMA sesi berikut:** jalankan `python experiments/generation_pilot/generate.py` (SUDAH diperbaiki: max_tokens 2048→8192 karena deepseek-v4-pro = reasoning model, sebelumnya balik KOSONG). Output ~12 contoh Jawa fresh terstratifikasi → **Bapak validasi keaslian**.
+
+**💰 Budget:** DeepSeek balance **$2.23** (murah, PILIH ini buat generate). xAI/Grok mahal/terbatas — stop dipakai buat filter.
+
+**Catatan:** audit sesi 2 (paper v3 + codebook v1.0a + `paper/AUDIT_RESPONSE.md`) tetap valid sebagai perbaikan kejujuran lapisan-labeling. 5 keputusan audit (A-E) kini SUBORDINAT ke pivot generator. Tidak ada run in-flight.
 **Tujuan:** sesi baru langsung tahu status terbaru, blocker, dan next action.
 
 **Cara mulai:** cukup bilang **"lanjut"**. Agent: baca CLAUDE.md → HANDOFF.md (ini) → wiki/index.md → STATE.md, lalu kerjakan "Next Concrete Action" di bawah.
@@ -134,7 +146,20 @@ Catatan dedup: rerun meng-APPEND record baru (responses.jsonl punya 300 unik tap
 
 ## Next Concrete Action (urutan)
 
-Konteks: **Audit adversarial menyeluruh selesai (2026-06-23 sesi 2)** + 17/18 temuan do-now diperbaiki. **5 keputusan tersisa untuk Bapak — lihat `paper/AUDIT_RESPONSE.md` tabel "Butuh keputusan Bapak":**
+Konteks: **PIVOT ke GENERATOR (2026-06-23 sesi 3).** Lihat status atas. Urutan:
+
+1. **▶️ JALANKAN GENERATOR PILOT** (langkah pertama, murah ~beberapa sen DeepSeek):
+   `python experiments/generation_pilot/generate.py` → ~12 contoh hate Jawa *fresh* terstratifikasi (register × SARA). Sudah diperbaiki (max_tokens 8192). **Bapak validasi keaslian** tiap output (otentik / "museum krama" / bocor Indonesia).
+2. **Kunci PRD ke framing generator** (HARD RULE #1) — biar niat tak menggelincir lagi. Tulis: human-bottleneck = *penciptaan/akuisisi data* (bukan labeling); solusi = LLM generator; labeling jadi QC; bukti kelangkaan dari kerja filter (0,9% yield).
+3. **Sistematisasi generasi**: matriks register × target SARA × (severity/form), termasuk **krama group-directed** (yg belum diuji — contoh krama sesi ini interpersonal). Native validasi → tabel paper.
+4. **Pipeline GENERATE→QC→anchor**: generated → consensus-label (3-LLM) + spot-check native → uji transfer ke 728 data nyata (detektor sintetis jalan di hate nyata?).
+5. **Judge ke-2** (Yekti/Daniel kalau penutur Jawa) → reliabilitas validasi keaslian.
+
+**Catatan paper:** novelty inti = register-pragmatik (`experiments/register_probe/FINDINGS.md`) + generator-untuk-uncollectable + bukti kelangkaan. Paper-labeling lama (audit sesi 2) jadi bahan pendukung.
+
+---
+
+### Keputusan audit sesi 2 (kini subordinat ke pivot — `paper/AUDIT_RESPONSE.md`):
 1. **(TERTINGGI) Spot-check pakar ~100 item** — Bapak native, ~1 jam, stratifikasi pada disagreement LLM-vs-sumber. Ubah κ0.19 dari pembunuh → fitur. Tidak melanggar zero-human. **Ini pengubah accept/reject.**
 2. **Aturan label**: konfirmasi tetap 3-rater (headline 0.513, sudah saya pilih jujur) atau ganti ds+grok-only (0.688).
 3. **Anekdot mahasiswa nyontek**: demote jadi 1 kalimat? (judgement coauthor — isu integritas).
