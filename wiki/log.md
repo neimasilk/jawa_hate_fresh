@@ -91,6 +91,19 @@ Format: `YYYY-MM-DD | OP | sumber/trigger | entities-touched | summary`
 
 ---
 
+## 2026-06-23
+
+| Time | OP | Trigger | Touched | Summary |
+|------|----|---------|---------|---------|
+| session-start | QUERY | User "lanjut, kemaren saya tinggal, apakah sudah selesai?" | CLAUDE.md, HANDOFF.md, wiki/index.md, STATE.md (read) + git status + cek dataset | Konfirmasi **Opsi A tuntas** (git clean, commit `eccc3f4`, dataset 728 + pool 735 ada di disk). Tidak ada run in-flight. |
+| dataset-integrity | LINT | Cek `deepseek:null` di record consensus | (recompute counts) | deepseek non-null **708/728**, full 3-rater **705**, sisanya transient fail (bukan bug) → klaim α ds+grok valid. |
+| **decision** | QUERY | AskUserQuestion D-OPEN-3 | (keputusan Bapak) | Bapak pilih **Opsi 1: codebook + draft paper**. Bahasa paper **Inggris**. |
+| **codebook-paper** | **INGEST** | Eksekusi Opsi 1 | **codebook/CODEBOOK.md, paper/draft_jinita.md** | Ekstrak contoh nyata per kategori dari dataset → **Codebook v1.0** (4-dimensi grounded, 7 boundary cases adjudicated, distribusi 728, limitasi jujur incl. register krama langka) + **draft paper metodologi** (Inggris, 3 pilar novelty). |
+| **jinita-guidelines** | **INGEST** | User "download petunjuk dari jinita, pelajari, sesuaikan" | **paper/jinita_guidelines/ (submissions.html, template.txt, gen_ai_policy.html, SUMMARY.md), paper/draft_jinita.md (v2 conform)** | OJS blokir WebFetch (403) → curl UA-browser sukses. Pelajari: English, IMRaD bernomor, abstrak 150–250 kata tanpa sitasi, max-5 keywords, IEEE refs (≥20, ≥80% jurnal ≤5thn), Gen AI disclosure wajib. **Sesuaikan paper:** judul ≤12 kata, restruktur IMRaD, sitasi IEEE [n], ≥20 referensi anchor nyata, Gen AI disclosure + Ethics + Acknowledgements. |
+| ingest-docs | INGEST | Sync docs | **STATE.md, HANDOFF.md, wiki/index.md, wiki/log.md (ini), .gitignore** | D-OPEN-3 resolved → Opsi 1 done. **Next: lit-pass verifikasi DOI ≥20 ref + Word template + review Bapak/coauthor.** |
+
+---
+
 ## Convention
 
 - **INGEST:** Source baru di-process ke wiki. Touched = entity pages yang di-update.

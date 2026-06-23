@@ -55,3 +55,7 @@ Thumbs.db
 .vscode/
 .idea/
 *.swp
+
+# JINITA raw downloads (pihak ketiga / copyright) — simpan SUMMARY.md + template.txt saja
+paper/jinita_guidelines/*.html
+paper/jinita_guidelines/*.pdf

@@ -1,6 +1,6 @@
 # HANDOFF - Ujaran Kebencian Jawa
 
-**Last updated:** 2026-06-22 — **✅ OPSI A (cascade perbesar pool) SELESAI.** Pool **332 → 735**, dataset **728 consensus (158 hate)**. **Held-out ds+grok α 0.688** [0.614, 0.759] di 586 teks → prompt v2 generalizes MENGUAT (vs Pilot #5 0.670). Dump haipradana habis → 735 ≈ ceiling. **Blocker hilang, tidak ada run in-flight.** Next = D-OPEN-3 (codebook/paper vs sumber data baru vs modeling). Vendor mix = **3-rater ds+grok+qwen3** (D16).
+**Last updated:** 2026-06-23 — **✅ D-OPEN-3 RESOLVED: Opsi 1 (codebook + draft paper).** Dibuat: `codebook/CODEBOOK.md` v1.0 (taksonomi 4-dimensi grounded di 728, 7 boundary cases, distribusi, limitasi jujur) + `paper/draft_jinita.md` (draft Inggris, **sudah conform template JINITA**: IMRaD bernomor, abstrak ≤250 kata, IEEE refs, Gen AI disclosure). Petunjuk JINITA di-download + dipelajari → `paper/jinita_guidelines/SUMMARY.md` (checklist). **Tidak ada run in-flight, tidak butuh saldo.** Next = lit-pass lengkapi ≥20 referensi (verifikasi DOI) + pindah ke Word template + review Bapak/coauthor. Sebelumnya (2026-06-22): Opsi A cascade pool 332→735, held-out ds+grok α 0.688. Vendor mix 3-rater ds+grok+qwen3 (D16).
 **Tujuan:** sesi baru langsung tahu status terbaru, blocker, dan next action.
 
 **Cara mulai:** cukup bilang **"lanjut"**. Agent: baca CLAUDE.md → HANDOFF.md (ini) → wiki/index.md → STATE.md, lalu kerjakan "Next Concrete Action" di bawah.
@@ -134,15 +134,21 @@ Catatan dedup: rerun meng-APPEND record baru (responses.jsonl punya 300 unik tap
 
 ## Next Concrete Action (urutan)
 
-Konteks: Opsi A SELESAI — pool diperbesar 332→735, dataset 728 consensus, held-out validation menguat (ds+grok 0.688). **Dump haipradana habis → 735 ≈ ceiling sumber ini.** Pipeline fully-LLM zero-human terbukti solid end-to-end + di-scale. Tinggal **keputusan arah (D-OPEN-3)** dari Bapak.
+Konteks: **D-OPEN-3 SELESAI — Bapak pilih Opsi 1 (codebook + draft paper).** Keduanya dibuat 2026-06-23. Petunjuk JINITA juga sudah di-download + paper disesuaikan ke template. **Tidak ada run in-flight, tidak butuh saldo.**
 
-**KEPUTUSAN UTAMA (BUTUH INPUT BAPAK): 728 < gate D7 BERT (3K) tapi dump habis — ke mana?**
+**Sudah jadi:**
+- `codebook/CODEBOOK.md` v1.0 — taksonomi 4-dimensi grounded di dataset 728, 7 boundary cases dengan adjudikasi, distribusi empiris, limitasi jujur (termasuk temuan register krama langka 157/158 ngoko).
+- `paper/draft_jinita.md` v2 — draft Inggris, **conform template JINITA**: judul ≤12 kata tanpa akronim, abstrak ≤250 kata tanpa sitasi, 5 keywords, IMRaD bernomor (1 INTRO / 2 TAXONOMY / 3 METHOD / 4 RESULTS&DISCUSSION / 5 CONCLUSION), sitasi IEEE `[n]`, ≥20 referensi anchor, **Gen AI disclosure**, Ethics, Acknowledgements.
+- `paper/jinita_guidelines/` — petunjuk JINITA terunduh (`submissions.html`, `template.txt`, `gen_ai_policy.html`) + `SUMMARY.md` (checklist kepatuhan + sisa TODO).
 
-- **Opsi 1 (rekomendasi): codebook + draft paper metodologi.** Bahan sudah sangat kuat tanpa modeling: held-out validation (0.688 di 586 teks), verifikasi adversarial 2-jalur (D17), temuan cascade-design (local over-keep 25% confirm-rate), taksonomi 4-dimensi register-aware. Codebook dari `bulk_v2_disagreement.jsonl` (7 ties + 12 residu Pilot #3) + profil taksonomi 728. **Tidak butuh saldo.** Sesuai novelty D14 (pipeline + taksonomi + code-mixed, BUKAN F1/ukuran).
-- **Opsi 2: cari sumber data tambahan** untuk dekati gate BERT 3K (haipradana habis). Butuh survei dump hate Indonesia lain / scraping (live scraping dihindari per kebijakan). Risiko: yield hot-Jawa rendah (~3-4%) → butuh filter banyak. Tunda modeling.
-- **Opsi 3: modeling BERT di 728 sekarang + framing future-work.** 728 (158 hate) kecil untuk fine-tune tapi bisa demo proof-of-concept + framing "scaling = future work". Risiko overfit/F1 lemah → bisa melemahkan paper kalau jadi klaim utama.
+**Sisa TODO (untuk sesi berikut / review Bapak):**
+1. **Lit-pass referensi:** lengkapi & verifikasi ≥20 referensi IEEE (DOI/vol/hal), ≥80% jurnal ≤5 tahun. Anchor sudah nyata (Ibrohim&Budi 2019, Putri/Ibrohim/Budi Javanese-Sunda = kemungkinan "UI 2021" yang kita rujuk, NusaCrowd, Gilardi PNAS, dll); tinggal verifikasi presisi (jangan fabricate — per Gen AI policy).
+2. **Pindah ke Word template** JINITA (TNR 10pt, A4, kolom) untuk submission final.
+3. **Review Bapak + coauthor** (Yekti, Daniel) atas isi codebook + paper.
+4. Opsional: modeling baseline (IndoBERT/XLM-R) sebagai karakterisasi dataset (future-work, bisa kuatkan Results) — butuh GPU lokal gratis.
+5. Versi blind (anonim) untuk peer review.
 
-**Catatan teknis:** dataset final di `data/labeled/bulk_v2_consensus.jsonl` (728) + `_disagreement.jsonl` (7). Pool `experiments/pilot02_llm_jawa_filter/outputs/hot_jawa_subset.jsonl` (735, grok-confirmed). Report `experiments/pilot05_bulk_labeling/report.md`. `analyze.py` default 3-rater (override `ANALYZE_VENDORS`); re-run aman (idempotent). Backup dataset 331 lama: `data/labeled/_backup_pilot05_3rater_20260622_*`.
+**Catatan teknis:** dataset final `data/labeled/bulk_v2_consensus.jsonl` (728) + `_disagreement.jsonl` (7). Pool `experiments/pilot02_llm_jawa_filter/outputs/hot_jawa_subset.jsonl` (735). Report `experiments/pilot05_bulk_labeling/report.md`. Backup dataset 331 lama: `data/labeled/_backup_pilot05_3rater_20260622_*`. APC JINITA Rp1.5jt/$100 (hanya jika diterima).
 
 ---
 

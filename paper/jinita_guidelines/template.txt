@@ -1,0 +1,160 @@
+﻿ISSN : 2715-9248                  
+
+
+The title of the article is english [Heading of Title] 
+
+
+Jinita 1, Journal Jinita 2 [Heading of Author]
+1 Department of First Author, University of First Author, City of First Author, State of First Author [Heading of Author’s Affiliation]
+2 Department of Second Author, University of Second Author, City of Second Author, State of Second Author
+ email:1 email of First Author, 2 email of Second Author [heading of Email]
+A R T I C L E   I N F O
+	
+
+	A B S T R A C T
+	Article history:
+Received 24 January 2020 Revised 30 April 2020 Accepted 2 December 2020 Available online xxx
+	It requires concise, specific, accurate and factual information to briefly show the reasons for study, proposed solution, the method used, proposed contribution, research objectives to be achieved, results and conclusions, and highlight the difference/benefit it offers from a pre-existing method. Do not display procedure steps and citation source. It should contain a maximum of 250 words. Remember it will be read first by the reader. This is your article advertising, make it as attractive as possible, and easy to understand. [Heading isi abstract].
+	Keywords: [ Key word heading]
+Maximum
+Five
+Word
+Key
+Important
+	IEEE style in citing this article: [citation Heading]
+Jinita and J. Jinita, "Article Title," Journal of Innovation Information Technology and Application, vol. 4, no. 1, pp. 1-10, 2022. [Fill citation heading]
+	 
+1. INTRODUCTION (10 PT)
+The main text format consists of a flat left-right columns on A4 paper (quarto). The margin text from the left and top are 2.5 cm, right and bottom are 2 cm. The manuscript is written in Microsoft Word, single space, Time New Roman 10 pt, and minimum 6 pages maximum 12 pages for original research article, or maximum 16 pages for review/survey paper, which can be downloaded at the website on OJS.
+A title of article should be the fewest possible words that accurately describe the content of the paper. The title should be succinct and informative and no more than about 12 words in length. Do not use acronyms or abbreviations in your title and do not mention the method you used, unless your paper reports on the development of a new method. Titles are often used in information-retrieval systems. Avoid  writing  long  formulas  with  subscripts  in  the  title. Omit all waste words such as "A study of ...", "Investigations of ...", "Implementation of ...”, "Observations on ...", "Effect of.....", “Analysis of …”, “Design of…”, etc. 
+A concise  and  factual  abstract  is  required.  The  abstract  should  state  briefly  the  purpose  of  the research, the principal results and major conclusions. An abstract is often presented separately from the article, so it must be able to stand alone. For this reason, References should be avoided, but if essential, then cite the author(s) and year(s). Also, non-standard or uncommon abbreviations should be avoided, but if essential they must be defined at their first mention in the abstract itself. Immediately after the abstract, provide a maximum of 5 keywords, using American spelling and avoiding general and plural terms and multiple concepts (avoid, for example, 'and', 'of'). Be sparing with abbreviations: only abbreviations firmly established in the field may be eligible. These keywords will be used for indexing purposes. 
+Indexing and abstracting services depend on the accuracy of the title, extracting from it keywords useful in cross-referencing and computer searching. An improperly titled paper may never reach the audience for which it was intended, so be specific.
+The Introduction section should provide: i) a clear background, ii) a clear statement of the problem, iii) the relevant literature on the subject, iv) the proposed approach or solution, and v) the new value of research which it is innovation (within 3-6 paragraphs). It should be understandable to colleagues from a broad range of scientific disciplines. Organization and citation of the bibliography are made in Institute of Electrical and Electronics Engineers (IEEE) style in sign [1], [2] and so on. The terms in foreign languages are written italic (italic). The text should be divided into sections, each with a separate heading and numbered consecutively [3]. The section or subsection headings should be typed on a separate line, e.g., 1. INTRODUCTION. A full article usually follows a standard structure: 1. Introduction, 2. The Comprehensive Theoretical Basis and/or the Proposed Method/Algorithm (optional), 3. Method, 
+4. Results and Discussion, and 5. Conclusion. The structure is well-known as IMRaD style. 
+Literature review that has been done author used in the section "INTRODUCTION" to explain 
+the difference of the manuscript with other papers, that it is innovative, it are used in the section "METHOD" to describe the step of research and used in the section "RESULTS AND DISCUSSION" to support the analysis of the results [4]. If the manuscript was written really have high originality, which proposed a new method or algorithm, the additional section after the "INTRODUCTION" section and before the "METHOD" section can be added to explain briefly the theory and/or the proposed method/algorithm [5].
+
+
+2. METHOD (10 PT)
+Explaining research chronological, including research design, research procedure (in the form of algorithms, Pseudocode or other), how to test and data acquisition [6]–[8]. The description of the course of research should be supported references, so the explanation can be accepted scientifically [9], [10]. Figures 1-2 and Table 1 are presented center, as shown below and cited in the manuscript [11]. Figure 2(a) shown delta angle with considerable perturbation and Figure 2(b) with heavy perturbation.
+
+
+
+
+  
+
+
+
+Figure 1. Figure title’s
+
+
+
+
+Table 1. The performance of ...
+Variable
+	Speed (rpm)
+	Power (kW)
+	x
+	10
+	8.6
+	y
+	15
+	12.4
+	z
+	20
+	15.3
+	
+
+
+
+
+
+  
+
+
+
+
+
+Figure 2. Allpass response for return loss, 
+
+
+3. RESULTS AND DISCUSSION (10 PT)
+In this section, it is explained the results of research and at the same time is given 
+the comprehensive discussion. Results can be presented in figures, graphs, tables and others that make 
+the reader understand easily [12], [13]. The discussion can be made in several sub-sections.
+
+
+3.1.  Sub section 1
+Equations should be placed at the center of the line and provided consecutively with equation numbers in parentheses flushed to the right margin, as in (1). The use of Microsoft Equation Editor or MathType is preferred.
+
+
+)
+
+
+All symbols that have been used in the equations should be defined in the following text.
+
+
+3.2.  Sub section 2
+Proper citation of other works should be made to avoid plagiarism. When referring to a reference item, please use the reference number as in [14] or [15] for multiple references. The use of ”Ref [16]...” should be employed for any reference citation at the beginning of sentence. For any reference with more than 3 or more authors, only the first author is to be written followed by et al. (e.g. in [17]). Examples of reference items of different categories shown in the References section. Each item in the references section should be typed using 8 pt font size [18]–[20].
+
+
+3.2.1. Subsub section 1
+yy
+
+3.2.2. Subsub section 2
+zz
+
+
+4. CONCLUSION (10 PT)
+Provide a statement that what is expected, as stated in the "INTRODUCTION" section can ultimately result in "RESULTS AND DISCUSSION" section, so there is compatibility. Moreover, it can also be added the prospect of the development of research results and application prospects of further studies into the next (based on result and discussion).
+
+
+ACKNOWLEDGEMENTS (10 PT)
+Author thanks ... . In most cases, sponsor and financial support acknowledgments.
+
+
+REFERENCES
+[1]        I. Sumaiya Thaseen, J. Saira Banu, K. Lavanya, M. Rukunuddin Ghalib, and K. Abhishek, “An integrated intrusion detection system using correlation‐based attribute selection and artificial neural network,” Trans. Emerg. Telecommun. Technol., vol. 32, no. 2, pp. 1–15, Feb. 2021, doi: 10.1002/ett.4014.
+[2]        R. Umar, A. Yudhana, and M. N. Faiz, “Experimental analysis of web browser sessions using live forensics method,” Int. J. Electr. Comput. Eng., vol. 8, no. 5, pp. 2951–2958, 2018, doi: 10.11591/ijece.v8i5.pp.2951-2958.
+[3]        A. Wirawan, C. Feresa, M. Foozy, and A. Azhari, “Machine Learning-Based Distributed Denial of Service Attack Detection on Intrusion Detection System Regarding to Feature Selection,” Int. J. Artif. Intelegence Res., vol. 4, no. 1, pp. 1–8, 2020, doi: 10.29099/ijair.v4i1.156.
+[4]        R. M. A. Mohammad and M. Alqahtani, “A comparison of machine learning techniques for file system forensics analysis,” J. Inf. Secur. Appl., vol. 46, no. January, pp. 53–61, 2019, doi: 10.1016/j.jisa.2019.02.009.
+[5]        H. Arshad, A. Jantan, and E. Omolara, “Evidence collection and forensics on social networks : Research challenges and directions,” Digit. Investig., vol. 28, no. February, pp. 126–138, 2019, doi: 10.1016/j.diin.2019.02.001.
+[6]        J. Ye, X. Cheng, J. Zhu, L. Feng, and L. Song, “A DDoS Attack Detection Method Based on SVM in Software Defined Network,” Secur. Commun. Networks, vol. 2018, pp. 1–8, 2018, doi: 10.1155/2018/9804061.
+[7]        A. Somasundaram and V. S. Meenakshi, “Ensemble Feature Selection Method and Combining Classifier Approach for DDoS Detection in Cloud,” Int. J. Adv. Sci. Technol., vol. 29, no. 3, pp. 14348–14364, 2020.
+[8]        A. Akutekwe and H. Seker, “Particle Swarm Optimization-Based Bio-Network Discovery Method for the Diagnosis of Colorectal Cancer,” Proc. - 2014 IEEE Int. Conf. Bioinforma. Biomed. IEEE BIBM 2014, pp. 8–13, 2014, doi: 10.1109/BIBM.2014.6999241.
+[9]        G. Nguyen et al., “Machine Learning and Deep Learning frameworks and libraries for large-scale data mining: a survey,” Artif. Intell. Rev., vol. 52, no. 1, pp. 77–124, 2019, doi: 10.1007/s10462-018-09679-z.
+[10]        J. Zhao, X. Jing, Z. Yan, and W. Pedrycz, “Network traffic classification for data fusion: A survey,” Inf. Fusion, vol. 72, pp. 22–47, Aug. 2021, doi: 10.1016/j.inffus.2021.02.009.
+[11]        N. Sultana, N. Chilamkurti, W. Peng, and R. Alhadad, “Survey on SDN based network intrusion detection system using machine learning approaches,” Peer-to-Peer Netw. Appl., vol. 12, no. 2, pp. 493–501, Mar. 2019, doi: 10.1007/s12083-017-0630-0.
+[12]        J. Sadowski, “When data is capital: Datafication, accumulation, and extraction,” Big Data Soc., vol. 6, no. 1, pp. 1–12, 2019, doi: 10.1177/2053951718820549.
+[13]        J. R. Saura, B. R. Herraez, and A. Reyes-Menendez, “Comparing a traditional approach for financial brand communication analysis with a big data analytics technique,” IEEE Access, vol. 7, pp. 37100–37108, 2019, doi: 10.1109/ACCESS.2019.2905301.
+[14]        M. H. Ligh, A. Case, J. Levy, and Aa. Walters, The Art of Memory Forensics. Indianapolis: Wiley Publishing, Inc., 2013. doi: 10.1017/CBO9781107415324.004.
+[15]        J. Bickford and P. Giura, “Safe Internet Browsing Using a Transparent Virtual Browser,” Proc. - 2nd IEEE Int. Conf. Cyber Secur. Cloud Comput. CSCloud 2015 - IEEE Int. Symp. Smart Cloud, IEEE SSC 2015, pp. 423–432, 2016, doi: 10.1109/CSCloud.2015.58.
+[16]        C. Shang and F. You, “Data Analytics and Machine Learning for Smart Process Manufacturing: Recent Advances and Perspectives in the Big Data Era,” Engineering, vol. 5, no. 6, pp. 1010–1016, 2019, doi: 10.1016/j.eng.2019.01.019.
+[17]        H. Nurhayati-Wolff, “Total number of deaths from COVID-19 Indonesia 2021,” Statista, 2021. https://www.statista.com/statistics/1103816/indonesia-covid-19-number-of-deaths/ (accessed Jan. 11, 2022).
+[18]        S. M. Kasongo and Y. Sun, “Performance Analysis of Intrusion Detection Systems Using a Feature Selection Method on the UNSW-NB15 Dataset,” J. Big Data, vol. 7, no. 1, pp. 1–20, 2020, doi: 10.1186/s40537-020-00379-6.
+[19]        N. Kunhare and R. Tiwari, “Study of the Attributes using Four Class Labels on KDD99 and NSL-KDD Datasets with Machine Learning Techniques,” in 2018 8th International Conference on Communication Systems and Network Technologies (CSNT), Nov. 2018, no. November 2018, pp. 127–131. doi: 10.1109/CSNT.2018.8820244.
+[20]        E. Casey, Digital Evidence and Computer Crime - Third edition. Maryland: Elsevier, 2011.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+JINITA  Vol. x, No. x, December 2019  
+DOI: doi.org/10.35970/jinita.vxixx.xx
