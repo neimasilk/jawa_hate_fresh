@@ -59,3 +59,6 @@ Thumbs.db
 # JINITA raw downloads (pihak ketiga / copyright) — simpan SUMMARY.md + template.txt saja
 paper/jinita_guidelines/*.html
 paper/jinita_guidelines/*.pdf
+
+# Audit report (regenerable via audit.py; memuat cuplikan teks mentah/PII pra-scrub)
+experiments/audit_external/audit_report.md

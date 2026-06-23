@@ -1,6 +1,6 @@
 # Codebook Taksonomi Ujaran Kebencian Bahasa Jawa
 
-**Versi:** 1.0 (2026-06-23)
+**Versi:** 1.0a (2026-06-23, dikoreksi pasca audit adversarial — lihat §9 Changelog)
 **Penyusun:** Mukhlis Amien, Yekti Asmoro Kanthi, Daniel Rudiaman Sijabat (Universitas Bina Husada Nusantara)
 **Status:** Supplementary untuk paper JINITA + deliverable HKI (Karya Tulis/Spesifikasi)
 **Lisensi:** CC BY-NC-SA 4.0
@@ -29,7 +29,7 @@ Codebook ini adalah **manual operasional** untuk mengklasifikasikan teks Bahasa 
 | Unit analisis | Satu posting/komentar (teks pendek sosmed), sudah dianonimisasi (username, mention, URL dihapus/diganti placeholder). | Etika §7 PRD |
 | Platform sumber | Dump publik berbahasa Indonesia (`haipradana`) difilter LLM untuk subset Jawa/code-mixed. Bukan *live scraping*. | D6, D13 |
 
-**Catatan empiris penting (jujur):** Jawa "murni" (ngoko/krama tanpa campuran) nyaris nol di data sosmed (1/250 pada Pilot #2). Ujaran kebencian Jawa real **didominasi code-mixed**. Codebook ini dengan sengaja **tidak** memaksakan kemurnian leksikal — itu akan bias jauh dari realitas.
+**Catatan empiris penting (jujur):** Jawa **leksikal-murni** (ngoko/krama tanpa campuran sama sekali) nyaris nol di sosmed (1/250 pada Pilot #2). Ujaran kebencian Jawa real **didominasi code-mixed**. (Catatan: field `filter_bahasa="jawa"` ~10% di dataset berarti "Jawa-dominan", bukan murni leksikal — tidak kontradiksi dengan 1/250.) Codebook ini sengaja **tidak** memaksakan kemurnian leksikal. **Peringatan kejujuran (temuan audit):** ~90% record + 95% record hate ber-`filter_bahasa="campuran"`, dan banyak di antaranya didominasi Indonesia dengan sedikit penanda Jawa → framing paling akurat = **"Indonesia code-mixed dengan Jawa"**, bukan "Jawa murni". Kuantifikasi densitas Jawa dengan langid proper sebelum klaim angka di paper.
 
 ---
 
@@ -147,10 +147,10 @@ Array string (boleh multi-target). Kategori:
 
 | Nilai | Definisi | Contoh dataset |
 |---|---|---|
-| `direct` | Eksplisit (141/158) | `"CINA ASU"` |
-| `sarcastic` | Sindiran (5/158) | `"Nang grejo 20 taun raiku gk onok kris10 e blas wkwkwk"` |
-| `idiomatic_pasemon` | Kiasan budaya Jawa (3/158) | `"Tedake maling, yo maling. Ora bakal owah."` (determinisme keturunan) |
-| `code_switched` | Campur Indo/Inggris/Arab (9/158) | `"Kiro2 akad nggowo outfit ngene ... ketok kyok kris10"` |
+| `direct` | Eksplisit (141, majority-of-3) | `"CINA ASU"` |
+| `sarcastic` | Sindiran (4) | `"Nang grejo 20 taun raiku gk onok kris10 e blas wkwkwk"` |
+| `idiomatic_pasemon` | Kiasan budaya Jawa (1) | `"Tedake maling, yo maling. Ora bakal owah."` (determinisme keturunan) |
+| `code_switched` | Campur Indo/Inggris/Arab (4) | `"Kiro2 akad nggowo outfit ngene ... ketok kyok kris10"` |
 
 > Catatan: `direct` mendominasi. `code_switched` sebagai *form* under-counted karena hampir semua teks sudah code-mixed di level leksikal; rater menandai `code_switched` hanya saat percampuran menonjol secara struktural.
 
@@ -183,17 +183,20 @@ Format output per teks:
 | Ties (1-1, masuk file disagreement) | 7 |
 | Rater | DeepSeek (708 vote) + Grok (727) + qwen3:14b (726) |
 
-**Target group (hate, top):** `gender_wanita` 49 · `politik_partai` 20 · `gender_lgbtq` 19 · `politik_tokoh` 17 · `suku_tionghoa` 15 · `agama_islam` 15 · `politik_ormas` 9 · `agama_kristen` 8 · `suku_arab` 5 · `agama_kepercayaan` 5 · sisanya (rohingya/hindu/buddha/jepang/intra-jawa/kelas) ≤ 1–2.
+> **Aturan hitung (penting untuk reproduksi):** angka di bawah = **majority-of-3** — sebuah kategori dihitung untuk satu teks hate jika muncul di **≥2 vote valid** teks itu (prinsip sama dengan label biner), diregenerasi oleh `audit.py`. Draf awal memakai penjumlahan vote per-vendor (mis. gender_lgbtq "55") yang menggelembungkan angka — **angka majority di sini menggantikannya.**
 
-**Register (hate):** `ngoko` 157 · `campur_kasar` 1 · krama 0.
-**Form (hate):** `direct` 141 · `code_switched` 9 · `sarcastic` 5 · `idiomatic_pasemon` 3.
-**Severity (hate):** `sedang` (terbanyak) · `ringan` · `berat` (sedikit). Severity-agree 89/158.
+**Target group (hate, majority-of-3):** `gender_wanita` 46 · `politik_partai` 19 · `gender_lgbtq` 18 · `suku_tionghoa` 14 · `agama_islam` 8 · `politik_tokoh` 8 · `politik_ormas` 7 · `agama_kristen` 7 · `suku_arab` 3 · `agama_kepercayaan` 3 · sisanya (`suku_rohingya`, `suku_jepang`, `intra_jawa_arek`, `agama_hindu`) = 1.
+> **Sparsity:** ≥9 kategori taksonomi punya 0 instance; 4 kategori ber-instance ≤2 → **analisis per-kategori tak bisa** untuk kategori ini (bias sumber tunggal, lihat §8).
+
+**Register (hate):** `ngoko` 157 · `campur_kasar` 1 · krama 0 (157/158 ngoko).
+**Form (hate, majority-of-3):** `direct` 141 · `code_switched` 4 · `sarcastic` 4 · `idiomatic_pasemon` 1 · (8 tanpa mayoritas).
+**Severity (hate):** `sedang` (terbanyak) · `ringan` · `berat` (sedikit). Severity-agree hanya **89/158** (56%); 69/158 tanpa severity unanimous → **field severity diberi penanda low-reliability**, label inti tetap biner.
 
 ---
 
 ## 6. Boundary cases & adjudikasi (kasus paling sulit)
 
-Kasus berikut adalah **disagreement nyata** antar-rater (file `bulk_v2_disagreement.jsonl`, 7 ties). Mereka mendefinisikan **batas operasional** taksonomi dan menjadi rujukan untuk versi codebook berikutnya. Pola dominan: **Grok melabeli slur identitas sebagai hate; qwen3 membacanya sebagai umpatan generik/pernyataan faktual.**
+Kasus berikut dari `bulk_v2_disagreement.jsonl` (7 "ties"). **Koreksi penting (audit 2026-06-23):** ke-7 ini ties hanya karena **DeepSeek dropout** (vote null) sehingga voting tinggal 2 rater yang pecah 1-1 — **bukan** kasus 3-arah terkontes. Jadi treat sebagai *ilustrasi batas Grok-vs-qwen3*, bukan "kasus tersulit dataset". Untuk analisis boundary yang sebenarnya, sampel dari **159 split mayoritas 2-1** di dalam file consensus (di mana label diputuskan tipis). Pola di 7 ties ini: Grok melabeli slur identitas sebagai hate; qwen3 membacanya sebagai umpatan generik/faktual.
 
 | # | Teks (ringkas) | Grok | qwen3 | Adjudikasi codebook |
 |---|---|---|---|---|
@@ -214,19 +217,23 @@ Kasus berikut adalah **disagreement nyata** antar-rater (file `bulk_v2_disagreem
 
 ## 7. Catatan protokol pelabelan (zero-human)
 
-- Label dihasilkan **tanpa anotasi manusia** — 3 rater LLM independen (DeepSeek + Grok cloud, qwen3:14b lokal/gratis), label final = *majority vote*.
-- Validasi reliabilitas memakai **Krippendorff's α** (bentuk kanonik *coincidence-matrix*). Pasangan primer **DeepSeek+Grok: α = 0.688** [0.614, 0.759] pada 586 teks *held-out* (di luar pool iterasi prompt) → prompt **generalizes** (bukan overfit). qwen3 adalah rater ke-3 (gratis, reproducible) tetapi paling bising (α turun bila dipakai sebagai pasangan).
-- **Severity** noisier daripada `hate` biner → label inti = biner. Lihat HANDOFF/STATE untuk detail verifikasi adversarial (2 bug ditemukan & diperbaiki sebelum rilis).
+- Label dihasilkan **tanpa anotasi manusia** — 3 rater LLM (DeepSeek + Grok cloud, qwen3:14b lokal/gratis), label final = *majority vote*. (Catatan: rater TIDAK sepenuhnya independen — mereka berbagi data pretraining, dan Grok over-label sementara qwen3 under-label; lihat audit §4.4 paper.)
+- Validasi reliabilitas memakai **Krippendorff's α** (bentuk kanonik *coincidence-matrix*). Karena label rilis = **3-rater majority**, reliabilitas yang berlaku untuk dataset = **α 3-rater 0.513 held-out / 0.545 full** ("moderat"). Pasangan dua-model-cloud DeepSeek+Grok lebih tinggi (**α 0.688** held-out, raw agreement 0.886, Gwet AC1 0.820) tetapi hanya subset dari aturan label → dilaporkan sebagai batas atas, **bukan** angka headline. qwen3 = rater ke-3 paling bising (α pasangan 0.40) tapi gratis/reproducible.
+- **PENTING (validitas ≠ reliabilitas):** α hanya mengukur kesepakatan antar-LLM, bukan kebenaran. Vs label manusia sumber, konsensus hanya setuju 54.5% (κ 0.19) karena taksonomi ini sengaja **mempersempit** hate ke group-directed (buang profanity). Klaim validitas perlu **spot-check pakar ~100 item** (belum dilakukan).
+- **Severity** noisier daripada `hate` biner → label inti = biner. Angka diregenerasi reproducible oleh `experiments/audit_external/audit.py`. Verifikasi adversarial menemukan 2 bug (diperbaiki) + audit lanjutan (2026-06-23) menemukan over-claim yang sudah dikoreksi di paper v3.
 
 ---
 
 ## 8. Limitasi & catatan kultural (transparansi)
 
-1. **Bias sumber.** Dump tunggal (`haipradana`, hate Indonesia) → target group condong ke **gender + politik + Tionghoa/Islam**; suku Madura/Sunda/Batak/Dayak/Papua dan register krama **under-represented**. Codebook menyediakan kategori tsb, tetapi dataset belum mengisinya. Penambahan sumber = *future work*.
-2. **Register krama langka** di sosmed (§3 Dim-3). Taksonomi register-aware tetap bernilai sebagai *capability*, bukan karena frekuensi.
-3. **Near-duplicate.** Beberapa teks pendek berulang (mis. `"rahim anget"`, `"Cebong mana ngerti"`) — artefak data viral/copy-paste; dipertahankan apa adanya, perlu dedup di hilir bila diperlukan modeling.
-4. **Use-vs-mention** (B6) belum tertangani andal — slur yang dikutip/dikritik bisa salah-label hate.
-5. **Kepercayaan vs antisemitisme** (mis. teks `"Zionis"` masuk `agama_kepercayaan`) menunjukkan kategori politik-agama global belum tertata rapi; perlu sub-kategori di v1.1.
+1. **Validitas belum teruji (limitasi utama).** Semua angka = reliabilitas antar-LLM, BUKAN kebenaran. Vs label manusia sumber: setuju 54.5%, κ 0.19; konsensus membuang 307/441 (70%) hate-manusia. Sebagian besar = **penyempitan definisi yang disengaja** (profanity non-grup → BUK) dan **24 flip neutral→hate = slur Jawa benar yang dilewatkan anotator** (`sipit/aseng`, `banci/jablay`, `kafir`). Tapi tetap perlu **spot-check pakar ~100 item** untuk klaim validitas.
+2. **Bias sumber.** Dump tunggal (`haipradana`) → target condong ke **gender + politik + Tionghoa/Islam**; Madura/Sunda/Batak/Dayak/Papua & register krama **kosong/under-represented**. ≥9 kategori 0 instance, 4 kategori ≤2. Penambahan sumber = *future work*.
+3. **Celah taksonomi (temuan audit).** Hinaan **warna kulit/fisik** tak punya kategori target → mis. `"bacot lo ireng jomok"` (orig=hate) di-skip jadi BUK. **v1.1 perlu kategori `fisik_warnakulit`/physical-trait.**
+4. **Near-duplicate + leakage.** 706/735 teks unik (149/158 hate unik); 5 teks held-out duplikat pool iterasi (~1% leakage) → dihapus sebelum hitung held-out. Pakai N-unik-hate ≈149 untuk klaim yang bergantung ukuran.
+5. **Register krama langka** di sosmed (§3 Dim-3) — dimensi register = *capability*, bukan demonstrasi.
+6. **Use-vs-mention** (B6) belum tertangani — slur yang dikutip/dikritik bisa salah-label hate.
+7. **Token off-taksonomi.** Vote mentah memuat `kaum_rhaim_anget` (1), `intra_jawa` (terpotong), `suku_jepang`/`suku_rohingya` (di luar daftar prompt walau grup nyata) → pipeline perlu langkah validasi token ke daftar kanonik.
+8. **Kepercayaan vs antisemitisme** (`"Zionis"` → `agama_kepercayaan`) — kategori politik-agama global belum rapi; sub-kategori di v1.1.
 
 ---
 
@@ -234,6 +241,9 @@ Kasus berikut adalah **disagreement nyata** antar-rater (file `bulk_v2_disagreem
 
 | Versi | Tanggal | Perubahan |
 |---|---|---|
-| 1.0 | 2026-06-23 | Codebook formal pertama. Diturunkan dari prompt produksi `cultural_classification_v2` (pemenang Pilot #3, α ds+grok 0.763) + profil empiris dataset 728 (Pilot #6b) + 7 boundary cases. |
+| 1.0 | 2026-06-23 | Codebook formal pertama. Diturunkan dari prompt produksi `cultural_classification_v2` (pemenang Pilot #3, α ds+grok 0.763 di pool tuning) + profil empiris dataset 728 (Pilot #6b) + 7 boundary cases. |
+| 1.0a | 2026-06-23 | Koreksi pasca audit adversarial: angka target/form ke aturan majority-of-3 reproducible (`audit.py`); reliabilitas jujur (3-rater 0.513 label / ds+grok 0.688 batas atas, buang klaim "generalizes"); reframe 7 ties (artefak DeepSeek-null); tambah validitas eksternal vs `orig_label` (54.5%, κ 0.19) + celah taksonomi skin-color + dedup/leakage + sparsity. |
 
-**Provenance prompt → codebook:** definisi §2 = blok DEFINISI prompt v2; aturan §2.2 = blok "slur identitas ke individu = hate" (ditambahkan v1→v2, menaikkan α +0.21); contoh few-shot 1–10 prompt = sumber contoh kanonik. Setiap aturan codebook punya jejak ke keputusan pilot (lihat `wiki/decisions.md`, `wiki/pilots.md`).
+**TODO v1.1:** kategori target `fisik_warnakulit`; sub-kategori politik-agama global (Zionis dll); langkah validasi token off-taksonomi; spot-check pakar ~100 item.
+
+**Provenance prompt → codebook:** definisi §2 = blok DEFINISI prompt v2; aturan §2.2 = blok "slur identitas ke individu = hate" (ditambahkan v1→v2, menaikkan α ds+grok **+0.23**: 0.534→0.763); contoh few-shot 1–10 prompt = sumber contoh kanonik (contoh krama §3 Dim-3 adalah few-shot **konstruksi**, bukan dari data). Setiap aturan codebook punya jejak ke keputusan pilot (lihat `wiki/decisions.md`, `wiki/pilots.md`).

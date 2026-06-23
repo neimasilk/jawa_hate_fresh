@@ -1,6 +1,6 @@
 # HANDOFF - Ujaran Kebencian Jawa
 
-**Last updated:** 2026-06-23 — **✅ D-OPEN-3 RESOLVED: Opsi 1 (codebook + draft paper).** Dibuat: `codebook/CODEBOOK.md` v1.0 (taksonomi 4-dimensi grounded di 728, 7 boundary cases, distribusi, limitasi jujur) + `paper/draft_jinita.md` (draft Inggris, **sudah conform template JINITA**: IMRaD bernomor, abstrak ≤250 kata, IEEE refs, Gen AI disclosure). Petunjuk JINITA di-download + dipelajari → `paper/jinita_guidelines/SUMMARY.md` (checklist). **Tidak ada run in-flight, tidak butuh saldo.** Next = lit-pass lengkapi ≥20 referensi (verifikasi DOI) + pindah ke Word template + review Bapak/coauthor. Sebelumnya (2026-06-22): Opsi A cascade pool 332→735, held-out ds+grok α 0.688. Vendor mix 3-rater ds+grok+qwen3 (D16).
+**Last updated:** 2026-06-23 (sesi 2, ultracode) — **✅ AUDIT ADVERSARIAL MENYELURUH + PERBAIKAN.** Workflow 8-reviewer (51 agen) audit codebook+paper+dataset vs data nyata → verdict jujur: **as-is REJECT/major-revision** (cross-LLM≠kebenaran; headline 2-rater 0.688≠label 3-rater 0.513; "generalizes" fallacy; PII bocor; register "novelty" kosong). **17/18 temuan do-now SUDAH DIPERBAIKI** (paper v3 + codebook v1.0a + scrub PII + `audit.py` reproducible). Detail+status: **`paper/AUDIT_RESPONSE.md`**. **5 keputusan tersisa untuk Bapak (A-E)** — terpenting: **spot-check pakar ~100 item** (ubah κ0.19 jadi kekuatan). Sebelumnya sesi ini: D-OPEN-3 Opsi 1 (codebook + draft paper conform JINITA). Tidak ada run in-flight, tidak butuh saldo.
 **Tujuan:** sesi baru langsung tahu status terbaru, blocker, dan next action.
 
 **Cara mulai:** cukup bilang **"lanjut"**. Agent: baca CLAUDE.md → HANDOFF.md (ini) → wiki/index.md → STATE.md, lalu kerjakan "Next Concrete Action" di bawah.
@@ -134,7 +134,20 @@ Catatan dedup: rerun meng-APPEND record baru (responses.jsonl punya 300 unik tap
 
 ## Next Concrete Action (urutan)
 
-Konteks: **D-OPEN-3 SELESAI — Bapak pilih Opsi 1 (codebook + draft paper).** Keduanya dibuat 2026-06-23. Petunjuk JINITA juga sudah di-download + paper disesuaikan ke template. **Tidak ada run in-flight, tidak butuh saldo.**
+Konteks: **Audit adversarial menyeluruh selesai (2026-06-23 sesi 2)** + 17/18 temuan do-now diperbaiki. **5 keputusan tersisa untuk Bapak — lihat `paper/AUDIT_RESPONSE.md` tabel "Butuh keputusan Bapak":**
+1. **(TERTINGGI) Spot-check pakar ~100 item** — Bapak native, ~1 jam, stratifikasi pada disagreement LLM-vs-sumber. Ubah κ0.19 dari pembunuh → fitur. Tidak melanggar zero-human. **Ini pengubah accept/reject.**
+2. **Aturan label**: konfirmasi tetap 3-rater (headline 0.513, sudah saya pilih jujur) atau ganti ds+grok-only (0.688).
+3. **Anekdot mahasiswa nyontek**: demote jadi 1 kalimat? (judgement coauthor — isu integritas).
+4. **Lit-pass referensi** (≥20 IEEE, verifikasi DOI).
+5. **Legal lisensi `haipradana`** (boleh rilis turunan CC BY-NC-SA?) — potensi blocker rilis.
+
+Lalu: pindah paper ke Word template JINITA + review Yekti/Daniel.
+
+---
+
+### Konteks lama (D-OPEN-3, masih berlaku)
+
+**D-OPEN-3 SELESAI — Bapak pilih Opsi 1 (codebook + draft paper).** Keduanya dibuat 2026-06-23. Petunjuk JINITA sudah di-download + paper disesuaikan ke template. **Tidak ada run in-flight, tidak butuh saldo.**
 
 **Sudah jadi:**
 - `codebook/CODEBOOK.md` v1.0 — taksonomi 4-dimensi grounded di dataset 728, 7 boundary cases dengan adjudikasi, distribusi empiris, limitasi jujur (termasuk temuan register krama langka 157/158 ngoko).

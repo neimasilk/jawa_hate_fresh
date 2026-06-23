@@ -1,6 +1,6 @@
 # Wiki Index — Ujaran Kebencian Jawa
 
-_Last touched: 2026-06-23 (D-OPEN-3 resolved → Opsi 1: codebook + draft paper JINITA-conformant; petunjuk JINITA diunduh)._
+_Last touched: 2026-06-23 sesi 2 (audit adversarial menyeluruh → paper v3 + codebook v1.0a; 5 keputusan Bapak tersisa di AUDIT_RESPONSE.md)._
 
 Catalog dari semua knowledge proyek. **Bapak baca dari sini — agent maintain seluruh konten.**
 
@@ -40,6 +40,9 @@ Catalog dari semua knowledge proyek. **Bapak baca dari sini — agent maintain s
 | [`codebook/CODEBOOK.md`](../codebook/CODEBOOK.md) | **Codebook v1.0** taksonomi 4-dimensi (grounded di 728, 7 boundary cases, distribusi, limitasi). Deliverable HKI + supplementary paper |
 | [`paper/draft_jinita.md`](../paper/draft_jinita.md) | **Draft paper JINITA** (Inggris, conform template: IMRaD bernomor, IEEE refs, Gen AI disclosure) |
 | [`paper/jinita_guidelines/SUMMARY.md`](../paper/jinita_guidelines/SUMMARY.md) | Ringkasan petunjuk JINITA + checklist kepatuhan + sisa TODO (referensi anchor, Word template) |
+| [`paper/AUDIT_RESPONSE.md`](../paper/AUDIT_RESPONSE.md) | **Audit adversarial 2026-06-23**: verdict jujur + action list 18 temuan (status) + 5 keputusan Bapak (A-E). Wajib baca sebelum lanjut paper |
+| [`experiments/audit_external/audit.py`](../experiments/audit_external/audit.py) | **Single source of truth angka** (reproducible): α/AC1/McNemar/confusion vs orig_label/dedup/per-kategori. Ganti hitungan ad-hoc |
+| [`experiments/audit_external/clean_release.py`](../experiments/audit_external/clean_release.py) | Scrub PII (nomor telp) → `*_clean.jsonl` (versi rilis) |
 | [`scripts/test_apis.py`](../scripts/test_apis.py) | Connectivity test 3 LLM (verified ✅ 3/3 per 2026-05-07) |
 | [`experiments/pilot01_llm_characterization/`](../experiments/pilot01_llm_characterization/) | Pilot #1 ready to run (run_pilot.py + analyze.py) |
 | [`experiments/pilot04_autoresearch_prompts/`](../experiments/pilot04_autoresearch_prompts/) | Pilot #4 plan (Karpathy autoresearch adaptation) |
