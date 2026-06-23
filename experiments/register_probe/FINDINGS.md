@@ -1,0 +1,86 @@
+# Register-Pragmatics of Javanese Hate Speech — Findings (2026-06-23)
+
+Emerged from a live session with the native-expert author (Mukhlis Amien) generating + judging
+krama hate speech. This is candidate **core novelty** for the paper. Capture before it evaporates.
+
+## 1. The core model: register encodes the *temperature* and *direction* of hostility
+
+Javanese hate speech is not register-flat. The honorific system (*ngoko / madya / krama*) interacts
+with the speech act of hate in a rule-governed way:
+
+- **HOT / direct hostility** (rage, vulgar confrontation) → **ngoko / kasar**. Krama is impossible:
+  you cannot scream an insult in a deference register.
+- **COLD / controlled hostility** (contempt, moral/hierarchical superiority, irony) → **krama** is
+  available, in distinct pragmatic niches.
+
+Krama-hate niches identified (native-validated):
+
+| Niche | Configuration | Mechanism | Example (native-validated) |
+|---|---|---|---|
+| N1 ngoko direct | target = addressee, hot | open aggression | "Wong Madura kuwi kasar kabeh..." |
+| N2 krama report | target ≠ addressee | derogate absent group, defer to listener | "Mugi tiyang Tionghoa enggal wangsul..." |
+| N3a krama sarcastic | target = addressee, ironic | weaponized over-praise (mock-deference) | "Inggih, panjenengan wicaksana sanget..." |
+| N3b krama cold-contempt | target = addressee, cold | moral/hierarchical superiority | "Panjenengan boten gadhah unggah-ungguh" |
+
+**Key correction to an earlier naive rule:** "krama can't be hostile face-to-face" is FALSE.
+It can — N3a/N3b — when the hostility is *cold contempt / moral superiority / irony*, not hot rage.
+The native expert's visceral reaction ("I'd feel offended and awkward if a younger person said that
+to me") is the strongest authenticity signal: the text lands as a real attack.
+
+## 2. LLM capability (hypothesis corrected by data)
+
+Earlier lean: "LLMs can't generate authentic krama hate." **This is wrong.**
+- DeepSeek produced cold-contempt krama (N3b: *"Panjenengan punika tiyang ingkang boten gadhah
+  unggah-ungguh"*, *"Kula mboten sami kaliyan panjenengan ingkang asor"*, *"Menapa panjenengan
+  mboten gadhah isin?"*) that the native expert judged **"sangat bagus"** (authentic).
+- The capability boundary is narrower than "can't": LLMs produce **authentic** krama hate when it is
+  short + high-frequency living vocabulary + cold-contempt mode; they produce **"museum krama"**
+  (grammatical but textbook, fossil literary vocabulary like *prayogi/dedunung/kitha* that even an
+  educated native does not actively use) when reaching for elaborate literary forms; and they
+  **default to the Central-Javanese prestige standard**, erasing regional (e.g. East-Java/Arek) variety.
+
+**Why can LLMs do krama contempt?** (a) Composition: register competence × hate semantics, learned
+separately, combined — no real "krama hate" example needed. (b) The textual record DOES contain krama
+conflict: classical Javanese literature and wayang/drama are full of refined-register conflict among
+nobles. So LLMs are good at the register that is well-represented *in writing* (literary krama) and
+weak at the register that is spoken-only (living regional ngoko hate) — the inverse of what can be
+collected.
+
+## 3. Detection blind-spot probe (experiment, blindspot_test.py)
+
+Minimal pair (same hateful meaning, target suku_madura) + the expert's interpersonal examples, run
+through the production pipeline (DeepSeek + Grok + qwen3, prompt v2):
+
+- **ngoko direct** → hate=True by all 3 (control).
+- **krama report (N2, polite surface, group)** → hate=True by **all 3**. Politeness alone does NOT
+  blind the detector — explicit hateful propositional content wins.
+- **krama sarcastic (N3a, ironic, group)** → DeepSeek/Grok True (ringan), **qwen3 False/BUK** (read it
+  as "formal praise"). The blind spot is **irony/implicature, not politeness**, and it is
+  **model-dependent** (cheap local model fails).
+- **cold-contempt interpersonal (N3b, no group)** → correctly BUK by most (no group identity → not
+  SARA hate per taxonomy). Grok flagged the *asor* one as hate (its known over-flag bias).
+
+**Corrected thesis:** the detection challenge is not surface politeness but **implicature (irony,
+sarcasm, pasemon)** in the krama register — and the cheapest rater (qwen3) is exactly where it breaks.
+This ties register + pasemon + the limits of cheap full-automation + vendor bias into one finding.
+
+## 4. Implications for the paper
+
+The strongest, most honest paper now unifies three threads:
+1. **Characterization** — the register-pragmatic model above (novel; absent from existing hate taxonomies).
+2. **Generation/augmentation** — LLMs can generate native-validated krama hate, the register that is
+   *uncollectable* from public social media (diglossia). A small, register-stratified, native-validated
+   set is a genuine contribution.
+3. **Detection probe** — implicature (not politeness) is the blind spot, and it is model-dependent —
+   a concrete limit of cheap full-automation that motivates the lightweight native-expert role.
+
+Human role collapses to **authenticity refereeing** (native comprehension > production suffices),
+not annotation — consistent with the "eliminate the human bottleneck" framing, with the honest
+qualification that the bottleneck is irreducible exactly at register-pragmatic authenticity.
+
+## 5. Open questions / next steps
+- **Group-directed krama cold-contempt**: the N3b examples are interpersonal; test whether authentic
+  SARA-group krama hate can be generated (mock-praising/morally-indicting a religious/ethnic group).
+- **Second native judge** (Yekti / Daniel, if Javanese) → authenticity inter-rater reliability.
+- **Systematize**: N stimuli × niches × models × native ratings → a real table, not anecdotes.
+- **Regional axis**: does the LLM default to Central-Java krama and erase Arek/East-Java? Quantify.
