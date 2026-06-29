@@ -173,11 +173,11 @@ Catatan dedup: rerun meng-APPEND record baru (responses.jsonl punya 300 unik tap
 
 Konteks: **PIVOT ke GENERATOR (2026-06-23 sesi 3).** Lihat status atas. Urutan:
 
-1. ✅ **GENERATOR PILOT SUDAH DIJALANKAN (sesi 4, 2026-06-29)** — 35/36 contoh fresh, matriks 4 niche × 9 target. **Langkah aktif sekarang: Bapak isi `experiments/generation_pilot/VALIDATION_FORM.xlsx`** (kolom G OTENTIK 1/0, H MASALAH) → `python experiments/generation_pilot/score_validation.py` → `validation_result.md` (rate keaslian per-niche; konfirmasi N3b group cold-contempt otentik atau formulaic).
-2. **Kunci PRD ke framing generator** (HARD RULE #1) — biar niat tak menggelincir lagi. Tulis: human-bottleneck = *penciptaan/akuisisi data* (bukan labeling); solusi = LLM generator; labeling jadi QC; bukti kelangkaan dari kerja filter (0,9% yield).
-3. **Sistematisasi generasi**: matriks register × target SARA × (severity/form), termasuk **krama group-directed** (yg belum diuji — contoh krama sesi ini interpersonal). Native validasi → tabel paper.
-4. **Pipeline GENERATE→QC→anchor**: generated → consensus-label (3-LLM) + spot-check native → uji transfer ke 728 data nyata (detektor sintetis jalan di hate nyata?).
-5. **Judge ke-2** (Yekti/Daniel kalau penutur Jawa) → reliabilitas validasi keaslian.
+1. ✅ **GENERATOR + SYSTEMATIZE OTOMATIS SELESAI (sesi 4–5).** Matriks 36/36, detection probe at scale, multi-model gen, QC judge-panel — semua di-commit (`398664d`). **⏭️ LANGKAH AKTIF = VALIDASI NATIVE (bottleneck irreducible).** Bapak isi `experiments/generation_pilot/VALIDATION_FORM.xlsx` — **108 contoh (3 model), 27 baris kuning PRIORITAS → ISI YANG KUNING DULU** (kolom OTENTIK 1/0 + MASALAH; kolom H `machine_caught` & I `auto_concern` = konteks bantu) → `python experiments/generation_pilot/score_validation.py` → `validation_result.md` (rate keaslian per-model, model×niche, cross-tab evasi×native). **Pertanyaan utama yang dijawab validasi:** (a) device formulaic (Mugi…enggal / lacks-isin) = otentik-kaya atau fake? (b) contoh yang lolos detektor TAPI otentik = alasan dataset ini ada.
+2. **Kunci PRD ke framing generator** (HARD RULE #1) — biar niat tak menggelincir lagi. Tulis: human-bottleneck = *penciptaan/akuisisi data* (bukan labeling); solusi = LLM generator; labeling jadi QC; bukti kelangkaan dari kerja filter (0,9% yield). **Tambah:** register-pragmatik + detection-blind-spot (pasemon lolos SEMUA detektor) = pilar novelty kuat (lihat `RESULTS_probe.md` + FINDINGS §3b).
+3. ✅ **Sistematisasi generasi — SUDAH (sesi 5):** matriks register × target SARA × 3 model + 5 detektor + QC panel 4-lensa. krama group-directed cold-contempt **berhasil di-generate** + terdeteksi 56–89% (keaslian native pending). Sisa: axis regional kuantitatif (qwen3 default ke Indonesia, bukan bahkan krama Jateng).
+4. **Judge native ke-2** (Yekti/Daniel kalau penutur Jawa) → reliabilitas inter-rater keaslian (FINDINGS §5).
+5. **Pipeline GENERATE→QC→anchor**: setelah validasi native, uji transfer ke 728 data nyata (detektor jalan di hate nyata?) + (opsional) regen niche formulaic dengan diversity-prompt.
 
 **Catatan paper:** novelty inti = register-pragmatik (`experiments/register_probe/FINDINGS.md`) + generator-untuk-uncollectable + bukti kelangkaan. Paper-labeling lama (audit sesi 2) jadi bahan pendukung.
 
