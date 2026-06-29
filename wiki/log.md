@@ -118,6 +118,19 @@ Format: `YYYY-MM-DD | OP | sumber/trigger | entities-touched | summary`
 
 ---
 
+## 2026-06-29 (sesi 5 — systematize otomatis, ultracode)
+
+| Time | OP | Trigger | Touched | Summary |
+|------|----|---------|---------|---------|
+| session-start | QUERY | User "baca handoff, bikin workflow, rekomendasikan & lakukan" | CLAUDE.md, HANDOFF.md, STATE.md, wiki/index.md, memory/, generation_pilot/* (read) | Pickup: generator pilot sesi 4 = 35/36, blocker = validasi native. Rekomendasi: ubah "35 nunggu 1 manusia" → hasil paper otomatis + tugas native lebih tajam. Cek env: .env+.venv ✅, Ollama (qwen3/gemma3/gpt-oss) ✅. |
+| **detection-probe** | **INGEST** | Detection blind-spot probe at scale | **experiments/generation_pilot/detect_probe.py, detect_report.md (gitignored), fill_arab_cell.py (sel ke-36)** | 36×5 detektor, 0 parse-fail, **recompute independen cocok persis**. **krama_sarcastic lolos SEMUA detektor** (ds/grok 11%, qwen3/gemma3/gpt-oss 0%; 2/45 verdict). ngoko_direct 100% semua; krama_report 78–89% cloud. **Koreksi FINDINGS §3:** blind-spot implikatur near-universal (bukan cheap-model-only). 9 sel lolos 0/5. |
+| **multimodel-gen** | **INGEST** | Inter-model axis (gratis lokal) | **gen_local.py, generated_multimodel.jsonl (gitignored)** | gemma3:27b + qwen3:14b ×36. **qwen3 bocor ke Bahasa Indonesia di niche krama** (gagal generate register uncollectable); DeepSeek/gemma3 Jawa otentik. Kapabilitas generasi model-dependent. |
+| **qc-judge-panel** | **INGEST** | Workflow 4-agen non-native pre-triage | **(workflow wf_0944005c), judge_panel.json (gitignored)** | 4 lensa (lang/register/target/diversity), 115K tok. 0 museum-krama / 0 indo-leak (advisory); flag #21 (sincere-blessing), #26 (Arek lemah), 12 formulaic clone. Fokuskan waktu native. |
+| **form-rebuild + synth** | **INGEST** | Rebuild form + RESULTS | **rebuild_form.py, score_validation.py (upgrade header-based + per-model + cross-tab), RESULTS_probe.md (committed), VALIDATION_FORM.xlsx+_key.csv (gitignored)** | Form 108 contoh (3 model) + **27 PRIORITAS** (evasive/flagged + slice model×niche). RESULTS_probe.md = sintesis tanpa verbatim ofensif. |
+| ingest-docs | INGEST | Sync docs | **STATE.md, HANDOFF.md, FINDINGS.md §3b+§5, generation_pilot/README.md, wiki/log.md (ini), .gitignore** | Systematize otomatis selesai. **Next (bottleneck by design): validasi native Bapak — baris PRIORITAS dulu → score_validation.py.** Lalu judge ke-2. |
+
+---
+
 ## Convention
 
 - **INGEST:** Source baru di-process ke wiki. Touched = entity pages yang di-update.

@@ -51,10 +51,27 @@ Run: `python experiments/generation_pilot/generate.py` then `... review_generate
 - Other niches also formulaic at the opener level (krama_report → every line opens "Mugi
   tiyang … enggal …"). Authentic pattern, but diversity is a native-validation question.
 
+## Update — 2026-06-29 sesi 5: detection probe + multi-model + QC panel
+
+Three automated analyses (no native input) systematized FINDINGS §5 into a real matrix.
+Full numbers + interpretation: **`RESULTS_probe.md`** (committed; verbatim text gitignored).
+
+- **Detection blind-spot probe** (`detect_probe.py`, 36 cells × 5 detectors, 0 parse fails,
+  recompute-verified): the headline — **krama_sarcastic (irony/pasemon) evades ALL detectors**
+  (cloud 11%, local 0%), not just cheap ones; ngoko_direct 100% everywhere; krama_report 78–89%
+  (cloud) → politeness alone does not blind. Corrected the earlier minimal-pair claim.
+- **Multi-model generation** (`gen_local.py`, gemma3:27b + qwen3:14b): qwen3 **defaults to
+  Indonesian** for krama (can't generate the uncollectable register); DeepSeek/gemma3 produce
+  Javanese. Generation capability is model-dependent, mirroring detection.
+- **QC judge panel** (4-agent workflow): 0 museum-krama / 0 indo-leak (advisory), flagged #21
+  (sincere-blessing) + #26 (weak Arek) + 12 formulaic clones → focuses native time.
+- **Form rebuilt** (`rebuild_form.py`): 108 examples (3 models), **27 PRIORITAS** rows so the
+  native validates the contested ~30, not 108 blind. Scorer (`score_validation.py`) upgraded:
+  per-model, model×niche, and detector-evasion×native-authenticity cross-tabs.
+
 **Pending (the bottleneck, by design):** native authenticity validation by the expert
-author. After that: systematize per FINDINGS §5 — multiple generator models (inter-model
-comparison), a second native judge (authenticity inter-rater reliability), and the
-regional axis (does the LLM default to Central-Java krama and erase Arek/East-Java?).
+author — now far more informative (PRIORITAS-ordered, multi-model). A second native judge
+(authenticity inter-rater reliability) remains the other open human step.
 
 > Ethics: all generated text is offensive by construction and exists solely to train/
 > evaluate hate-speech **detection**. Anonymized, synthetic (no real persons), never for

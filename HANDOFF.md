@@ -1,6 +1,16 @@
 # HANDOFF - Ujaran Kebencian Jawa
 
-**Last updated:** 2026-06-29 (sesi 4) — **✅ GENERATOR PILOT DIJALANKAN** (eksekusi pivot).
+**Last updated:** 2026-06-29 (sesi 5) — **✅ SYSTEMATIZE OTOMATIS** (detection probe + multi-model + QC panel, zero-human).
+
+**🆕 SESI 5 (2026-06-29) — systematize otomatis (ultracode workflow):**
+- **Logika:** validasi native = bottleneck (by design). Daripada nunggu Bapak, ubah jadi **2 hasil paper otomatis + tugas native lebih tajam**. Semua nol-human, ~beberapa sen DeepSeek + lokal gratis.
+- **🎯 Detection blind-spot probe AT SCALE** (`experiments/generation_pilot/detect_probe.py`, 36 sel × 5 detektor, 0 parse-fail, recompute independen cocok persis). **TEMUAN HEADLINE + koreksi:** krama_sarcastic (ironi/pasemon) **lolos SEMUA detektor** (ds 11%, grok 11%, qwen3/gemma3/gpt-oss 0%; total 2/45 verdict hate). ngoko_direct 100% semua (kontrol). krama_report 78–89% cloud → kesopanan saja TIDAK membutakan. **Klaim minimal-pair FINDINGS §3 ("cuma qwen3 yang gagal, cloud nangkap") = KELIRU** — di skala, blind-spot implikatur near-universal, cloud pun gagal. 9 sel lolos 0/5 (7 sarkastik + krama_report/cold_contempt × politik).
+- **📊 Multi-model gen** (`gen_local.py`): qwen3:14b **bocor ke Bahasa Indonesia** di niche krama (gagal generate register uncollectable); DeepSeek + gemma3:27b = Jawa otentik. Kapabilitas generasi model-dependent (cermin hasil deteksi).
+- **🤖 QC judge-panel 4-agen** (workflow, 115K tok): 0 museum-krama / 0 indo-leak (advisory, non-native), flag #21 (santri sarkastik baca sincere-blessing) + #26 (Arek lemah) + 12 formulaic clone (Mugi…enggal / ingkang sampun paring / lacks-isin).
+- **Form di-rebuild** (`rebuild_form.py`): **108 contoh** (deepseek/gemma3/qwen3 ×36) + **27 PRIORITAS** (baris kuning: detector-evasive ATAU judge-flagged + 1 slice per model×niche). `score_validation.py` di-upgrade (header-based; breakdown per-model, model×niche, cross-tab evasi×native).
+- **⏭️ LANGKAH PERTAMA sesi berikut = TETAP validasi native**, tapi kini jauh lebih informatif: Bapak isi `VALIDATION_FORM.xlsx` **baris PRIORITAS (kuning) DULU** (kolom OTENTIK 1/0 + MASALAH) → `python experiments/generation_pilot/score_validation.py`. Kolom konteks H (machine_caught) + I (auto_concern) bantu menilai.
+- **Sintesis committed:** `experiments/generation_pilot/RESULTS_probe.md` (tabel + interpretasi, TANPA verbatim ofensif). Teks ofensif (detect_results/generated_multimodel/detect_report/judge_panel/xlsx) gitignored per policy.
+- **Caveat jujur:** ds+qwen3 = generator SEKALIGUS detektor → DeepSeek gagal deteksi ironi yang ia sendiri generate (11%) = temuan, bukan confound. Judge-panel non-native = advisory; keaslian final tetap native.
 
 **🆕 SESI 4 (2026-06-29) — generator pilot tuntas dijalankan:**
 - **Bug empty-content di-root-cause + diperbaiki:** deepseek-v4-pro reasoning model; minta 12 contoh sekaligus → reasoning makan semua token, content kosong. Request kecil sebenarnya berhasil. **Bukan kegagalan task.**

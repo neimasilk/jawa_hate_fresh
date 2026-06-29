@@ -64,6 +64,30 @@ through the production pipeline (DeepSeek + Grok + qwen3, prompt v2):
 sarcasm, pasemon)** in the krama register — and the cheapest rater (qwen3) is exactly where it breaks.
 This ties register + pasemon + the limits of cheap full-automation + vendor bias into one finding.
 
+### 3b. AT SCALE (2026-06-29): the blind spot is NEAR-UNIVERSAL, not cheap-model-only
+
+The minimal-pair claim above ("cheap qwen3 fails, cloud catches") was **partly wrong** — an
+artifact of one example. Running the full register matrix (36 cells, DeepSeek-generated) through
+the production detector with 5 raters (`experiments/generation_pilot/detect_probe.py`, verified
+recompute, 0 parse failures) gives the corrected picture:
+
+| niche | deepseek | grok | qwen3:14b | gemma3:27b | gpt-oss:20b |
+|---|---|---|---|---|---|
+| ngoko_direct | 100% | 100% | 100% | 100% | 100% |
+| krama_report | 78% | 89% | 44% | 89% | 44% |
+| **krama_sarcastic** | **11%** | **11%** | **0%** | **0%** | **0%** |
+| krama_cold_contempt | 78% | 89% | 56% | 78% | 78% |
+
+- **krama_sarcastic (irony/pasemon) evades EVERYONE**, cloud included: 2/45 verdicts were "hate".
+  No detector in this set reliably catches Javanese irony — this is the stronger, more honest claim.
+- **ngoko_direct = 100%** everywhere (control); **krama_report 78–89%** for cloud+gemma3 → politeness
+  alone does not blind (explicit propositional hate wins). Implicature, not honorifics, is the wall.
+- Model capability modulates the *non-ironic* krama niches (cheap local drops 30–45 pts on
+  krama_report), but for genuine irony capability does not rescue detection.
+- **Tie-back:** the same production trio labeled the 728 real tweets → it systematically
+  under-labels krama-sarcastic hate. DeepSeek even fails to detect the irony it *generated* (11%).
+  Full results: `experiments/generation_pilot/RESULTS_probe.md`.
+
 ## 4. Implications for the paper
 
 The strongest, most honest paper now unifies three threads:
@@ -79,6 +103,14 @@ not annotation — consistent with the "eliminate the human bottleneck" framing,
 qualification that the bottleneck is irreducible exactly at register-pragmatic authenticity.
 
 ## 5. Open questions / next steps
+
+**Progress 2026-06-29 (sesi 5):** Group-directed cold-contempt → **generated** (9 cells, matrix
+complete); detection-wise it is caught 56–89% (not the blind spot — irony is). Systematize → **done
+as a real matrix** (4 niches × 9 targets × 3 generator models × 5 detectors + 4-lens QC panel; see
+`experiments/generation_pilot/RESULTS_probe.md`). Regional axis → partially: qwen3 defaults to
+**Indonesian** (not even Central-Java krama) for krama niches; DeepSeek/gemma3 produce Javanese.
+Native authenticity validation + second native judge = still open (the irreducible human step).
+
 - **Group-directed krama cold-contempt**: the N3b examples are interpersonal; test whether authentic
   SARA-group krama hate can be generated (mock-praising/morally-indicting a religious/ethnic group).
 - **Second native judge** (Yekti / Daniel, if Javanese) → authenticity inter-rater reliability.

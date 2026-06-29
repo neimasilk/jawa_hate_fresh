@@ -1,6 +1,6 @@
 # Wiki Index — Ujaran Kebencian Jawa
 
-_Last touched: 2026-06-23 sesi 2 (audit adversarial menyeluruh → paper v3 + codebook v1.0a; 5 keputusan Bapak tersisa di AUDIT_RESPONSE.md)._
+_Last touched: 2026-06-29 sesi 5 (systematize otomatis: detection blind-spot probe at scale + multi-model gen + QC judge-panel → `experiments/generation_pilot/RESULTS_probe.md`; krama_sarcastic/pasemon lolos SEMUA detektor). Sebelumnya sesi 2 audit → paper v3 + codebook v1.0a._
 
 Catalog dari semua knowledge proyek. **Bapak baca dari sini — agent maintain seluruh konten.**
 
@@ -46,6 +46,8 @@ Catalog dari semua knowledge proyek. **Bapak baca dari sini — agent maintain s
 | [`scripts/test_apis.py`](../scripts/test_apis.py) | Connectivity test 3 LLM (verified ✅ 3/3 per 2026-05-07) |
 | [`experiments/pilot01_llm_characterization/`](../experiments/pilot01_llm_characterization/) | Pilot #1 ready to run (run_pilot.py + analyze.py) |
 | [`experiments/pilot04_autoresearch_prompts/`](../experiments/pilot04_autoresearch_prompts/) | Pilot #4 plan (Karpathy autoresearch adaptation) |
+| [`experiments/register_probe/FINDINGS.md`](../experiments/register_probe/FINDINGS.md) | **Register-pragmatik hate Jawa** (calon novelty inti) — §3b: pasemon = blind-spot deteksi near-universal (at scale) |
+| [`experiments/generation_pilot/`](../experiments/generation_pilot/) | **Generator pivot** — matriks 4 niche × 9 SARA × 3 model; `detect_probe.py` (blind-spot probe), `gen_local.py`, `rebuild_form.py`; **`RESULTS_probe.md`** sintesis; validasi native pending |
 
 ## External refs
 
