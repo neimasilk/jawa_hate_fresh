@@ -106,6 +106,18 @@ Format: `YYYY-MM-DD | OP | sumber/trigger | entities-touched | summary`
 
 ---
 
+## 2026-06-29 (sesi 4 — eksekusi pivot generator)
+
+| Time | OP | Trigger | Touched | Summary |
+|------|----|---------|---------|---------|
+| session-start | QUERY | User "lanjutkan, review dulu, rekomendasikan & kerjakan" | CLAUDE.md, HANDOFF.md, STATE.md, wiki/index.md, memory/ (read) | Pickup: pivot generator (sesi 3); langkah #1 = jalankan generator pilot (belum pernah sukses, balik kosong). |
+| **bug-rootcause** | **INGEST** | Generator balik kosong lagi (max_tokens 8192) | (diagnosa) src/llm_clients.py dipakai apa adanya | deepseek-v4-pro = reasoning model; request 12-contoh → reasoning makan seluruh budget → `message.content` kosong (teks ke `reasoning_content`). Request kecil sukses (821 reasoning-tok + JSON valid). **Bukan kegagalan task.** |
+| **generator-redesign** | **INGEST** | Fix bug + systematize FINDINGS §5 | **experiments/generation_pilot/generate.py (rewrite), README.md, review_generated.py, score_validation.py, .gitignore** | Redesign jadi matriks **4 niche register × 9 target SARA** (per-niche batched, retry-on-truncation, resume-aware). Pipeline lengkap generate→review→[native]→score. |
+| **generator-run** | **INGEST** | Jalankan generator (DeepSeek, 4 call, ~beberapa sen) | experiments/generation_pilot/ (outputs gitignored) | **35/36 cell** ter-generate (1 drop saat retry). Auto-triage: **0 museum-krama**, 2 indo-leak? + 3 register-mismatch = false-positive heuristik. **N3b krama cold-contempt ke KELOMPOK SARA berhasil** (jawab open-question; device berulang = tuduh kelompok tak punya isin/unggah-ungguh). |
+| ingest-docs | INGEST | Sync docs | **STATE.md, HANDOFF.md, wiki/log.md (ini)** | Pivot dieksekusi. **Next (bottleneck by design): validasi native Bapak (`VALIDATION_FORM.xlsx`) → score_validation.py.** Lalu systematize: multi-model generator, judge ke-2, axis regional. |
+
+---
+
 ## Convention
 
 - **INGEST:** Source baru di-process ke wiki. Touched = entity pages yang di-update.

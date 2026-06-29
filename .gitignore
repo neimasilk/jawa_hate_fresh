@@ -67,3 +67,12 @@ experiments/audit_external/audit_report.md
 experiments/expert_spotcheck/*.xlsx
 experiments/expert_spotcheck/_key.csv
 experiments/expert_spotcheck/spotcheck_result.md
+
+# Generation pilot working files (synthetic offensive text + validation form/key/results;
+# skrip .py + README tetap di-commit, dataset sintetis dirilis terpisah via HF/Zenodo nanti)
+experiments/generation_pilot/generated_pilot.jsonl
+experiments/generation_pilot/*.xlsx
+experiments/generation_pilot/VALIDATION_FORM.csv
+experiments/generation_pilot/_key.csv
+experiments/generation_pilot/review_report.md
+experiments/generation_pilot/validation_result.md
