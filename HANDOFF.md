@@ -8,7 +8,10 @@
 - **Hasil: 35/36 contoh hate Jawa fresh** ter-generate (~beberapa sen). 0 museum-krama. **N3b krama cold-contempt ke KELOMPOK SARA BERHASIL** (jawab open-question; device berulang = tuduh kelompok tak punya isin/unggah-ungguh — native nilai otentik vs formulaic).
 - **Pipeline lengkap siap:** `generate.py` → `review_generated.py` (auto-triage + `VALIDATION_FORM.xlsx`) → **[isi native]** → `score_validation.py`.
 - **⏭️ LANGKAH PERTAMA sesi berikut = VALIDASI NATIVE:** Bapak isi `experiments/generation_pilot/VALIDATION_FORM.xlsx` kolom G (OTENTIK? 1/0) + H (MASALAH), lalu `python experiments/generation_pilot/score_validation.py`. Ini bottleneck inti (by design — native = authenticity referee).
-- Detail: `experiments/generation_pilot/README.md`. Teks ofensif sintetis gitignored (policy mirror expert_spotcheck); scripts+README di-commit.
+- Detail: `experiments/generation_pilot/README.md`. Teks ofensif sintetis gitignored (policy mirror expert_spotcheck); scripts+README di-commit (`7d09765`).
+- **Sisa kecil:** 1 cell drop (`krama_sarcastic × suku_arab`) saat retry → matriks 35/36. Bisa diisi ulang (perlu regen niche `krama_sarcastic`), atau biarkan; tidak menghalangi validasi.
+- **Roadmap setelah validasi native** (saya bisa otomatisasi): (1) **multi-model** generator (DeepSeek vs lokal vs Grok) = perbandingan antar-model; (2) **judge ke-2** (Yekti/Daniel kalau penutur Jawa) = reliabilitas inter-rater keaslian; (3) **axis regional** (apakah LLM default krama Jawa-Tengah & hapus Arek/Jatim). Semua = tabel paper.
+- **Caveat jujur untuk validasi:** generator pakai **device berulang** (cold-contempt → tuduh kelompok tak punya isin/unggah-ungguh; krama_report → semua buka "Mugi tiyang … enggal …"). Polanya otentik, tapi **otentik-kaya vs formulaic** = justru yang Bapak nilai.
 
 ---
 
@@ -22,7 +25,7 @@
 
 **⏭️ LANGKAH PERTAMA sesi berikut:** ~~jalankan generator~~ **SUDAH DIJALANKAN sesi 4** (35 contoh, lihat blok sesi 4 di atas). Langkah pertama sekarang = **validasi native** (`VALIDATION_FORM.xlsx`).
 
-**💰 Budget:** DeepSeek balance **$2.23** (murah, PILIH ini buat generate). xAI/Grok mahal/terbatas — stop dipakai buat filter.
+**💰 Budget:** DeepSeek balance **~$2.2** (sesi 4 generator pakai cuma ~beberapa sen; murah, PILIH ini buat generate). xAI/Grok mahal/terbatas — stop dipakai buat filter.
 
 **Catatan:** audit sesi 2 (paper v3 + codebook v1.0a + `paper/AUDIT_RESPONSE.md`) tetap valid sebagai perbaikan kejujuran lapisan-labeling. 5 keputusan audit (A-E) kini SUBORDINAT ke pivot generator. Tidak ada run in-flight.
 **Tujuan:** sesi baru langsung tahu status terbaru, blocker, dan next action.
