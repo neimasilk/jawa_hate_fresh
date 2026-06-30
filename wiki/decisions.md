@@ -1,6 +1,6 @@
 # Decisions Log
 
-_Last touched: 2026-06-22 (D18 Opsi A dieksekusi — pool 332→735). Source-of-truth untuk decision rationale._
+_Last touched: 2026-06-29 (D19 PIVOT labeler→generator diformalkan + dikunci ke PRD v0.4 §0.1). Source-of-truth untuk decision rationale._
 
 Cross-ref: [`PRD.md` §0](../PRD.md) (kanonik), [STATE.md sesi log](../STATE.md), [memory project files](../../.claude/projects/C--Users-Mukhlis-Amien-Documents-ujaran-kebencian-jawa-fresh/memory/MEMORY.md).
 
@@ -259,9 +259,30 @@ Dataset tetap deliverable (HKI + release HF/Zenodo) — boleh disebut "first *pu
 
 ---
 
+## D19 — 🔄 PIVOT BESAR: Labeler → Generator
+
+**Date:** 2026-06-23 (formalisasi + lock ke PRD 2026-06-29)
+**Decision:** Arah inti proyek berubah dari **melabeli data Indonesia yang ada** (filter `haipradana` → label 3-LLM) ke **LLM sebagai GENERATOR** ujaran kebencian Jawa *fresh* register-stratified, divalidasi keasliannya oleh native. Pipeline baru: **GENERATE → consensus-QC → native authenticity check → dataset**.
+
+**Rationale:**
+- **Maksud asli ≠ yang dibangun.** Per Bapak (2026-06-23), niat sejak awal SELALU = generator. Istilah "annotation" di PRD/CLAUDE.md (di NLP = labeling) menyebabkan setiap sesi diam-diam membangun *labeler*. Drift ini tak pernah masuk source-of-truth → bertahan berbulan. Bapak kecewa saat sadar.
+- **Bukti empiris human bottleneck di akuisisi, bukan labeling:** filter dump `haipradana` (8.269 tweet) → hanya **74 (0,9%) Jawa asli**, 62% Indonesia. Register krama/pasemon (carrier hate antar-priyayi, novelty inti) **uncollectable** dari sosmed — 157/158 hate nyata = ngoko. Data yang dibutuhkan tak bisa di-scrape; harus di-generate.
+- Penemuan register-pragmatik (`experiments/register_probe/FINDINGS.md`) + LLM bisa generate krama otentik (native: "sangat bagus") membuat generator *feasible*, bukan sekadar diinginkan.
+
+**Konsekuensi:**
+- **Kerja lama di-repurpose, bukan dibuang:** taksonomi 4-dim + prompt v2 = otak generator; pipeline labeling 3-LLM (D16) = QC/detektor; dataset 728 = jangkar realisme + **bukti kelangkaan** (Motivasi paper: "0,9% yield → generation perlu").
+- **Novelty pillars menggeser D14:** (1) register-pragmatik hate Jawa, (2) generator untuk register uncollectable, (3) detection blind-spot (pasemon lolos SEMUA detektor — cloud 11%, lokal 0%, di skala 36×5). Lihat `experiments/generation_pilot/RESULTS_probe.md`.
+- **Peran native = authenticity referee**, bukan annotator (tetap konsisten zero-human-labeling; native hanya menilai keaslian sampel generated). Bottleneck aktif by design.
+- PRD dikunci ke framing ini: **PRD §0.1** (2026-06-29, v0.4) = arah aktif; §4.2 NEIL + §5 Phases 2–4 = legacy.
+
+**See also:** PRD §0.1, memory `generator-not-labeler-pivot`, `experiments/generation_pilot/README.md`, HANDOFF.md (sesi 3–5).
+
+---
+
 ## Open decisions
 
 - **D-OPEN-1:** HKI batch placement di tridarma tracker UBHINUS — tunggu input user.
-- **D-OPEN-3:** Arah setelah pool 735: (a) codebook + draft paper metodologi (held-out + cascade findings = materi kuat), (b) cari sumber data tambahan untuk dekati gate BERT 3K, atau (c) modeling BERT di 728 + framing future-work. Tunggu keputusan Bapak. (D-OPEN-2 RESOLVED oleh D18.)
+- **D-OPEN-3:** RESOLVED — Bapak pilih Opsi 1 (codebook v1.0 + draft paper JINITA, 2026-06-23). (D-OPEN-2 RESOLVED oleh D18.)
+- **D-OPEN-4 (aktif):** Validasi keaslian native sampel generated (D19) — bottleneck by design. Bapak isi `experiments/generation_pilot/VALIDATION_FORM.xlsx` (27 baris PRIORITAS dulu) → `score_validation.py`. Menjawab: device formulaic = otentik-kaya atau fake? + sampel yang lolos detektor tapi otentik = alasan dataset ada.
 
 (Decisions yang sudah resolved tapi minor / default-approved tidak ditulis di sini supaya lean. Lihat [`PRD.md` §9](../PRD.md) untuk full open decisions list.)

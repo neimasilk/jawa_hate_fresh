@@ -1,17 +1,17 @@
 # PRD — Ujaran Kebencian Jawa: Fully Automated LLM Pipeline
 
 **Document type:** Product Requirement Document (research project)
-**Version:** 0.3 (novelty reframe 2026-06-08)
-**Last updated:** 2026-06-08
+**Version:** 0.4 (**PIVOT labeler → generator**, D19 2026-06-23; framing dikunci 2026-06-29)
+**Last updated:** 2026-06-29
 **Owner:** Mukhlis Amien
 **Coauthors:** Yekti Asmoro Kanthi, Daniel Rudiaman Sijabat (semua UBHINUS)
 **Target:** 1 paper **Sinta 2 (JINITA)** + 1 dataset HKI + 1 codebook HKI
 
 ---
 
-## 0. Decisions Log (2026-05-07, updated 2026-06-10)
+## 0. Decisions Log (2026-05-07, updated 2026-06-29)
 
-Sesi Claude Code 2026-05-07 menghasilkan pivot framing besar — section di PRD ini (terutama §4.2 NEIL) **superseded** oleh decisions berikut, akan di-rewrite penuh setelah pilot eksperimen #1 selesai:
+Sesi Claude Code 2026-05-07 menghasilkan pivot framing besar; sesi 2026-06-23 menghasilkan **pivot kedua yang lebih fundamental: labeler → generator (D19)**. Section deskriptif di PRD ini (terutama §4.2 NEIL + §5 Phases 2–4) **superseded** — baca **§0.1** untuk arah aktif. Decisions di-log di tabel berikut (D1–D18 ringkas; rationale penuh di [`wiki/decisions.md`](wiki/decisions.md)):
 
 | # | Decision | Detail |
 |---|----------|--------|
@@ -27,8 +27,34 @@ Sesi Claude Code 2026-05-07 menghasilkan pivot framing besar — section di PRD 
 | D13 | **Data strategy: code-mixed via dump Indonesia** (2026-05-25) | Tidak ada korpus hate Jawa siap-unduh → filter dump hate Indonesia (`haipradana`) via LLM → ekstrak subset Jawa/code-mixed. **Code-mixed = scope sah** (tervalidasi Pilot #2: Jawa murni ~nol di sosmed, hate Jawa real didominasi code-mixed). |
 | D14 | **Novelty reframe** (2026-06-08) | Dataset hate Jawa SUDAH pernah dibuat (UI/WCSE 2021, tidak di-release). Klaim "dataset pertama/from-scratch" DITINGGALKAN. Novelty utama = (1) **pipeline fully-automated zero-human**, (2) **taksonomi kultural 4-dimensi register-aware**, (3) **code-mixed realism**. Dataset tetap deliverable — bisa disebut "first *publicly released*" sebagai fakta sekunder, bukan klaim utama. |
 | D15 | **Vendor mix final: 2-LLM deepseek+grok, Kimi DROPPED** (2026-06-10, keputusan Bapak) | Update D8: cross-LLM consistency pakai **DeepSeek V4 Pro + Grok 4.3** (2 rater — α tetap terukur). Kimi K2.6 di-drop: saldo Moonshot habis DAN secara empiris penyumbang noise (validity 73.8% di n=149, 126s/call, out-token 30× grok). Data Kimi v0 n=149 TETAP dipakai di paper sebagai sensitivity analysis 3-vs-2 vendor (drop-Kimi α 0.534, drop-Grok 0.722) — narasi seleksi vendor berbasis data = materi metodologi. |
+| D16 | **Vendor mix → 3-rater** (2026-06-11) | Tambah **qwen3:14b lokal** (Ollama, RTX 4080) sebagai rater ke-3 di samping ds+grok (memperluas, bukan ganti Grok). Consensus = majority ≥2. qwen3 = rater paling bising → klaim α utama tetap pasangan **ds+grok**. Sebagian pipeline jadi reproducible tanpa API berbayar. [wiki D16](wiki/decisions.md). |
+| D17 | **α dikanonikkan + verifikasi adversarial = SOP** (2026-06-15) | `src/agreement.py` → Krippendorff coincidence-matrix kanonik (bobot per-unit 1/(m_u−1)); angka 2-rater historis tak berubah, 3-rater bergeser tipis. Sebelum angka masuk paper/commit: **code-audit + recompute independen** (dua jalur — recompute saja meniru bug yang sama). [wiki D17](wiki/decisions.md). |
+| D18 | **Opsi A: perbesar pool via cascade** (2026-06-22) | Pool **332→735** (728 consensus, 158 hate) via cascade SEA-LION→qwen3 pre-screen → grok-verify. Held-out ds+grok α **0.688** [0.614, 0.759] (menguat vs 0.670) → klaim anti-overfit lebih kuat. Dump `haipradana` habis → 735 ≈ ceiling sumber. [wiki D18](wiki/decisions.md). |
+| **D19** | **🔄 PIVOT LABELER → GENERATOR** (2026-06-23, keputusan Bapak) | Maksud asli Bapak SELALU = LLM **generator** hate Jawa *fresh*, BUKAN filter+label data yang ada. Istilah "annotation" lama (= labeling) menyebabkan drift selama berbulan sesi. Pipeline baru: **generate → consensus-QC → native authenticity check**. Kerja lama di-repurpose (taksonomi = otak generator, labeling 3-LLM = QC/detektor, dataset 728 = jangkar realisme + bukti kelangkaan 0,9% yield). **Detail penuh: §0.1.** |
 
-**Catatan:** Section 4.2 (NEIL) di bawah ini **legacy**, akan di-rewrite penuh setelah pilot. Baca sebagai konteks historis pre-pivot.
+**Catatan:** Section 4.2 (NEIL) + §5 Phases 2–4 di bawah ini = **legacy pre-pivot**. Dipertahankan sebagai konteks historis + sumber komponen yang di-repurpose, BUKAN rencana aktif. Arah aktif = §0.1.
+
+---
+
+## 0.1 PIVOT BESAR: Labeler → Generator (D19, 2026-06-23) — **framing terkunci**
+
+> Section ini = **arah aktif proyek**. Kalau ada konflik dengan section lain di PRD, §0.1 menang.
+
+**Realisasi inti** (lihat memory `generator-not-labeler-pivot`): maksud asli Bapak SELALU = **LLM sebagai GENERATOR** ujaran kebencian Jawa *fresh*, bukan filter+label data yang sudah ada. Istilah "annotation" di PRD lama (di NLP: annotation = labeling) menyebabkan setiap sesi diam-diam membangun *labeler*. Drift ini baru disadari 2026-06-23 → dikunci di sini supaya tak menggelincir lagi (HARD RULE #1).
+
+**Re-definisi human bottleneck:** bukan di *labeling*, tapi di **penciptaan/akuisisi data**. Bukti empiris: filter dump Indonesia `haipradana` (8.269 tweet) → hanya **74 (0,9%) Jawa asli**, 62% Indonesia. Register krama/pasemon (carrier hate antar-priyayi) **uncollectable** dari sosmed — 157/158 hate nyata di dataset = ngoko. Data yang dibutuhkan tidak bisa di-*scrape*; harus di-*generate*.
+
+**Pipeline baru:** GENERATE (LLM + cultural prompt v2, matriks register × SARA) → consensus-label + **native authenticity spot-check** (QC) → dataset. **Kerja lama di-repurpose, bukan dibuang:**
+- Taksonomi 4-dim + prompt v2 = **otak generator**.
+- Pipeline labeling 3-LLM (ds+grok+qwen3, D16) = **QC / detektor**.
+- Dataset 728 nyata = **jangkar realisme + bukti kelangkaan** (Motivasi paper: "0,9% yield → generation perlu").
+
+**Novelty pillars pasca-pivot** (menggeser tiga pilar D14):
+1. **Register-pragmatik hate Jawa** — register menyandi *suhu* benci (panas→ngoko; dingin/contempt/ironis→krama). LLM ternyata bisa generate krama otentik (native menilai "sangat bagus"). (`experiments/register_probe/FINDINGS.md`)
+2. **Generator untuk register uncollectable** — krama-report (*ngrasani* pihak ketiga), krama-sarkastik (*pasemon*), krama cold-contempt group-directed: nyata di tutur, nyaris nol di dump.
+3. **Detection blind-spot** — **pasemon/ironi lolos SEMUA detektor** (cloud 11%, lokal 0%) pada skala 36-sel × 5 detektor; bukan cuma model murah — cloud pun gagal. Yang membutakan = *implikatur*, bukan kesopanan. (`experiments/generation_pilot/RESULTS_probe.md`)
+
+**Status eksekusi (2026-06-29):** matriks generator 36/36 (3 model) dijalankan; detection probe + multi-model gen + QC judge-panel selesai (semua otomatis). **Bottleneck aktif (by design) = validasi keaslian native** oleh Bapak (`experiments/generation_pilot/VALIDATION_FORM.xlsx`, 27 baris PRIORITAS dulu) → `score_validation.py`.
 
 ---
 
@@ -64,11 +90,13 @@ Empat alasan struktural kenapa dataset/codebase translasi tidak bisa di-fix deng
 
 ### 2.1 Primary goals
 
-- **G1.** Develop **Cultural Taxonomy** ujaran kebencian Bahasa Jawa dalam 4 dimensi (target group, severity, register, form) — di-release sebagai codebook formal
-- **G2.** Develop **fully-automated LLM annotation pipeline** (zero human; per D1, menggantikan NEIL) — kontribusi metodologis untuk low-resource hate speech annotation
-- **G3.** Build **dataset** ujaran kebencian Jawa **code-mixed** (target 5K-10K instance; per D13-D14: release publik pertama, bukan klaim "dataset pertama") — anonimized, properly licensed
-- **G4.** Train + report **baseline models** sebagai *characterization* dataset baru (bukan untuk dibandingkan dengan paper lain)
-- **G5.** Submit **paper Sinta 2 (JINITA, per D3)** dengan tiga pilar di atas sebagai kontribusi
+> **Pasca-D19 (§0.1):** G2 + G3 di-reframe dari *labeling* ke *generation*. G1/G4/G5 tetap.
+
+- **G1.** Develop **Cultural Taxonomy** ujaran kebencian Bahasa Jawa dalam 4 dimensi (target group, severity, register, form) — di-release sebagai codebook formal. *(Sekaligus = otak generator, D19.)*
+- **G2.** Develop **fully-automated LLM _generation_ pipeline** (zero-human di penciptaan data; labeling 3-LLM di-repurpose jadi QC/detektor) — kontribusi metodologis: eliminasi bottleneck di **akuisisi/penciptaan** data low-resource, bukan sekadar labeling (D19, §0.1).
+- **G3.** Build **dataset** ujaran kebencian Jawa: (a) **generated** register-stratified (krama/sarkastik/pasemon yang *uncollectable*) + (b) **anchor 728 data nyata** code-mixed sebagai realisme + bukti kelangkaan (0,9% yield). **Native-validated authenticity**; anonimized, properly licensed.
+- **G4.** Train + report **baseline models / detector probe** sebagai *characterization* (bukan dibandingkan dengan paper lain). Detection blind-spot (pasemon) = hasil karakterisasi utama.
+- **G5.** Submit **paper Sinta 2 (JINITA, per D3)** dengan novelty pillars §0.1 (register-pragmatik + generator-uncollectable + detection blind-spot) sebagai kontribusi.
 
 ### 2.2 Success criteria
 
@@ -176,6 +204,8 @@ Codebook 4-dimensi:
 ---
 
 ## 5. Pipeline / Phases
+
+> **⚠️ LEGACY pre-pivot (D19).** Fase 2 (Data collection/scraping) + Fase 3 (NEIL annotation) + Fase 4 (intra/external-rater) menggambarkan pipeline *labeling* yang sudah superseded. Arah aktif = generate → QC → native authenticity (§0.1). Komponen yang masih dipakai: Fase 1 (taxonomy = otak generator), labeling 3-LLM (jadi QC), Fase 5 (baseline/detector probe). Fase di bawah dipertahankan sebagai konteks historis.
 
 ### Fase 1 — Taxonomy development (1 bulan)
 
@@ -335,3 +365,5 @@ NEIL protocol = transferable methodology untuk PhD project di bahasa daerah lain
 | Version | Date | Change |
 |---------|------|--------|
 | 0.1 | 2026-05-07 | Initial draft after concept session with Claude |
+| 0.3 | 2026-06-08 | Novelty reframe (D14): drop klaim "dataset pertama" → pipeline + taksonomi + code-mixed |
+| 0.4 | 2026-06-29 | **PIVOT labeler → generator dikunci** (D19): tambah §0.1 (framing aktif) + D16–D19 ke Decisions Log; G2/G3 re-anchor ke generation; §4.2 NEIL + §5 Phases 2–4 ditandai legacy. |

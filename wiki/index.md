@@ -1,6 +1,6 @@
 # Wiki Index — Ujaran Kebencian Jawa
 
-_Last touched: 2026-06-29 sesi 5 (systematize otomatis: detection blind-spot probe at scale + multi-model gen + QC judge-panel → `experiments/generation_pilot/RESULTS_probe.md`; krama_sarcastic/pasemon lolos SEMUA detektor). Sebelumnya sesi 2 audit → paper v3 + codebook v1.0a._
+_Last touched: 2026-06-29 sesi 6 (**PRD dikunci ke framing generator** — D19 formal + PRD v0.4 §0.1; guard drift HARD RULE #1). Sebelumnya sesi 5: detection blind-spot probe at scale + multi-model + QC panel → `experiments/generation_pilot/RESULTS_probe.md`._
 
 Catalog dari semua knowledge proyek. **Bapak baca dari sini — agent maintain seluruh konten.**
 

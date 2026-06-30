@@ -131,6 +131,15 @@ Format: `YYYY-MM-DD | OP | sumber/trigger | entities-touched | summary`
 
 ---
 
+## 2026-06-29 (sesi 6 — lock PRD ke generator)
+
+| Time | OP | Trigger | Touched | Summary |
+|------|----|---------|---------|---------|
+| session-start | QUERY | User "lanjutkan" | CLAUDE.md, HANDOFF.md, STATE.md, wiki/index.md, memory/, generation_pilot/* (read) | Pickup: form belum diisi (`validation_result.md` "No rows scored"). Native validation = bottleneck (tugas Bapak). Pilih kerjakan Next Action #2 (otomatis, zero native input). |
+| **lock-prd** | **INGEST** | Next Action #2: kunci PRD ke framing generator (HARD RULE #1, guard drift ke-3) | **PRD.md (v0.3→v0.4: §0.1 baru, D16–D19 di §0, G2/G3 re-anchor, §5 legacy-tag, §12 history), wiki/decisions.md (D19 + D-OPEN-4 + last-touched)** | Pivot generator (D19) sebelumnya cuma di HANDOFF/STATE/memory — tak pernah masuk source-of-truth PRD → drift. Diformalkan D19 + dikunci §0.1 (arah aktif menang atas section lain). NEIL + Phases 2–4 ditandai legacy-but-repurposed. |
+
+---
+
 ## Convention
 
 - **INGEST:** Source baru di-process ke wiki. Touched = entity pages yang di-update.
