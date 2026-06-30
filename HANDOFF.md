@@ -1,15 +1,25 @@
 # HANDOFF - Ujaran Kebencian Jawa
 
-**Last updated:** 2026-06-30 (sesi 7) — **✅ VALIDATION_FORM diisi LLM (advisory), Bapak cek + go/no-go.** 60/108 = 56% otentik (DeepSeek 100%, Gemma3 56%, Qwen3 11%). Hasil: `experiments/generation_pilot/validation_result.md`.
+**Last updated:** 2026-06-30 (sesi 7 lanjutan) — **✅ Validasi native selesai + Paper v4 ditulis (generator framing).** State: paper draft tersedia di `paper/draft_jinita.md`, commit `3396d90`.
 
-**🆕 SESI 7 (2026-06-30) — LLM mengisi VALIDATION_FORM (advisory):**
-- `VALIDATION_FORM.xlsx` diisi LLM untuk semua 108 baris (kolom OTENTIK + MASALAH + CATATAN). **Advisory — Bapak native yang final go/no-go.**
-- **Temuan LLM (perlu konfirmasi native):** DeepSeek 36/36 (100%) otentik; Gemma3 20/36 (56%) — gagal di krama_sarcastic (bocor Bahasa Indonesia); Qwen3 4/36 (11%) — gagal di semua krama + hallucination kata 'kacandran'.
-- **Feedback native Bapak (2026-06-30) sudah diintegrasikan:** (1) `kacandran` = halusinasi qwen3, bukan kata Jawa valid → qwen3 tetap 0. (2) No. 21 = pujian tulus, bukan sarkasme → dikoreksi ke OTENTIK 0. (3) No. 6 `ngentu` = kata vulgar Jawa valid → tetap 1. (4) No. 27/30/32 encoding bukan rusak: `naté`=pernah / `saestu`=sungguh-sungguh / `estri`=perempuan krama (è dibaca spt "sate") → tetap 1.
-- **Hasil final post-patch:** 59/108 = 55% otentik (DeepSeek 35/36 = 97%, Gemma3 20/36 = 56%, Qwen3 4/36 = 11%)
-- **Detector-evasion × native (3/3 evasive items = authentic):** semua item yang lolos detektor juga dinilai otentik LLM → konfirmasi klaim paper bahwa krama_sarcastic/cold_contempt DeepSeek = "uncollectable AND undetectable hate".
-- `validation_result.md` di-generate dan di-commit.
-- **⏭️ LANGKAH PERTAMA sesi berikut:** Bapak review VALIDATION_FORM.xlsx → koreksi OTENTIK? mana yang perlu → rerun `python experiments/generation_pilot/score_validation.py` → final result.
+**🆕 SESI 7 (2026-06-30) — Validasi native + Paper v4:**
+
+### A. Validasi native (SELESAI)
+- `VALIDATION_FORM.xlsx` diisi LLM (108 baris), **lalu dikoreksi native Bapak** → hasil final:
+  - **DeepSeek 35/36 (97%)** — 1 gugur: no.21 krama_sarcastic/agama_islam dibaca sebagai pujian tulus, bukan sarkasme
+  - **Gemma3 20/36 (56%)** — krama_sarcastic gagal semua (bocor Bahasa Indonesia); krama_cold_contempt sebagian salah register (ngoko)
+  - **Qwen3 4/36 (11%)** — krama semua gagal; kata `kacandran` = halusinasi (bukan Jawa); cold_contempt = Indonesia murni
+  - **Total: 59/108 = 55%** otentik. File: `experiments/generation_pilot/validation_result.md`
+- **Koreksi native kunci:** `kacandran`=halusinasi; no.21=pujian tulus (0); `ngentu`=vulgar valid (1); `naté`/`saestu`/`estri` = kata Jawa valid dengan è-pepet (bukan encoding rusak)
+- **Cross-tab evasion×native:** item yang lolos detektor = otentik native → krama_sarcastic DeepSeek = *uncollectable AND undetectable hate* (klaim paper terkonfirmasi)
+
+### B. Paper v4 — generator framing (SELESAI, `paper/draft_jinita.md`)
+- **Judul baru:** "Register-Stratified Javanese Hate Speech Generation via Large Language Models"
+- **Kontribusi utama berubah:** 4-niche × 9-target matrix + detection blind-spot proof (bukan 728 labeled texts + α)
+- **Struktur baru:** §1 Intro (collection paradox) → §2 Register-pragmatic taxonomy (4 niches Table) → §3 Method (labeling=scarcity baseline; generation=main) → §4 Results (Table 1 per-model, Table 2 per-niche, Table 3 detection 5-detector) → §5 Conclusion
+- **Headline numbers di paper:** DeepSeek 97%; krama_sarcastic 30% authentic / 4% detection rate; ngoko_direct 81% authentic / 100% detection rate; 9/36 cells evade ALL 5 detectors
+- **25 referensi** (4 baru vs v3; ~15 masih butuh verifikasi DOI/vol/hal)
+- **Change log appendix** (hapus sebelum submit)
 
 **🆕 SESI 6 (2026-06-29) — lock PRD (zero native input):**
 - Form `VALIDATION_FORM.xlsx` **belum diisi** → native validation = bottleneck (tugas Bapak, irreducible). Tak ada kerja otomatis sesi 5 yang tersisa.
@@ -126,7 +136,7 @@ Saldo Moonshot habis (run Kimi v1 gagal 149/149, 429) → keputusan Bapak: **bia
 
 Riset tetap pada framing **"Eliminating Human Bottleneck in Low-Resource Hate Speech Annotation"** untuk paper JINITA Sinta 2 + dataset/codebook HKI.
 
-**🔆 STATUS TERKINI (2026-06-22):** **OPSI A / Pilot #6b SELESAI** — pool diperbesar **332 → 735**, dataset **728 consensus (158 hate)**, **held-out ds+grok α 0.688** (menguat vs Pilot #5 0.670). Dump habis → 735 ceiling. Vendor mix 3-rater ds+grok+qwen3 (D16), prompt `prompts/cultural_classification_v2.md`. Angka diverifikasi recompute independen. **Tidak ada run in-flight, blocker hilang.** Pilot #5 (2026-06-15): dataset 331 + held-out 0.670. Pilot #6: qwen3 LOLOS (0.660), SEA-LION GAGAL (0.422).
+**🔆 STATUS TERKINI (2026-06-30):** **PAPER v4 SELESAI** — `paper/draft_jinita.md` commit `3396d90`. Generator framing: judul baru + §1–5 rewrite penuh. Validasi native selesai: 59/108=55% otentik (DeepSeek 97%). Detection blind-spot proof: krama_sarcastic 4% detection rate vs ngoko_direct 100%. **⏭️ NEXT = Lit-pass referensi** (verif DOI/vol/hal ≥20 ref, jangan fabricate) + inter-rater ke-2 (Yekti/Daniel) + Word template JINITA. Tidak ada run in-flight. Budget DeepSeek ~$2.2 (murah untuk regen kalau perlu).
 
 **✅ NOVELTY REFRAME (D14, 2026-06-08):** keputusan Bapak — klaim "dataset pertama/from-scratch" **DITINGGALKAN** (dataset hate Jawa sudah ada: UI/WCSE 2021, tak di-release). Novelty utama sekarang 3 pilar: (1) **pipeline fully-automated zero-human**, (2) **taksonomi kultural 4-dimensi register-aware**, (3) **code-mixed realism**. PRD sudah di-update ke v0.3 (D13 retroaktif + D14, Goals G2/G3/G5 sinkron). Dataset tetap deliverable ("first *publicly released*" = fakta sekunder, bukan klaim utama).
 
@@ -189,7 +199,7 @@ Catatan dedup: rerun meng-APPEND record baru (responses.jsonl punya 300 unik tap
 
 Konteks: **PIVOT ke GENERATOR (2026-06-23 sesi 3).** Lihat status atas. Urutan:
 
-1. ✅ **GENERATOR + SYSTEMATIZE OTOMATIS SELESAI (sesi 4–5).** Matriks 36/36, detection probe at scale, multi-model gen, QC judge-panel — semua di-commit (`398664d`). ✅ **VALIDATION_FORM diisi LLM (sesi 7) — advisory.** **⏭️ LANGKAH AKTIF = Bapak review + koreksi VALIDATION_FORM.xlsx** — cek kolom OTENTIK (terutama yang ada MASALAH/catatan), koreksi yang perlu, rerun `python experiments/generation_pilot/score_validation.py`. Pertanyaan kunci: (a) `kacandran` kata Jawa valid? (b) No. 21 sarkasme atau doa tulus? (c) No. 6 `ngentu` = vulgar atau typo? (d) encoding rusak no. 27/30/32 = apa teks aslinya?
+1. ✅ **GENERATOR + SYSTEMATIZE + VALIDASI NATIVE + PAPER v4 — SEMUA SELESAI (sesi 4–7).** Validasi final 59/108=55% (DeepSeek 97%). Paper v4 `paper/draft_jinita.md` commit `3396d90`. **⏭️ LANGKAH AKTIF = Lit-pass referensi** — verifikasi ≥20 referensi IEEE (DOI/vol/hal nyata, jangan fabricate). Atau: inter-rater ke-2 Yekti/Daniel kalau penutur Jawa (§4.7 limitation).
 2. ✅ **Kunci PRD ke framing generator — SELESAI (sesi 6).** PRD v0.4: §0.1 PIVOT block (arah aktif), D16–D19 di Decisions Log, Goals G2/G3 re-anchor ke *generation*, NEIL/Phases legacy-tag; `wiki/decisions.md` D19 formal. Human-bottleneck = *penciptaan/akuisisi data* (bukan labeling); novelty pillars = register-pragmatik + generator-uncollectable + detection-blind-spot.
 3. ✅ **Sistematisasi generasi — SUDAH (sesi 5):** matriks register × target SARA × 3 model + 5 detektor + QC panel 4-lensa. krama group-directed cold-contempt **berhasil di-generate** + terdeteksi 56–89% (keaslian native pending). Sisa: axis regional kuantitatif (qwen3 default ke Indonesia, bukan bahkan krama Jateng).
 4. **Judge native ke-2** (Yekti/Daniel kalau penutur Jawa) → reliabilitas inter-rater keaslian (FINDINGS §5).
