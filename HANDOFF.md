@@ -1,11 +1,18 @@
 # HANDOFF - Ujaran Kebencian Jawa
 
-**Last updated:** 2026-06-29 (sesi 6) — **✅ PRD DIKUNCI ke framing generator** (D19 formal + §0.1, PRD v0.4). Blocker tetap = validasi native.
+**Last updated:** 2026-06-30 (sesi 7) — **✅ VALIDATION_FORM diisi LLM (advisory), Bapak cek + go/no-go.** 60/108 = 56% otentik (DeepSeek 100%, Gemma3 56%, Qwen3 11%). Hasil: `experiments/generation_pilot/validation_result.md`.
+
+**🆕 SESI 7 (2026-06-30) — LLM mengisi VALIDATION_FORM (advisory):**
+- `VALIDATION_FORM.xlsx` diisi LLM untuk semua 108 baris (kolom OTENTIK + MASALAH + CATATAN). **Advisory — Bapak native yang final go/no-go.**
+- **Temuan LLM (perlu konfirmasi native):** DeepSeek 36/36 (100%) otentik; Gemma3 20/36 (56%) — gagal di krama_sarcastic (bocor Bahasa Indonesia); Qwen3 4/36 (11%) — gagal di semua krama + hallucination kata 'kacandran'.
+- **Pertanyaan kunci untuk Bapak:** (1) `kacandran` = kata Jawa valid? (kalau iya, beberapa qwen3 ngoko bisa naik ke 1). (2) No. 21 (santri sholat malam) = sarkasme atau doa tulus? (3) No. 6 `ngentu` = vulgar atau typo? (4) Encoding rusak no. 27/30/32 — teks aslinya apa?
+- **Detector-evasion × native (3/3 evasive items = authentic):** semua item yang lolos detektor juga dinilai otentik LLM → konfirmasi klaim paper bahwa krama_sarcastic/cold_contempt DeepSeek = "uncollectable AND undetectable hate".
+- `validation_result.md` di-generate dan di-commit.
+- **⏭️ LANGKAH PERTAMA sesi berikut:** Bapak review VALIDATION_FORM.xlsx → koreksi OTENTIK? mana yang perlu → rerun `python experiments/generation_pilot/score_validation.py` → final result.
 
 **🆕 SESI 6 (2026-06-29) — lock PRD (zero native input):**
 - Form `VALIDATION_FORM.xlsx` **belum diisi** → native validation = bottleneck (tugas Bapak, irreducible). Tak ada kerja otomatis sesi 5 yang tersisa.
 - Kerjakan **Next Action #2** yang tak butuh native: **kunci PRD ke generator** (HARD RULE #1). Pivot D19 selama 3 sesi cuma di HANDOFF/STATE/memory — **tak pernah masuk PRD** → risiko drift ke-3. Sekarang: **PRD v0.4 §0.1** (PIVOT block = arah aktif) + D16–D19 di Decisions Log + Goals G2/G3 re-anchor ke *generation* + §4.2 NEIL/§5 Phases 2–4 ditandai legacy. `wiki/decisions.md` D19 formal + D-OPEN-4.
-- **⏭️ LANGKAH PERTAMA sesi berikut = TETAP validasi native** (tak berubah dari sesi 5): Bapak isi `VALIDATION_FORM.xlsx` baris **PRIORITAS (kuning) dulu** → `python experiments/generation_pilot/score_validation.py`.
 
 ---
 
@@ -181,7 +188,7 @@ Catatan dedup: rerun meng-APPEND record baru (responses.jsonl punya 300 unik tap
 
 Konteks: **PIVOT ke GENERATOR (2026-06-23 sesi 3).** Lihat status atas. Urutan:
 
-1. ✅ **GENERATOR + SYSTEMATIZE OTOMATIS SELESAI (sesi 4–5).** Matriks 36/36, detection probe at scale, multi-model gen, QC judge-panel — semua di-commit (`398664d`). **⏭️ LANGKAH AKTIF = VALIDASI NATIVE (bottleneck irreducible).** Bapak isi `experiments/generation_pilot/VALIDATION_FORM.xlsx` — **108 contoh (3 model), 27 baris kuning PRIORITAS → ISI YANG KUNING DULU** (kolom OTENTIK 1/0 + MASALAH; kolom H `machine_caught` & I `auto_concern` = konteks bantu) → `python experiments/generation_pilot/score_validation.py` → `validation_result.md` (rate keaslian per-model, model×niche, cross-tab evasi×native). **Pertanyaan utama yang dijawab validasi:** (a) device formulaic (Mugi…enggal / lacks-isin) = otentik-kaya atau fake? (b) contoh yang lolos detektor TAPI otentik = alasan dataset ini ada.
+1. ✅ **GENERATOR + SYSTEMATIZE OTOMATIS SELESAI (sesi 4–5).** Matriks 36/36, detection probe at scale, multi-model gen, QC judge-panel — semua di-commit (`398664d`). ✅ **VALIDATION_FORM diisi LLM (sesi 7) — advisory.** **⏭️ LANGKAH AKTIF = Bapak review + koreksi VALIDATION_FORM.xlsx** — cek kolom OTENTIK (terutama yang ada MASALAH/catatan), koreksi yang perlu, rerun `python experiments/generation_pilot/score_validation.py`. Pertanyaan kunci: (a) `kacandran` kata Jawa valid? (b) No. 21 sarkasme atau doa tulus? (c) No. 6 `ngentu` = vulgar atau typo? (d) encoding rusak no. 27/30/32 = apa teks aslinya?
 2. ✅ **Kunci PRD ke framing generator — SELESAI (sesi 6).** PRD v0.4: §0.1 PIVOT block (arah aktif), D16–D19 di Decisions Log, Goals G2/G3 re-anchor ke *generation*, NEIL/Phases legacy-tag; `wiki/decisions.md` D19 formal. Human-bottleneck = *penciptaan/akuisisi data* (bukan labeling); novelty pillars = register-pragmatik + generator-uncollectable + detection-blind-spot.
 3. ✅ **Sistematisasi generasi — SUDAH (sesi 5):** matriks register × target SARA × 3 model + 5 detektor + QC panel 4-lensa. krama group-directed cold-contempt **berhasil di-generate** + terdeteksi 56–89% (keaslian native pending). Sisa: axis regional kuantitatif (qwen3 default ke Indonesia, bukan bahkan krama Jateng).
 4. **Judge native ke-2** (Yekti/Daniel kalau penutur Jawa) → reliabilitas inter-rater keaslian (FINDINGS §5).

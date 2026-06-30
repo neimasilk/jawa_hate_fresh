@@ -77,7 +77,8 @@ experiments/generation_pilot/*.xlsx
 experiments/generation_pilot/VALIDATION_FORM.csv
 experiments/generation_pilot/_key.csv
 experiments/generation_pilot/review_report.md
-experiments/generation_pilot/validation_result.md
+# validation_result.md = statistik saja (no verbatim offensive text), aman di-commit
+# experiments/generation_pilot/validation_result.md
 experiments/generation_pilot/detect_report.md
 experiments/generation_pilot/judge_panel.json
 experiments/generation_pilot/_*.txt
