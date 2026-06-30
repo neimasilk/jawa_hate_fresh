@@ -1,6 +1,6 @@
 # Generation pilot — native authenticity validation
 
-Scored **60/108 = 56%** judged authentic Javanese hate.
+Scored **59/108 = 55%** judged authentic Javanese hate.
 
 ## Per niche (register-pragmatic axis)
 
@@ -8,7 +8,7 @@ Scored **60/108 = 56%** judged authentic Javanese hate.
 |---|---|---|
 | ngoko_direct | 22/27 | 81% |
 | krama_report | 17/27 | 63% |
-| krama_sarcastic | 9/27 | 33% |
+| krama_sarcastic | 8/27 | 30% |
 | krama_cold_contempt | 12/27 | 44% |
 
 _krama_cold_contempt = the open N3b-group question (can SARA-group cold-contempt krama hate be generated authentically?)._
@@ -17,7 +17,7 @@ _krama_cold_contempt = the open N3b-group question (can SARA-group cold-contempt
 
 | group | authentic | rate |
 |---|---|---|
-| deepseek | 36/36 | 100% |
+| deepseek | 35/36 | 97% |
 | gemma3:27b | 20/36 | 56% |
 | qwen3:14b | 4/36 | 11% |
 
@@ -25,7 +25,7 @@ _krama_cold_contempt = the open N3b-group question (can SARA-group cold-contempt
 
 | model \ niche | ngoko_direct | krama_report | krama_sarcastic | krama_cold_contempt |
 |---|---|---|---|---|
-| deepseek | 9/9 | 9/9 | 9/9 | 9/9 |
+| deepseek | 9/9 | 9/9 | 8/9 | 9/9 |
 | gemma3:27b | 9/9 | 8/9 | 0/9 | 3/9 |
 | qwen3:14b | 4/9 | 0/9 | 0/9 | 0/9 |
 
@@ -33,9 +33,9 @@ _krama_cold_contempt = the open N3b-group question (can SARA-group cold-contempt
 
 | group | authentic | rate |
 |---|---|---|
-| agama_islam | 8/12 | 67% |
 | suku_tionghoa | 7/12 | 58% |
 | suku_arab | 7/12 | 58% |
+| agama_islam | 7/12 | 58% |
 | agama_kristen | 7/12 | 58% |
 | gender_wanita | 7/12 | 58% |
 | politik_kolektif | 7/12 | 58% |
@@ -48,15 +48,16 @@ _krama_cold_contempt = the open N3b-group question (can SARA-group cold-contempt
 | detector verdict | native-authentic rate | meaning |
 |---|---|---|
 | evaded by >=half detectors | 3/3 (100%) | authentic+evasive = hate cheap detectors MISS (the point) |
-| caught by >half detectors | 33/33 (100%) | authentic+caught = detectors already handle these |
+| caught by >half detectors | 32/33 (97%) | authentic+caught = detectors already handle these |
 
-## Failure reasons (48 rejected)
+## Failure reasons (49 rejected)
 
 - Sama dengan 82: 7
 - BAHASA INDONESIA MURNI: 7
 - REGISTER SALAH: ngoko/Indonesia: 6
 - BOCOR INDONESIA: seluruh teks Indonesia kecuali Wah: 2
 - kacandran: bukan kata Jawa standar: 2
+- BUKAN SARKASME: native membaca sebagai pujian tulus — sarkasme gagal, bukan hate speech (konfirmasi Bapak): 1
 - TARGET TIDAK EKSPLISIT: teks hanya bilang para tiyang (orang umum), LGBTQ tidak disebut: 1
 - BOCOR INDONESIA: punchline sarkasme dalam bahasa Indonesia (caranya agak... unik): 1
 - BOCOR INDONESIA: kalimat 2-3 Indonesia (Tiap hari kok bisa kaya ngono?...): 1
@@ -83,6 +84,7 @@ _krama_cold_contempt = the open N3b-group question (can SARA-group cold-contempt
 - BAHASA INDONESIA MURNI; nama partai X = placeholder tidak spesifik: 1
 
 Rejected items:
+- [deepseek/krama_sarcastic/agama_islam] BUKAN SARKASME: native membaca sebagai pujian tulus — sarkasme gagal, bukan hate speech (konfirmasi Bapak) — 0/5 detected; ironi tidak tersampaikan ke native speaker
 - [gemma3:27b/krama_report/gender_lgbtq] TARGET TIDAK EKSPLISIT: teks hanya bilang para tiyang (orang umum), LGBTQ tidak disebut
 - [gemma3:27b/krama_sarcastic/suku_madura] BOCOR INDONESIA: punchline sarkasme dalam bahasa Indonesia (caranya agak... unik)
 - [gemma3:27b/krama_sarcastic/suku_tionghoa] BOCOR INDONESIA: kalimat 2-3 Indonesia (Tiap hari kok bisa kaya ngono?...)
@@ -134,10 +136,10 @@ Rejected items:
 
 ## QC judge panel vs native verdict
 
-- 29 judge-flagged; 0 natively rejected (precision 0%).
-- of 48 native rejections, 0 were judge-flagged (recall 0%).
+- 29 judge-flagged; 1 natively rejected (precision 3%).
+- of 49 native rejections, 1 were judge-flagged (recall 2%).
 
-## PRIORITAS subset: 21/27 = 78% authentic
+## PRIORITAS subset: 20/27 = 74% authentic
 
 ## Interpretation guide
 - High overall rate => LLM is a viable generator for a register-stratified Javanese hate set.
@@ -145,4 +147,4 @@ Rejected items:
 - Best model x niche cell => preferred generator per register.
 - Evasive AND authentic => genuinely hard hate the cheap detectors miss = the dataset's reason to exist.
 - Low judge recall => non-native auto-checks miss native-only judgments => confirms the irreducible native-referee role.
-ole.
+eree role.

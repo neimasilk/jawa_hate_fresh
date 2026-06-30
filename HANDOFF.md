@@ -5,7 +5,8 @@
 **🆕 SESI 7 (2026-06-30) — LLM mengisi VALIDATION_FORM (advisory):**
 - `VALIDATION_FORM.xlsx` diisi LLM untuk semua 108 baris (kolom OTENTIK + MASALAH + CATATAN). **Advisory — Bapak native yang final go/no-go.**
 - **Temuan LLM (perlu konfirmasi native):** DeepSeek 36/36 (100%) otentik; Gemma3 20/36 (56%) — gagal di krama_sarcastic (bocor Bahasa Indonesia); Qwen3 4/36 (11%) — gagal di semua krama + hallucination kata 'kacandran'.
-- **Pertanyaan kunci untuk Bapak:** (1) `kacandran` = kata Jawa valid? (kalau iya, beberapa qwen3 ngoko bisa naik ke 1). (2) No. 21 (santri sholat malam) = sarkasme atau doa tulus? (3) No. 6 `ngentu` = vulgar atau typo? (4) Encoding rusak no. 27/30/32 — teks aslinya apa?
+- **Feedback native Bapak (2026-06-30) sudah diintegrasikan:** (1) `kacandran` = halusinasi qwen3, bukan kata Jawa valid → qwen3 tetap 0. (2) No. 21 = pujian tulus, bukan sarkasme → dikoreksi ke OTENTIK 0. (3) No. 6 `ngentu` = kata vulgar Jawa valid → tetap 1. (4) No. 27/30/32 encoding bukan rusak: `naté`=pernah / `saestu`=sungguh-sungguh / `estri`=perempuan krama (è dibaca spt "sate") → tetap 1.
+- **Hasil final post-patch:** 59/108 = 55% otentik (DeepSeek 35/36 = 97%, Gemma3 20/36 = 56%, Qwen3 4/36 = 11%)
 - **Detector-evasion × native (3/3 evasive items = authentic):** semua item yang lolos detektor juga dinilai otentik LLM → konfirmasi klaim paper bahwa krama_sarcastic/cold_contempt DeepSeek = "uncollectable AND undetectable hate".
 - `validation_result.md` di-generate dan di-commit.
 - **⏭️ LANGKAH PERTAMA sesi berikut:** Bapak review VALIDATION_FORM.xlsx → koreksi OTENTIK? mana yang perlu → rerun `python experiments/generation_pilot/score_validation.py` → final result.
