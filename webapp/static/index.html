@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo — Ujaran Kebencian Jawa: Generator &amp; Detector</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span class="brand-mark">Jw</span>
+      <div>
+        <h1>Register-Stratified Javanese Hate Speech</h1>
+        <p class="subtitle">Demo pipeline: LLM sebagai GENERATOR &amp; DETECTOR &mdash; riset deteksi ujaran kebencian Bahasa Jawa</p>
+      </div>
+    </div>
+    <span class="pill pill-local">local demo &middot; tidak untuk disebar</span>
+  </div>
+</header>
+
+<nav class="tabs" id="tabs">
+  <button class="tab-btn active" data-tab="taxonomy">1. Taksonomi</button>
+  <button class="tab-btn" data-tab="generator">2. Generator (live)</button>
+  <button class="tab-btn" data-tab="detector">3. Detector (live)</button>
+  <button class="tab-btn" data-tab="dashboard">4. Hasil Riset</button>
+</nav>
+
+<main class="container">
+
+  <!-- TAB 1: TAXONOMY -->
+  <section class="tab-panel active" id="tab-taxonomy">
+    <h2>Kenapa generator, bukan koleksi?</h2>
+    <p class="lede">
+      Sumber publik hanya menghasilkan yield Jawa ~0,9% (dari dump Twitter Indonesia) &mdash;
+      terlalu langka untuk dataset. Sebaliknya, register <strong>krama</strong> yang paling
+      "sulit dikoleksi" (ironis/pasemon, contempt-dingin) justru bisa <strong>digenerate</strong>
+      LLM dengan prompt kultural, lalu divalidasi native. Matriks di bawah = 4 niche register
+      &times; 9 target SARA yang diuji.
+    </p>
+    <div id="niche-cards" class="card-grid"></div>
+    <h3>9 target SARA yang diuji</h3>
+    <div id="target-chips" class="chip-row"></div>
+    <div class="note">
+      <strong>Catatan etik:</strong> semua teks yang dihasilkan tab Generator bersifat sintetis,
+      ofensif-by-design, dan dibuat semata untuk riset deteksi (defensif). Tidak untuk disebarluaskan.
+      Lihat <code>CLAUDE.md</code> &sect;7 &amp; <code>experiments/generation_pilot/README.md</code>.
+    </div>
+  </section>
+
+  <!-- TAB 2: GENERATOR -->
+  <section class="tab-panel" id="tab-generator">
+    <h2>Generator live</h2>
+    <p class="lede">Pilih niche register, target SARA, dan model &mdash; panggil LLM langsung (biaya kecil untuk model cloud).</p>
+    <form id="gen-form" class="control-row">
+      <label>Niche register
+        <select id="gen-niche" name="niche"></select>
+      </label>
+      <label>Target SARA
+        <select id="gen-target" name="target"></select>
+      </label>
+      <label>Model generator
+        <select id="gen-model" name="model"></select>
+      </label>
+      <button type="submit" id="gen-btn" class="btn-primary">Generate</button>
+    </form>
+    <p class="hint" id="gen-niche-guidance"></p>
+
+    <div id="gen-result" class="result-box hidden">
+      <div class="result-head">
+        <span class="badge" id="gen-model-badge"></span>
+        <span class="badge" id="gen-register-badge"></span>
+        <span class="badge" id="gen-severity-badge"></span>
+        <span class="badge" id="gen-form-badge"></span>
+        <span class="latency" id="gen-latency"></span>
+      </div>
+      <p class="generated-text" id="gen-text"></p>
+      <p class="mekanisme"><strong>Mekanisme:</strong> <span id="gen-mekanisme"></span></p>
+      <button id="gen-to-detector" class="btn-secondary">Kirim teks ini ke Detector &rarr;</button>
+    </div>
+    <div id="gen-error" class="error-box hidden"></div>
+    <div id="gen-loading" class="loading hidden">Memanggil LLM&hellip;</div>
+  </section>
+
+  <!-- TAB 3: DETECTOR -->
+  <section class="tab-panel" id="tab-detector">
+    <h2>Detector live</h2>
+    <p class="lede">Setiap "detector" di sini adalah LLM yang dipakai sebagai hate-speech judge (prompt kultural v2) &mdash; bukan model terlatih.</p>
+    <textarea id="det-text" rows="3" placeholder="Tempel/ketik teks Jawa di sini, atau kirim dari tab Generator&hellip;"></textarea>
+    <div class="control-row" id="det-checks"></div>
+    <button id="det-btn" class="btn-primary">Jalankan Detector</button>
+    <div id="det-loading" class="loading hidden">Memanggil detektor&hellip;</div>
+    <div id="det-error" class="error-box hidden"></div>
+    <div id="det-summary" class="hidden"></div>
+    <div id="det-results" class="det-grid"></div>
+  </section>
+
+  <!-- TAB 4: DASHBOARD -->
+  <section class="tab-panel" id="tab-dashboard">
+    <h2>Hasil riset (tersimpan)</h2>
+    <p class="lede">Statistik dari eksperimen yang sudah dijalankan &mdash; validasi native (authenticity) &amp; probe blind-spot deteksi.</p>
+    <div id="dash-overall" class="overall-banner"></div>
+
+    <h3>Detection rate per niche &times; detector <span class="hint-inline">(rendah = lolos/blind-spot)</span></h3>
+    <div id="dash-heatmap" class="table-wrap"></div>
+
+    <div class="two-col">
+      <div>
+        <h3>Authenticity per niche (validasi native)</h3>
+        <div id="dash-auth-niche" class="bar-list"></div>
+      </div>
+      <div>
+        <h3>Authenticity per model generator</h3>
+        <div id="dash-auth-model" class="bar-list"></div>
+      </div>
+    </div>
+
+    <h3>Headline: evasion &times; authenticity</h3>
+    <div id="dash-evasion" class="table-wrap"></div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  Ujaran Kebencian Jawa &mdash; riset akademik (Sinta 2, JINITA). Demo lokal, bukan produk publik.
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
