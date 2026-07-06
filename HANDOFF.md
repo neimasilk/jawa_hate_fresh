@@ -1,6 +1,15 @@
 # HANDOFF - Ujaran Kebencian Jawa
 
-**Last updated:** 2026-06-30 (sesi 7 lanjutan) — **✅ Validasi native selesai + Paper v4 ditulis (generator framing).** State: paper draft tersedia di `paper/draft_jinita.md`, commit `3396d90`.
+**Last updated:** 2026-07-06 (sesi 8) — **✅ Demo webapp (generator+detector UI) commit `5b4e5a0`.** Sebelumnya: Validasi native selesai + Paper v4 ditulis (generator framing), `paper/draft_jinita.md` commit `3396d90`.
+
+**🆕 SESI 8 (2026-07-06) — Demo webapp di-commit + didokumentasikan:**
+
+- Sesi dibuka dengan `webapp/` (Flask, ~800 baris: `app.py` + `static/{index.html,app.js,style.css}` + README) **staged tapi belum di-commit dan tidak tercatat di HANDOFF/STATE/wiki manapun** — kemungkinan sisa sesi sebelumnya yang belum sempat di-wrap-up. Ditinjau (baca app.py+README, smoke-test import + jalankan server lokal, cek endpoint `/api/taxonomy` + `/api/dashboard` return data benar termasuk angka validasi 97%/56%/11%), lalu **commit `5b4e5a0`**.
+- **Isi webapp** (lihat `webapp/README.md`): 4 tab — (1) Taksonomi statis (4 niche × 9 target), (2) Generator live (panggil DeepSeek/gemma3/qwen3 sungguhan, reuse `generate.py`), (3) Detector live (LLM sbg hate-speech judge pakai prompt v2, reuse `src/cultural_prompt.py`), (4) Dashboard baca `detect_report.md` + `validation_result.md` statis jadi heatmap/bar chart. Localhost-only (`python webapp/app.py` → `127.0.0.1:5000`), tidak untuk deploy publik; tidak menyimpan teks ke disk.
+- **Tidak mengubah arah riset** — murni tooling demo untuk presentasi ke coauthor/reviewer, dibangun di atas kode yang sudah ada (tidak ada logic baru).
+- **⏭️ Next action tidak berubah** dari sesi 7: **lit-pass referensi** (verifikasi ≥20 ref IEEE, DOI/vol/hal nyata) atau inter-rater ke-2 (Yekti/Daniel).
+
+---
 
 **🆕 SESI 7 (2026-06-30) — Validasi native + Paper v4:**
 

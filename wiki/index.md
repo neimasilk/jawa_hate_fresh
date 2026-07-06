@@ -1,6 +1,6 @@
 # Wiki Index — Ujaran Kebencian Jawa
 
-_Last touched: 2026-06-29 sesi 6 (**PRD dikunci ke framing generator** — D19 formal + PRD v0.4 §0.1; guard drift HARD RULE #1). Sebelumnya sesi 5: detection blind-spot probe at scale + multi-model + QC panel → `experiments/generation_pilot/RESULTS_probe.md`._
+_Last touched: 2026-07-06 sesi 8 (**demo webapp** `webapp/` commit `5b4e5a0` — generator+detector live UI + dashboard, tooling only, tidak mengubah arah riset). Sebelumnya sesi 6: PRD dikunci ke framing generator (D19 formal + PRD v0.4 §0.1)._
 
 Catalog dari semua knowledge proyek. **Bapak baca dari sini — agent maintain seluruh konten.**
 
@@ -48,6 +48,7 @@ Catalog dari semua knowledge proyek. **Bapak baca dari sini — agent maintain s
 | [`experiments/pilot04_autoresearch_prompts/`](../experiments/pilot04_autoresearch_prompts/) | Pilot #4 plan (Karpathy autoresearch adaptation) |
 | [`experiments/register_probe/FINDINGS.md`](../experiments/register_probe/FINDINGS.md) | **Register-pragmatik hate Jawa** (calon novelty inti) — §3b: pasemon = blind-spot deteksi near-universal (at scale) |
 | [`experiments/generation_pilot/`](../experiments/generation_pilot/) | **Generator pivot** — matriks 4 niche × 9 SARA × 3 model; `detect_probe.py` (blind-spot probe), `gen_local.py`, `rebuild_form.py`; **`RESULTS_probe.md`** sintesis; validasi native pending |
+| [`webapp/`](../webapp/) | **Demo webapp** (Flask, localhost-only) untuk coauthor/reviewer: taksonomi statis, generator live, detector live, dashboard hasil riset. Reuse `src/` + `generation_pilot/` — tidak ada logic baru. `python webapp/app.py` → `127.0.0.1:5000` |
 
 ## External refs
 
