@@ -73,6 +73,52 @@ Full numbers + interpretation: **`RESULTS_probe.md`** (committed; verbatim text 
 author — now far more informative (PRIORITAS-ordered, multi-model). A second native judge
 (authenticity inter-rater reliability) remains the other open human step.
 
+## Update — 2026-07-06 sesi 9: multi-validator forms (E1, STRATEGY.md)
+
+Mukhlis's 55% (59/108) authenticity result is a single-evaluator estimate (paper
+Limitation #1) — a real problem for anything beyond JINITA. Yekti Asmoro Kanthi is a
+confirmed native Javanese speaker; Daniel Rudiaman Sijabat is **not** a native speaker
+but has lived in East Java for 30 years and is highly proficient in Javanese as an
+additional language (credential corrected 2026-07-07, D21 — earlier drafts of this
+file wrongly called both "confirmed active Javanese speakers"). A second/third
+independent judgment was still feasible from both.
+
+1. `build_multivalidator_forms.py` — generates `VALIDATION_FORM_yekti.xlsx` +
+   `VALIDATION_FORM_daniel.xlsx` from the same `_key.csv` (108 items), BLIND (no
+   pre-filled verdicts, and blind to Mukhlis's answers). Adds a second judgment column
+   not present in the original form: `OTENTIK?` (same question Mukhlis answered, for
+   direct comparability) AND `JELAS_HATE?` (separate question — is this clearly an
+   attack on group identity, independent of how authentically Javanese it sounds).
+   Separating these matters because "authentic Javanese but not actually hate" (e.g.
+   example #21, sarcasm read as sincere praise) and "clearly hate but not quite
+   authentic-sounding" are different failure modes that a single OTENTIK column
+   conflates. Never overwrites a form that already has answers.
+2. **[native step, not automatable]** Give each `.xlsx` to the named validator with the
+   instructions in its `Petunjuk` sheet. Ask them not to compare notes with Mukhlis or
+   each other until both are done — the point is independent judgment. ~1-2 hours each,
+   comprehension-only (read + judge), not annotation labor.
+3. `score_multivalidator.py` — once one or both forms are filled, computes per-validator
+   authenticity rate, pairwise raw agreement + canonical Krippendorff's alpha (reuses
+   `src/agreement.py`, same formula as the main labeling pipeline) against Mukhlis's
+   existing scored form, and the OTENTIK-vs-JELAS_HATE cross-tab → `multivalidator_result.md`.
+   Safe to run before any form is filled (prints a "not yet filled" placeholder).
+
+Run order: `python build_multivalidator_forms.py` → [Yekti/Daniel fill their .xlsx] →
+`python score_multivalidator.py`.
+
+## Update — 2026-07-07 sesi 10: results (E1 done, D21)
+
+Both forms came back filled (`VALIDATION_FORM_yekti_FILLED.xlsx`,
+`VALIDATION_FORM_daniel_FILLED.xlsx`, 108/108 rows each, genuinely blind).
+`score_multivalidator.py` was re-pointed at the `_FILLED` filenames and run — see
+`multivalidator_result.md` for the full table. Headline: authenticity rates were 55%
+(Mukhlis), 91% (Yekti), 45% (Daniel); pairwise Krippendorff's alpha was 0.095
+(Mukhlis-Yekti), 0.779 (Mukhlis-Daniel), -0.039 (Yekti-Daniel), 3-rater 0.336 — below
+the conventional 0.667 threshold. This does **not** close Limitation #1 as a clean
+confirmation: the two actual native speakers (Mukhlis, Yekti) disagree at a level
+indistinguishable from chance. Reported honestly in `paper/draft_jinita.md` §4.7 (1)
+rather than pooled into a single headline number.
+
 > Ethics: all generated text is offensive by construction and exists solely to train/
 > evaluate hate-speech **detection**. Anonymized, synthetic (no real persons), never for
 > dissemination. Consistent with the project ethics statement.

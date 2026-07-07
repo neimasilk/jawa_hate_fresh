@@ -1,17 +1,17 @@
 # PRD — Ujaran Kebencian Jawa: Fully Automated LLM Pipeline
 
 **Document type:** Product Requirement Document (research project)
-**Version:** 0.4 (**PIVOT labeler → generator**, D19 2026-06-23; framing dikunci 2026-06-29)
-**Last updated:** 2026-06-29
+**Version:** 0.5 (**Reframe generator → diagnostic-suite**, D20 2026-07-06; venue dikunci ke JINITA saja)
+**Last updated:** 2026-07-06
 **Owner:** Mukhlis Amien
-**Coauthors:** Yekti Asmoro Kanthi, Daniel Rudiaman Sijabat (semua UBHINUS)
+**Coauthors:** Yekti Asmoro Kanthi, Daniel Rudiaman Sijabat (semua UBHINUS = Universitas Bhinneka Nusantara)
 **Target:** 1 paper **Sinta 2 (JINITA)** + 1 dataset HKI + 1 codebook HKI
 
 ---
 
-## 0. Decisions Log (2026-05-07, updated 2026-06-29)
+## 0. Decisions Log (2026-05-07, updated 2026-07-06)
 
-Sesi Claude Code 2026-05-07 menghasilkan pivot framing besar; sesi 2026-06-23 menghasilkan **pivot kedua yang lebih fundamental: labeler → generator (D19)**. Section deskriptif di PRD ini (terutama §4.2 NEIL + §5 Phases 2–4) **superseded** — baca **§0.1** untuk arah aktif. Decisions di-log di tabel berikut (D1–D18 ringkas; rationale penuh di [`wiki/decisions.md`](wiki/decisions.md)):
+Sesi Claude Code 2026-05-07 menghasilkan pivot framing besar; sesi 2026-06-23 menghasilkan **pivot kedua yang lebih fundamental: labeler → generator (D19)**; sesi 2026-07-06 menghasilkan **reframe ketiga: generator → diagnostic-suite (D20)**, hasil strategic review (`STRATEGY.md`). Section deskriptif di PRD ini (terutama §4.2 NEIL + §5 Phases 2–4) **superseded** — baca **§0.1** untuk arah aktif. Decisions di-log di tabel berikut (D1–D19 ringkas; rationale penuh di [`wiki/decisions.md`](wiki/decisions.md)):
 
 | # | Decision | Detail |
 |---|----------|--------|
@@ -31,8 +31,10 @@ Sesi Claude Code 2026-05-07 menghasilkan pivot framing besar; sesi 2026-06-23 me
 | D17 | **α dikanonikkan + verifikasi adversarial = SOP** (2026-06-15) | `src/agreement.py` → Krippendorff coincidence-matrix kanonik (bobot per-unit 1/(m_u−1)); angka 2-rater historis tak berubah, 3-rater bergeser tipis. Sebelum angka masuk paper/commit: **code-audit + recompute independen** (dua jalur — recompute saja meniru bug yang sama). [wiki D17](wiki/decisions.md). |
 | D18 | **Opsi A: perbesar pool via cascade** (2026-06-22) | Pool **332→735** (728 consensus, 158 hate) via cascade SEA-LION→qwen3 pre-screen → grok-verify. Held-out ds+grok α **0.688** [0.614, 0.759] (menguat vs 0.670) → klaim anti-overfit lebih kuat. Dump `haipradana` habis → 735 ≈ ceiling sumber. [wiki D18](wiki/decisions.md). |
 | **D19** | **🔄 PIVOT LABELER → GENERATOR** (2026-06-23, keputusan Bapak) | Maksud asli Bapak SELALU = LLM **generator** hate Jawa *fresh*, BUKAN filter+label data yang ada. Istilah "annotation" lama (= labeling) menyebabkan drift selama berbulan sesi. Pipeline baru: **generate → consensus-QC → native authenticity check**. Kerja lama di-repurpose (taksonomi = otak generator, labeling 3-LLM = QC/detektor, dataset 728 = jangkar realisme + bukti kelangkaan 0,9% yield). **Detail penuh: §0.1.** |
+| **D20** | **Reframe paper: Generator → Diagnostic-suite; venue = JINITA saja** (2026-07-06, keputusan Bapak pasca strategic review Fable 5) | Pipeline eksekusi (§0.1) TIDAK berubah. Yang berubah = **klaim mana yang jadi headline paper**: generator jadi metode konstruksi stimulus (bukan kontribusi utama), blind-spot deteksi jadi kontribusi utama — menutup 3 risiko validitas (validator n=1, sirkularitas LLM-judge, framing dual-use). Bapak pilih **paket minimum JINITA saja** (E1 validator ke-2/3 + E7 anchor kelangkaan kedua + E9 lit-pass), bukan paket Scopus/Q-tier (E2/E3/E5/E6 — perlu detektor nyata + eksperimen mitigasi, ditunda). **Detail penuh: §0.2, `STRATEGY.md`.** |
+| **D21** | **E1 selesai: IRR native rendah, bukan konfirmasi + koreksi kredensial Daniel** (2026-07-07) | Yekti + Daniel isi form buta; `score_multivalidator.py` dijalankan. Hasil: rate otentik 55% (Mukhlis) / 91% (Yekti) / 45% (Daniel); α Krippendorff Mukhlis–Yekti **0.095**, Mukhlis–Daniel 0.779, Yekti–Daniel **−0.039**, 3-rater 0.336 — di bawah ambang 0.667. **Dua native asli (Mukhlis, Yekti) justru paling tidak sepakat** (hampir setara chance). **Koreksi kredensial:** Daniel Rudiaman Sijabat **BUKAN penutur asli Jawa** — tinggal di Jawa Timur 30 tahun, fasih Jawa sebagai bahasa tambahan, bukan L1. Klaim "dikonfirmasi penutur Jawa aktif" di §0.2 poin 2 (di bawah) SALAH untuk Daniel — diperbaiki di sini, bukan dihapus, sebagai jejak koreksi. Paper `draft_jinita.md` §4.7 Limitation (1) + v5→v6 changelog appendix sudah diupdate dengan angka asli + kredensial benar. Detail: `experiments/generation_pilot/multivalidator_result.md`. |
 
-**Catatan:** Section 4.2 (NEIL) + §5 Phases 2–4 di bawah ini = **legacy pre-pivot**. Dipertahankan sebagai konteks historis + sumber komponen yang di-repurpose, BUKAN rencana aktif. Arah aktif = §0.1.
+**Catatan:** Section 4.2 (NEIL) + §5 Phases 2–4 di bawah ini = **legacy pre-pivot**. Dipertahankan sebagai konteks historis + sumber komponen yang di-repurpose, BUKAN rencana aktif. Arah aktif eksekusi = §0.1; arah paper-writing = §0.2.
 
 ---
 
@@ -55,6 +57,24 @@ Sesi Claude Code 2026-05-07 menghasilkan pivot framing besar; sesi 2026-06-23 me
 3. **Detection blind-spot** — **pasemon/ironi lolos SEMUA detektor** (cloud 11%, lokal 0%) pada skala 36-sel × 5 detektor; bukan cuma model murah — cloud pun gagal. Yang membutakan = *implikatur*, bukan kesopanan. (`experiments/generation_pilot/RESULTS_probe.md`)
 
 **Status eksekusi (2026-06-29):** matriks generator 36/36 (3 model) dijalankan; detection probe + multi-model gen + QC judge-panel selesai (semua otomatis). **Bottleneck aktif (by design) = validasi keaslian native** oleh Bapak (`experiments/generation_pilot/VALIDATION_FORM.xlsx`, 27 baris PRIORITAS dulu) → `score_validation.py`.
+
+---
+
+## 0.2 REFRAME: Generator → Diagnostic-suite untuk paper (D20, 2026-07-06)
+
+> Section ini = **arah aktif untuk penulisan paper**. Pipeline eksekusi (generate → QC → validasi native, §0.1) tetap sama — yang berubah adalah bagaimana paper membingkai kontribusinya.
+
+**Latar:** Bapak minta Fable 5 (strategist, dijalankan sekali) me-review keseluruhan proyek dengan target naik ke Scopus/Q-tier. Hasil review (`STRATEGY.md`, lengkap) menemukan temuan intinya (register-pragmatik + detection blind-spot) kuat, tapi framing "Generator" + 3 lubang validasi (validator native n=1, blind-spot hanya diuji LLM-judge dengan 1 prompt di atas data sintetis buatan sendiri = sirkular, framing dual-use "uncollectable AND undetectable" terbaca sebagai resep evasion) berisiko reject di venue manapun yang serius soal ethics review.
+
+**Keputusan Bapak (2026-07-06):**
+1. **Reframe disetujui** — headline paper pindah dari "kami bikin generator hate Jawa" ke "kami temukan + diagnosis blind-spot detektor hate Jawa halus-ironis" (gaya HateCheck: generator = alat konstruksi stimulus, bukan tujuan). Lihat `paper/draft_jinita.md` v5 changelog appendix untuk detail perubahan per-section.
+2. **Validator native ke-2/3 = Yekti Asmoro Kanthi dan Daniel Rudiaman Sijabat** (dikonfirmasi penutur Jawa aktif). Instrumen (`build_multivalidator_forms.py` + `score_multivalidator.py`) sudah disiapkan; pengisian form = langkah native berikutnya (belum dieksekusi).
+   > **Koreksi (D21, 2026-07-07):** Daniel **bukan** penutur asli Jawa — tinggal di Jawa Timur 30 tahun, fasih sebagai bahasa tambahan (bukan L1). Yekti tetap penutur asli. Lihat D21 di tabel Decisions Log dan `experiments/generation_pilot/multivalidator_result.md` untuk hasil IRR setelah form terisi (rendah — native-native pun tidak sepakat).
+3. **Venue = JINITA Sinta 2 saja** — TIDAK mengejar paket Scopus/Q (yang perlu detektor nyata IndoBERT/Perspective, eksperimen mitigasi fine-tune, baseline deteksi-manusia). Paket dikerjakan sesi ini terbatas ke **E1 (validator) + E7 (anchor kelangkaan kedua dari data twitter sister-project) + E9 (lit-pass referensi)** — lihat `STRATEGY.md` §4.1 untuk daftar lengkap eksperimen yang ditunda (bukan ditolak, hanya di luar scope JINITA).
+
+**Konsekuensi:** novelty pillars D19 (§0.1) tidak berubah substansinya — hanya urutan penekanan di paper yang berubah (blind-spot dulu, taksonomi menjelaskan kenapa, generator sebagai metode). Kalau suatu saat Bapak mau naik ambisi ke Scopus/Q, `STRATEGY.md` §4 sudah punya roadmap lengkap (E2/E3/E5/E6) untuk dilanjutkan dari titik ini.
+
+**See also:** [wiki D20](wiki/decisions.md), `STRATEGY.md` (memo lengkap), memory `strategy-review-fable5-2026-07-06`.
 
 ---
 

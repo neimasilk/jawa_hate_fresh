@@ -4,6 +4,7 @@
 
 **Owner:** Mukhlis Amien (native Javanese speaker, dosen UBHINUS/STIKI Malang)
 **Coauthors:** Yekti Asmoro Kanthi, Daniel Rudiaman Sijabat (semua UBHINUS)
+**Catatan afiliasi (koreksi 2026-07-06):** UBHINUS = **Universitas Bhinneka Nusantara** (universitas baru, dulu STIKI Malang). BUKAN "Universitas Bina Husada Nusantara" — nama itu pernah salah tertulis di paper/codebook (sudah diperbaiki). Kalau menulis nama lengkap di dokumen formal (paper, codebook), selalu pakai "Universitas Bhinneka Nusantara".
 **Status:** Pre-eksperimen — decisions methodologis tentative, di-resolve via pilot
 **Started:** 2026-05-07
 **Updated:** 2026-05-07 (pivot framing ke Fully LLM)

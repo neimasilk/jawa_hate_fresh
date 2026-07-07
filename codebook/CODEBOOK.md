@@ -1,7 +1,7 @@
 # Codebook Taksonomi Ujaran Kebencian Bahasa Jawa
 
 **Versi:** 1.0a (2026-06-23, dikoreksi pasca audit adversarial — lihat §9 Changelog)
-**Penyusun:** Mukhlis Amien, Yekti Asmoro Kanthi, Daniel Rudiaman Sijabat (Universitas Bina Husada Nusantara)
+**Penyusun:** Mukhlis Amien, Yekti Asmoro Kanthi, Daniel Rudiaman Sijabat (Universitas Bhinneka Nusantara)
 **Status:** Supplementary untuk paper JINITA + deliverable HKI (Karya Tulis/Spesifikasi)
 **Lisensi:** CC BY-NC-SA 4.0
 **Dataset rujukan:** `bulk_v2_consensus.jsonl` (728 teks, 158 hate / 570 non-hate)

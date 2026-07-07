@@ -1,6 +1,6 @@
 # Decisions Log
 
-_Last touched: 2026-06-29 (D19 PIVOT labeler→generator diformalkan + dikunci ke PRD v0.4 §0.1). Source-of-truth untuk decision rationale._
+_Last touched: 2026-07-06 (D20 reframe paper generator→diagnostic-suite + venue=JINITA saja; strategic review Fable 5). Source-of-truth untuk decision rationale._
 
 Cross-ref: [`PRD.md` §0](../PRD.md) (kanonik), [STATE.md sesi log](../STATE.md), [memory project files](../../.claude/projects/C--Users-Mukhlis-Amien-Documents-ujaran-kebencian-jawa-fresh/memory/MEMORY.md).
 
@@ -279,10 +279,68 @@ Dataset tetap deliverable (HKI + release HF/Zenodo) — boleh disebut "first *pu
 
 ---
 
+## D20 — Reframe paper: Generator → Diagnostic-suite + venue = JINITA saja
+
+**Date:** 2026-07-06 (sesi 9, strategic review Fable 5 → eksekusi Sonnet)
+**Decision:** (1) Paper direframe dari headline "Generation" ke **diagnostic-suite framing** (gaya HateCheck): generator = metode konstruksi stimulus, blind-spot deteksi = kontribusi utama. (2) Validator native ke-2/3 = **Yekti Asmoro Kanthi dan Daniel Rudiaman Sijabat** (dikonfirmasi penutur Jawa aktif). (3) **Venue target = JINITA Sinta 2 saja** — TIDAK mengejar Scopus/Q-tier untuk paper ini (paket eksperimen mahal seperti fine-tune IndoBERT/E5 tidak dikerjakan).
+
+> **Koreksi (D21, 2026-07-07):** poin (2) salah untuk Daniel — ia **bukan penutur asli** Jawa (30 tahun resident Jawa Timur, fasih sbg bahasa tambahan). Yekti tetap penutur asli. Lihat D21 di bawah.
+
+**Rationale:**
+- Strategic review (`STRATEGY.md`, Fable 5, dijalankan sekali) mengidentifikasi 3 lubang validasi yang berisiko reject di venue tinggi: (R1) validator native n=1 (penulis sendiri menilai hasil sendiri), (R2) "blind-spot" hanya diuji LLM-judge dengan 1 prompt di atas data sintetis buatan DeepSeek sendiri (sirkular), (R3) framing dual-use ("uncollectable AND undetectable" terbaca sebagai resep evasion).
+- Reframe (generator = metode, bukan headline) menutup R3 langsung via eksplisit dual-use statement (§4.8) tanpa perlu eksperimen mahal.
+- Bapak pilih **paket minimum** (E1 validator + E7 anchor kelangkaan kedua + E9 lit-pass), BUKAN paket Scopus/Q (E2 detektor nyata + E3 anchor data real + E5 mitigasi fine-tune + E6 baseline manusia) — sesuai budget waktu weekend-only.
+
+**Konsekuensi (dikerjakan sesi ini):**
+- Paper `paper/draft_jinita.md` v4→v5: judul baru ("Diagnosing a Register-Pragmatic Blind Spot in Javanese Hate Speech Detection"), abstract+contributions+conclusion direstrukturisasi, §4.8 Ethics dapat Dual-use statement baru, §4.7 Limitations #1 diupdate (validator ke-2/3 in-progress bukan kondisional). Taksonomi §2 + scarcity baseline §3.1 **tidak diubah** (sudah bagus).
+- **E7 dikerjakan:** anchor kelangkaan kedua dari `D:\documents\twitter` (proyek sister Bapak, Digital Vitality Index) — 32-kota, ~1,42 juta tweet, Javanese 0,093% confirmed rate (tertinggi dari 10 bahasa daerah disurvei, tapi tetap <0,1%). Tabel 1 baru + referensi [8] (unpublished, disitasi dengan izin eksplisit Bapak — cek konflik publikasi terpisah SUDAH ditanyakan & disetujui).
+- **E1 instrumen disiapkan:** `experiments/generation_pilot/build_multivalidator_forms.py` (form buta 2-kolom: OTENTIK + JELAS_HATE terpisah, per STRATEGY §6 poin 1) + `score_multivalidator.py` (α Krippendorff antar-rater, reuse `src/agreement.py`). **Pengisian form oleh Yekti/Daniel = langkah native, belum dieksekusi** — itu tugas Bapak/mereka, bukan otomatis.
+  - **Percobaan pre-fill LLM ditolak (same day):** sempat dicoba isi draft Claude ke kedua form (atas instruksi Bapak) supaya Yekti/Daniel koreksi, bukan mulai kosong. Ditinjau → risiko anchoring bias merusak independensi yang justru mau diukur instrumen ini (pola sama dgn insiden mahasiswa back-translation, HARD RULE #2). **Bapak putuskan: batalkan, kedua form direset ke blank.** Detail: `STATE.md` Challenges Log C11.
+- **Koreksi tak terkait ditemukan+diperbaiki:** nama universitas salah di paper+codebook — "Universitas Bina Husada Nusantara" (fabrikasi/salah ingat sesi lalu) → benar **"Universitas Bhinneka Nusantara"** (UBHINUS, dulu STIKI Malang). Lihat CLAUDE.md catatan afiliasi.
+- Referensi [24] placeholder fabricated diganti sitasi HateCheck asli terverifikasi (Röttger et al., ACL-IJCNLP 2021, DOI dicek via ACL Anthology). Referensi [8] baru (DVI) disisipkan, [8]–[25] lama digeser [9]–[26].
+
+**Ditunda (bukan ditolak, hanya di luar paket JINITA minimum):** E2 (detektor nyata: IndoBERT/Perspective/XLM-R), E3 (anchor data real krama-hate), E5 (eksperimen mitigasi fine-tune), E6 (baseline deteksi-manusia), E4 (perbesar suite), E8 (gradien collectability by register). Semua terdokumentasi di `STRATEGY.md` §4 kalau suatu saat mau naik ambisi ke Scopus/Q.
+
+**See also:** `STRATEGY.md` (memo lengkap), memory `strategy-review-fable5-2026-07-06`, `experiments/generation_pilot/README.md` (update sesi 9).
+
+---
+
+## D21 — E1 hasil: IRR native rendah + koreksi kredensial Daniel
+
+**Date:** 2026-07-07 (sesi 10)
+**Decision:** Yekti dan Daniel mengisi `VALIDATION_FORM_yekti_FILLED.xlsx` / `VALIDATION_FORM_daniel_FILLED.xlsx` (108 baris, buta, independen). `score_multivalidator.py` dijalankan (di-repoint ke nama file `_FILLED`). Hasil dilaporkan apa adanya di paper, tidak dipoles.
+
+**Hasil:**
+- Rate otentik: **Mukhlis 55%** (baseline lama), **Yekti 91%**, **Daniel 45%**.
+- Krippendorff's α (OTENTIK, pairwise): Mukhlis–Yekti **0.095** [-0.109, 0.293], Mukhlis–Daniel **0.779** [0.650, 0.889], Yekti–Daniel **-0.039** [-0.220, 0.146]. 3-rater α **0.336** [0.224, 0.449] — di bawah ambang konvensional 0.667 untuk kesimpulan tentatif.
+- **Koreksi kredensial (dari Bapak, di tengah sesi):** Daniel Rudiaman Sijabat **bukan penutur asli** Jawa — tinggal 30 tahun di Jawa Timur, fasih Jawa sebagai bahasa tambahan, bukan L1. **Mukhlis dan Yekti tetap penutur asli**, dikonfirmasi ulang. Klaim "confirmed active Javanese speaker" untuk Daniel sejak D20 **salah**.
+
+**Interpretasi:** ini bukan sekadar "butuh validator lebih banyak" — **dua penutur asli sungguhan (Mukhlis, Yekti) sendiri paling tidak sepakat** (α≈chance), sementara Daniel (non-native, resident lama) justru melacak Mukhlis dengan erat. Ini menunjukkan "otentik" sebagai binary refereeing task bukan construct ber-konsensus-tinggi bahkan antar native — bukan cuma masalah jumlah rater. Angka 55%/97%/11% (Table 2 paper) harus dibaca sebagai estimasi satu evaluator berkualitas, bukan ground truth ter-validasi inter-subjektif.
+
+**Konsekuensi (dikerjakan sesi ini):**
+- `paper/draft_jinita.md` §4.7 Limitation (1) ditulis ulang: melaporkan 3 rate + matriks α penuh + kredensial Daniel yang benar, tidak pool jadi satu angka. v5→v6 changelog appendix ditambahkan.
+- PRD dapat entry **D21** (tabel Decisions Log) + koreksi inline di §0.2 poin 2.
+- STATE.md Challenges Log dapat **C12**; Stage/Last update header diperbarui.
+- HANDOFF.md dapat blok SESI 10 + koreksi inline di blok SESI 9.
+- Koreksi ini TIDAK menghapus catatan lama (D20, dsb.) — ditandai sebagai koreksi dengan blockquote, mengikuti pola koreksi afiliasi UBHINUS sebelumnya (lihat CLAUDE.md).
+
+**Follow-up diagnosis (same session, Bapak's hypothesis, verified against data):** Bapak proposed the low IRR isn't random noise — hate speech judgment is inherently subjective (e.g. "jancuk awakmu picek" = anger at an individual, not hate; "dasare wong meduro jorok-jorok" = hate despite no profanity, since it generalizes to a whole ethnic group), and validator environment (Bapak: homogeneous Javanese-majority; a relative in Surabaya: heterogeneous, frequent code-switching) may set different authenticity thresholds. Checked directly against the 39 Mukhlis-Yekti + 12 Mukhlis-Daniel disagreement rows — **strongly confirmed:**
+- **Instrument artifact:** all 39 Mukhlis-Yekti disagreements run one direction (Mukhlis=not-authentic, Yekti=authentic); 19 of the 27 *krama_sarcastic* items (70% of that niche) are disagreement rows, and the niche accounts for 19/39 (49%) of all disagreements — either way, *krama_sarcastic* dominates. 34/39 have Yekti marking JELAS_HATE=0 — Mukhlis's original single-column form likely conflated "authentic Javanese" with "clearly reads as hate." Harmonizing (OTENTIK AND JELAS_HATE) raises Mukhlis-Yekti α from 0.095 to 0.519. Does NOT apply to Daniel (0.779→0.448, drops instead) — his disagreement pattern is different (non-native register doubt despite recognizing hate content).
+- **Sociolinguistic environment:** 31/39 disagreement rows have Yekti's notes explicitly calling code-mixing with Indonesian "wajar" (normal) — exactly matching the homogeneous-vs-heterogeneous-environment hypothesis. Connected to two verified citations (web search + primary-source fetch, not guessed): Ravindranath & Cohn 2014 [25] (population size ≠ vitality, Javanese as the case study) and Smith-Hefner 2009 [26] (urbanization/class-linked krama attrition).
+
+**Paper updated:** §1 Introduction (one sentence citing [25],[26]), §4.7 Limitation (1) substantially extended with the diagnosis + cross-reference to Limitation (4), Limitation (4) gets a one-sentence back-reference, References gains [25]/[26] (appended at list end, not renumbered — existing body citations were already not in strict first-appearance order, e.g. [16]/[20], so appending is lower-risk than a full renumber of an already lit-pass-verified list).
+
+A related point Bapak raised (Chinese-Indonesian friends have a distinguishable "Chindo Javanese" dialect that native ears can perceive as different) is noted in Limitation (1) as an open question for future ethnolect-specific validation, not as a claim this paper makes — there is no data or community-specific validator to support more than that.
+
+**See also:** `experiments/generation_pilot/multivalidator_result.md`, `paper/draft_jinita.md` §1 + §4.7 + v5→v6 changelog, memory `feedback-validator-independence-guard`, memory `e1-irr-result-daniel-credential-2026-07-07`.
+
+---
+
 ## Open decisions
 
 - **D-OPEN-1:** HKI batch placement di tridarma tracker UBHINUS — tunggu input user.
 - **D-OPEN-3:** RESOLVED — Bapak pilih Opsi 1 (codebook v1.0 + draft paper JINITA, 2026-06-23). (D-OPEN-2 RESOLVED oleh D18.)
-- **D-OPEN-4 (aktif):** Validasi keaslian native sampel generated (D19) — bottleneck by design. Bapak isi `experiments/generation_pilot/VALIDATION_FORM.xlsx` (27 baris PRIORITAS dulu) → `score_validation.py`. Menjawab: device formulaic = otentik-kaya atau fake? + sampel yang lolos detektor tapi otentik = alasan dataset ada.
+- **D-OPEN-4: RESOLVED (D21, 2026-07-07)** — Validasi keaslian native selesai untuk ketiga validator. Mukhlis 55%, Yekti 91%, Daniel 45%; α native-native (Mukhlis-Yekti) 0.095, 3-rater 0.336 — rendah, dilaporkan jujur di paper §4.7 sebagai temuan (bukan konfirmasi IRR bersih). Daniel dikoreksi: bukan penutur asli.
+- **D-OPEN-5 (D20): RESOLVED** — Lit-pass referensi selesai (2026-07-06). 24 referensi final, semua tersitasi in-text (0 fabricated, 0 yatim). Dari 5 placeholder "(Authors TBD)": 2 fabricated diganti (Javanese NLP benchmark, sarcasm survey), 3 ternyata judul asli tinggal isi penulis (2× Pamungkas et al. — related work langsung relevan, ditambah eksplisit di §1; Törnberg). 2 referensi lama (Gwet, SEA-LION) di-drop karena tak pernah disitasi. Satu item ([4] WCSE 2021) masih perlu cek halaman manual (selisih publisher vs agregator) sebelum submit.
 
 (Decisions yang sudah resolved tapi minor / default-approved tidak ditulis di sini supaya lean. Lihat [`PRD.md` §9](../PRD.md) untuk full open decisions list.)

@@ -1,6 +1,6 @@
 # Wiki Index — Ujaran Kebencian Jawa
 
-_Last touched: 2026-07-06 sesi 8 (**demo webapp** `webapp/` commit `5b4e5a0` — generator+detector live UI + dashboard, tooling only, tidak mengubah arah riset). Sebelumnya sesi 6: PRD dikunci ke framing generator (D19 formal + PRD v0.4 §0.1)._
+_Last touched: 2026-07-06 sesi 9 (**D20: reframe paper generator→diagnostic-suite, venue=JINITA saja** — strategic review Fable 5 → eksekusi Sonnet; lihat `STRATEGY.md` + `wiki/decisions.md` D20). Sebelumnya sesi 8: demo webapp `webapp/` commit `5b4e5a0`._
 
 Catalog dari semua knowledge proyek. **Bapak baca dari sini — agent maintain seluruh konten.**
 
@@ -24,6 +24,7 @@ Catalog dari semua knowledge proyek. **Bapak baca dari sini — agent maintain s
 | [`STATE.md`](../STATE.md) | Live execution state, milestones, **Challenges Log**, sesi log | Update tiap sesi |
 | [`CLAUDE.md`](../CLAUDE.md) | Hard rules + workflow untuk sesi Claude Code | Schema layer |
 | [`HANDOFF.md`](../HANDOFF.md) | Quick context untuk sesi baru — TL;DR + read order | Pickup file |
+| [`STRATEGY.md`](../STRATEGY.md) | **Strategic memo Fable 5 (2026-07-06)** — kritik jujur (3 lubang validasi fatal) + reframe generator→blind-spot-diagnosis+mitigasi utk Scopus/Q + roadmap E1–E9 + venue ladder + keputusan terbuka Bapak (§9) | Baca sebelum lanjut paper |
 | [`README.md`](../README.md) | Public-facing project description | Stable |
 | [`Ujaran Kebencian Jawa_ Riset Mendalam_.md`](../Ujaran%20Kebencian%20Jawa_%20Riset%20Mendalam_.md) | Background literature paper draft (pre-pivot) — Tabel 1 taksonomi 7-kategori, Tabel 2 pre-trained models comparison | Background |
 
@@ -47,7 +48,7 @@ Catalog dari semua knowledge proyek. **Bapak baca dari sini — agent maintain s
 | [`experiments/pilot01_llm_characterization/`](../experiments/pilot01_llm_characterization/) | Pilot #1 ready to run (run_pilot.py + analyze.py) |
 | [`experiments/pilot04_autoresearch_prompts/`](../experiments/pilot04_autoresearch_prompts/) | Pilot #4 plan (Karpathy autoresearch adaptation) |
 | [`experiments/register_probe/FINDINGS.md`](../experiments/register_probe/FINDINGS.md) | **Register-pragmatik hate Jawa** (calon novelty inti) — §3b: pasemon = blind-spot deteksi near-universal (at scale) |
-| [`experiments/generation_pilot/`](../experiments/generation_pilot/) | **Generator pivot** — matriks 4 niche × 9 SARA × 3 model; `detect_probe.py` (blind-spot probe), `gen_local.py`, `rebuild_form.py`; **`RESULTS_probe.md`** sintesis; validasi native pending |
+| [`experiments/generation_pilot/`](../experiments/generation_pilot/) | **Generator pivot** — matriks 4 niche × 9 SARA × 3 model; `detect_probe.py` (blind-spot probe), `gen_local.py`, `rebuild_form.py`; **`RESULTS_probe.md`** sintesis; validasi native Mukhlis SELESAI (`validation_result.md`, 55%). `build_multivalidator_forms.py` + `score_multivalidator.py` — form buta 2-kolom untuk validator ke-2/3 Yekti/Daniel. **E1 SELESAI (D21, sesi 10):** `multivalidator_result.md` — rate 55%/91%/45%, α native-native (Mukhlis-Yekti) 0.095 (~chance), 3-rater 0.336 (di bawah ambang) — dilaporkan jujur di paper sebagai temuan, bukan konfirmasi IRR. Daniel dikoreksi: bukan penutur asli (30th resident Jatim), Yekti tetap native |
 | [`webapp/`](../webapp/) | **Demo webapp** (Flask, localhost-only) untuk coauthor/reviewer: taksonomi statis, generator live, detector live, dashboard hasil riset. Reuse `src/` + `generation_pilot/` — tidak ada logic baru. `python webapp/app.py` → `127.0.0.1:5000` |
 
 ## External refs

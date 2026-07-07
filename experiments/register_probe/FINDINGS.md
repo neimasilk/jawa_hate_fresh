@@ -114,5 +114,7 @@ Native authenticity validation + second native judge = still open (the irreducib
 - **Group-directed krama cold-contempt**: the N3b examples are interpersonal; test whether authentic
   SARA-group krama hate can be generated (mock-praising/morally-indicting a religious/ethnic group).
 - **Second native judge** (Yekti / Daniel, if Javanese) → authenticity inter-rater reliability.
+  **Done (D21, 2026-07-07):** Yekti is native, Daniel is not (30yr East Java resident, non-native).
+  IRR came back low (native-native Mukhlis-Yekti α=0.095) — see `experiments/generation_pilot/multivalidator_result.md`.
 - **Systematize**: N stimuli × niches × models × native ratings → a real table, not anecdotes.
 - **Regional axis**: does the LLM default to Central-Java krama and erase Arek/East-Java? Quantify.
