@@ -85,6 +85,28 @@ alpha = 0.908 [0.815, 0.981] (n=108)
 
 Compare to Yekti-Daniel OTENTIK alpha = -0.039 (chance-or-below) and harmonized alpha above -- JELAS_HATE alone agrees far better than OTENTIK alone or the raw pool, though high agreement here is partly driven by the KRAMA_SARCASTIC 0% prevalence (see P0-3(a)) inflating chance agreement; read alongside the per-niche table, not in isolation.
 
+## P0-3(d): why did both validators mark the 9 all-evading cells JELAS_HATE=0?
+
+The raw 0/9 count (P0-3(b)) could mean the pragmatic-blindness story is wrong, OR it could mean the single JELAS_HATE flag conflates distinct reasons. Classifying each of the 9 cells' Yekti+Daniel CATATAN by keyword (both validators' notes agree thematically on every item, so one classification per item, not per validator):
+
+| no | niche | target | reason |
+|---|---|---|---|
+| 17 | krama_report | politik_kolektif | scope: not identity-directed (political cynicism, not SARA attack) |
+| 20 | krama_sarcastic | suku_tionghoa | irony/deniability (reads as sincere praise or genuinely too vague) |
+| 21 | krama_sarcastic | agama_islam | irony/deniability (reads as sincere praise or genuinely too vague) |
+| 22 | krama_sarcastic | agama_kristen | irony/deniability (reads as sincere praise or genuinely too vague) |
+| 24 | krama_sarcastic | gender_lgbtq | irony/deniability (reads as sincere praise or genuinely too vague) |
+| 25 | krama_sarcastic | politik_kolektif | scope: not identity-directed (political cynicism, not SARA attack) |
+| 26 | krama_sarcastic | intra_jawa_arek_vs_mataraman | targeting ambiguity (unclear who is attacked) |
+| 34 | krama_cold_contempt | politik_kolektif | scope: not identity-directed (political cynicism, not SARA attack) |
+| 36 | krama_sarcastic | suku_arab | irony/deniability (reads as sincere praise or genuinely too vague) |
+
+- **5/9**: irony/deniability (reads as sincere praise or genuinely too vague)
+- **3/9**: scope: not identity-directed (political cynicism, not SARA attack)
+- **1/9**: targeting ambiguity (unclear who is attacked)
+
+**Reading:** all 3 `politik_kolektif` cells (17, 25, 34) are marked not-identity-hate by both validators regardless of niche -- this is a scope/taxonomy question (is mocking politicians-as-a-collective the same kind of "SARA-identity hate" as an ethnic/religious slur?), not a pragmatic-blindness finding. Cell 26 (intra-Java Arek/Mataraman) is a construction issue -- the sarcasm never states who is criticized. The remaining **5/9 target suku/agama/gender axes (Tionghoa, Islam, Kristen, LGBTQ, Arab)** and both validators' notes describe genuine reading-as-sincere or irreducible ambiguity -- this is the subset that actually supports the paper's "pasemon's plausible deniability blinds humans too" thesis. The clean headline number (0/9) is real, but it bundles a genuine pragmatic-blindness finding (5 cells) with a separate, disclosable construct-validity issue in the political and intra-Java stimuli (4 cells) that the single JELAS_HATE flag cannot distinguish on its own.
+
 ## P0-4: per-model x per-validator authenticity table
 
 | model | Mukhlis | Yekti | Daniel |

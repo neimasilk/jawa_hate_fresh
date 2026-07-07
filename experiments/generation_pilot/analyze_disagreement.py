@@ -251,6 +251,48 @@ def main():
       "high agreement here is partly driven by the KRAMA_SARCASTIC 0% prevalence (see P0-3(a)) "
       "inflating chance agreement; read alongside the per-niche table, not in isolation.\n")
 
+    # ---- P0-3(d): why is JELAS_HATE=0 for the 9 all-evading cells? (follow-up requested
+    # by Bapak, 2026-07-07: check whether the JELAS_HATE instrument is systematically too
+    # strict before reframing SS4.5, rather than assuming the raw 0/9 count settles it) ----
+    P("## P0-3(d): why did both validators mark the 9 all-evading cells JELAS_HATE=0?\n")
+    P("The raw 0/9 count (P0-3(b)) could mean the pragmatic-blindness story is wrong, OR it "
+      "could mean the single JELAS_HATE flag conflates distinct reasons. Classifying each of "
+      "the 9 cells' Yekti+Daniel CATATAN by keyword (both validators' notes agree thematically "
+      "on every item, so one classification per item, not per validator):\n")
+
+    def classify_reason(cy: str, cd: str) -> str:
+        combined = (cy + " " + cd).lower()
+        if "identitas" in combined:
+            return "scope: not identity-directed (political cynicism, not SARA attack)"
+        if ("cetho" in combined or "jelas" in combined) and ("target" in combined or "arah" in combined):
+            return "targeting ambiguity (unclear who is attacked)"
+        if any(k in combined for k in ["samar", "deniable", "pujian", "ambigu", "tulus"]):
+            return "irony/deniability (reads as sincere praise or genuinely too vague)"
+        return "other/unclassified"
+
+    P("| no | niche | target | reason |")
+    P("|---|---|---|---|")
+    reason_counts = Counter()
+    for no in zero_ids:
+        reason = classify_reason(yekti[no]["catatan"], daniel[no]["catatan"])
+        reason_counts[reason] += 1
+        P(f"| {no} | {key[no]['niche']} | {key[no]['intended_target']} | {reason} |")
+    P("")
+    for reason, c in reason_counts.most_common():
+        P(f"- **{c}/9**: {reason}")
+    P("")
+    P("**Reading:** all 3 `politik_kolektif` cells (17, 25, 34) are marked not-identity-hate by "
+      "both validators regardless of niche -- this is a scope/taxonomy question (is mocking "
+      "politicians-as-a-collective the same kind of \"SARA-identity hate\" as an ethnic/religious "
+      "slur?), not a pragmatic-blindness finding. Cell 26 (intra-Java Arek/Mataraman) is a "
+      "construction issue -- the sarcasm never states who is criticized. The remaining **5/9 "
+      "target suku/agama/gender axes (Tionghoa, Islam, Kristen, LGBTQ, Arab)** and both validators' "
+      "notes describe genuine reading-as-sincere or irreducible ambiguity -- this is the subset "
+      "that actually supports the paper's \"pasemon's plausible deniability blinds humans too\" "
+      "thesis. The clean headline number (0/9) is real, but it bundles a genuine pragmatic-blindness "
+      "finding (5 cells) with a separate, disclosable construct-validity issue in the political and "
+      "intra-Java stimuli (4 cells) that the single JELAS_HATE flag cannot distinguish on its own.\n")
+
     # ---- P0-4: per-model x per-validator authenticity table ----
     P("## P0-4: per-model x per-validator authenticity table\n")
     P("| model | Mukhlis | Yekti | Daniel |")
