@@ -11,6 +11,14 @@
 - **Build:** `scripts/build_jutif_docx.py` mengisi template asli in-place (style bawaan: JUDUL/AUTHOR/INSTANSI/BODY PARAGRAP/SUB JUDUL/JUDUL TABEL/GAMBAR; heading auto-number numId=4 — teks heading TANPA nomor literal; tabel gaya formal top/bottom-border seperti sampel template; caption tabel di atas & gambar di bawah, center). QA build lolos semua (9 tabel, 3 gambar, 2 oMath, 45 ref, 42 X checklist, 0 artefak markdown, font TNR).
 - **Placeholder yang diisi Bapak sebelum submit:** Phone Number (footer korespondensi), tanggal Received/Revised (editor), Acknowledgement. Versi blind: JUTIF submit via OJS — cek apakah perlu file anonim terpisah.
 - **File JINITA tetap ada** (`draft_jinita_submission.md`, `JINITA_Amien_Kanthi_Sijabat_2026.docx`, `build_jinita_docx.py`) sebagai arsip — jangan hapus, tapi arah aktif = JUTIF.
+- **⚠️ GOTCHA: `git push` GAGAL di sesi 12** — token GitHub di mesin ini invalid ("Invalid username or token"). Commit `dafbf40` (+commit handoff ini) aman lokal tapi BELUM di remote. Sesi berikutnya: minta Bapak jalankan `! gh auth login` (atau perbaiki credential) lalu `git push` — HARD RULE #6 (push minimal weekly) sedang tertunggak.
+- **⚙️ Cara regenerasi manuskrip** (kalau konten md diedit): edit `paper/draft_jutif_submission.md` → `python scripts/build_jutif_docx.py` → output menimpa `paper/JUTIF_Amien_Kanthi_Sijabat_2026.docx`. Jangan edit .docx langsung (single source = md + builder). Figures: `python paper/figures/make_figures.py`.
+- **⏭️ NEXT (urutan):**
+  1. **Push ke GitHub** (butuh Bapak login ulang — lihat gotcha di atas).
+  2. **Bapak buka `JUTIF_Amien_Kanthi_Sijabat_2026.docx` di Word** — cek visual sekali: render 2 persamaan OMML (Section 2.5 & 2.8), posisi tabel/gambar tidak terpotong halaman, heading bernomor otomatis 1–5 muncul benar.
+  3. **Placeholder diisi Bapak:** Phone Number (baris "Phone Number : xxxxxxx" — untuk korespondensi, tidak tampil di artikel) + Acknowledgement. Tanggal Received/Revised = diisi editor, biarkan.
+  4. **Submit via OJS JUTIF** (https://jutif.if.unsoed.ac.id, akun Bapak). Cek saat submit: apakah OJS minta versi blind terpisah — kalau ya, buat turunan md tanpa nama/afiliasi + anonimkan ref [self-citation DVI] (pola sudah ada di rencana blind JINITA, HANDOFF sesi 11 poin next (2)).
+  5. Setelah submit: eksekusi janji rilis artefak publik (keputusan D22 item 4 — repo dibuka SETELAH submit).
 
 ---
 
