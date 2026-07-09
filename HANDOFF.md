@@ -15,13 +15,14 @@
 - **2 referensi baru [30]/[31]:** Gemma 3 Technical Report (arXiv:2503.19786) dan gpt-oss-120b/20b Model Card (arXiv:2508.10925) — keduanya diverifikasi LIVE via arXiv API (bukan diasumsikan dari training data) sebelum ditambahkan. Referensi total 29→31.
 - **B. Fix typo kecil** di `experiments/generation_pilot/RESULTS_probe.md`: "7 of the 8 krama_sarcastic cells" → "7 of the 9" + catatan koreksi (statistik "(7/8)" formulaic-opener di bagian lain dibiarkan, beda konteks).
 - **Versi paper:** v7 (2026-07-07) → **v8 (2026-07-09)**. Changelog lengkap A1-A17 + B-E ada di appendix paper sendiri ("Paper v7 → v8 change log").
-- **⏳ MASIH MENUNGGU BAPAK (belum bisa diotomasi):**
-  1. **Kredensial "academic background in Javanese linguistics"** untuk first author di §3.3 — perlu konfirmasi apakah ini akurat/mau dicantumkan persis begitu untuk versi submission (belum diverifikasi/dikonfirmasi ulang sesi ini).
-  2. **Email author** (`amien@ubhinus.ac.id` dll di front matter) — perlu konfirmasi masih aktif/benar untuk submission.
-  3. **Acknowledgements** — masih placeholder "(To be completed...)", perlu isi institusi/grant/compute resources yang benar.
-  4. **Rencana rilis artefak publik** (dataset HF/Zenodo, codebook, stimulus set berlisensi restricted) — belum ada timeline konkret, perlu keputusan Bapak kapan/bagaimana.
-  5. **Keputusan strategi rasio referensi** — reference-list header note mengakui gap literal JINITA "≥80% jurnal ≤5 tahun" (sudah dihitung ulang utk 31 referensi: 21/31 recent, 11/31 jurnal, 8/31 keduanya ≈ 26% vs aturan 80%) — perlu keputusan apakah trade beberapa referensi fondasional untuk padanan jurnal recent, atau terima gap dengan disclosure yang sudah ada.
-  6. Item lama yang masih berlaku: **Word template JINITA** (konversi dari Markdown), **renumber referensi P2-9** (urutan sitasi IEEE murni), **versi blind (anonim)** untuk peer review — semua ditunda ke sesi konversi berikutnya.
+- **✅ KEPUTUSAN BAPAK (2026-07-09, sesi sama — 6 item review dijawab):**
+  1. **Kredensial first author DIKOREKSI:** Bapak konfirmasi — beliau **native speaker**, TIDAK punya "academic background in Javanese linguistics" (frasa itu fabrikasi sesi drafting lampau, kelas error sama dgn insiden kredensial Daniel). §3.3 diperbaiki ke "(native Javanese speaker from East Java)" saja. Daniel: non-native, ±30 tahun di Jawa Timur — sudah benar di paper, tidak diubah.
+  2. **Email author** → DITUNDA ("ntar saja") — cek sebelum submission, jangan tanya sekarang.
+  3. **Acknowledgements** → DITUNDA ("ntar saja") — isi sebelum submission, jangan tanya sekarang.
+  4. **Rilis artefak publik:** keputusan Bapak — **repo dibuka publik SETELAH submit** (aman secara timing). Klaim "publicly released" di paper valid sebagai janji rilis; eksekusi rilis = setelah submission.
+  5. **Rasio referensi: "sesuaikan"** — Bapak minta gap dipersempit. Dikerjakan agent lit-pass ke-3 (tidak butuh waktu Bapak): tambah referensi jurnal recent terverifikasi di titik yang natural, update header note. Catatan realistis: kepatuhan literal 80% tidak mungkin tanpa membuang fondasi (Errington/Krippendorff/anchor lama) — target = persempit + disclosure tetap.
+  6. **P2-8 (re-jawab 39 baris disagreement, ~30 mnt)** → **DITUNDA TANPA BATAS WAKTU** — Bapak sibuk; JANGAN mengangkat lagi item apa pun yang butuh waktu Bapak sampai beliau bilang longgar. Paper sudah jujur dengan asumsi harmonized-α sebagai asumsi; tidak blocking.
+- **⏭️ NEXT (sesi Sonnet berikutnya, tidak butuh Bapak):** (1) **Konversi Word template JINITA** — urutan kerja: renumber referensi ke urutan sitasi IEEE murni dulu di Markdown (P2-9; 9 titik rusak sudah dipetakan di audit sesi 11), strip banner v8 + 4 appendix changelog + header-note referensi + baris "(Article info...)" line 9, baru konversi ke docx/GDoc template JINITA (TNR 10pt, A4, 2 kolom; sample: `paper/jinita_guidelines/`), (2) **versi blind** — hapus nama/afiliasi/email + anonimkan ref [8] self-citation ("M. Amien, unpublished data" → "Anonymous, companion measurement") + cek frasa "first author" yang mengidentifikasi, (3) placeholder email/Acknowledgements DIISI BAPAK belakangan (item 2/3 di atas).
 
 ---
 

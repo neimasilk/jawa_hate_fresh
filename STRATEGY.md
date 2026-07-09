@@ -294,12 +294,13 @@ Kerja sesi 9 (reframe v5, STRATEGY.md, E7, E1-instrumen, lit-pass) + sesi 10 (ha
 | 9 | 2 referensi baru relevan (Gemma3, GPT-OSS) belum ada sitasi eksplisit meski model-nya sudah dipakai di Table 2/4 | ✅ Ditambah [30]/[31] setelah verifikasi live arXiv API |
 | 10 | Urutan sitasi IEEE tidak strict-appearance-order di beberapa titik | ⏳ Ditunda ke P2-9 (Word template) — sudah diketahui sejak v5→v6, bukan bug baru |
 
-**Item menunggu Bapak** (sama seperti di HANDOFF sesi 11):
-1. Kredensial "academic background in Javanese linguistics" (§3.3, first author) — perlu konfirmasi akurasi untuk versi submission.
-2. Email author di front matter — perlu konfirmasi masih aktif/benar.
-3. Acknowledgements — masih placeholder, perlu isi institusi/grant/compute yang benar.
-4. Rencana rilis artefak publik (dataset HF/Zenodo, codebook, stimulus set restricted-license) — belum ada timeline konkret.
-5. Keputusan strategi rasio referensi — gap literal JINITA "≥80% jurnal ≤5 tahun" (rasio sudah dihitung ulang di header referensi: 21/31 recent, 11/31 jurnal, 8/31 keduanya ≈ 26% vs aturan 80%) — trade beberapa referensi fondasional untuk padanan jurnal recent, atau terima gap dengan disclosure yang sudah ada?
-6. Item lama: Word template JINITA, renumber referensi P2-9, versi blind (anonim) — semua ditunda ke sesi konversi berikutnya.
+**Item menunggu Bapak — DIJAWAB SEMUA (2026-07-09, sesi sama):**
+1. Kredensial first author → **DIKOREKSI**: native speaker saja, TANPA "academic background in Javanese linguistics" (fabrikasi, dihapus dari §3.3 — kelas error sama dgn koreksi kredensial Daniel v5→v6).
+2. Email author → ditunda ke pra-submission (keputusan Bapak: "ntar saja").
+3. Acknowledgements → ditunda ke pra-submission ("ntar saja").
+4. Rilis artefak → **repo dibuka publik SETELAH submit** (keputusan Bapak; klaim "released" di paper = janji rilis yang valid).
+5. Rasio referensi → **"sesuaikan"**: lit-pass ke-3 dijalankan (tambah referensi jurnal recent terverifikasi di titik natural, persempit gap; kepatuhan literal 80% tetap mustahil tanpa membuang fondasi — disclosure dipertahankan).
+6. P2-8 → **ditunda tanpa batas waktu** — Bapak sibuk; jangan angkat lagi pekerjaan yang butuh waktu Bapak sampai beliau bilang longgar.
+Sisa kerja non-Bapak: Word template JINITA + renumber P2-9 + versi blind — sesi konversi berikutnya (instruksi detail di HANDOFF sesi 11).
 
 **Detail lengkap semua edit:** appendix paper sendiri ("Paper v7 → v8 change log"), `STATE.md` C15, `HANDOFF.md` blok SESI 11.

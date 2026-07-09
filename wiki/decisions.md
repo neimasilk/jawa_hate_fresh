@@ -336,6 +336,23 @@ A related point Bapak raised (Chinese-Indonesian friends have a distinguishable 
 
 ---
 
+## D22 — Jawaban 6 item review Fable sesi 11: koreksi kredensial first author + rilis repo pasca-submit + defer item Bapak
+
+**Date:** 2026-07-09 (sesi 11)
+**Decision (jawaban Bapak atas 6 item review Fable v8):**
+1. **Kredensial first author dikoreksi:** Mukhlis = **native speaker**, TIDAK punya "academic background in Javanese linguistics" — frasa itu fabrikasi sesi drafting lampau (kelas error sama dgn koreksi kredensial Daniel di D21), dihapus dari paper §3.3 (kini hanya "native Javanese speaker from East Java"). Deskripsi Daniel (non-native, ±30 th Jatim) sudah benar, tidak diubah.
+2. **Email author** → ditunda ke pra-submission (jangan tanya sekarang).
+3. **Acknowledgements** → ditunda ke pra-submission (jangan tanya sekarang).
+4. **Rilis artefak publik:** **repo dibuka publik SETELAH submit** — klaim "publicly released" di paper valid sebagai janji rilis; eksekusi setelah submission.
+5. **Rasio referensi:** "sesuaikan" — lit-pass ke-3 dijalankan agent (tambah referensi jurnal recent terverifikasi di titik natural; kepatuhan literal 80% mustahil tanpa membuang fondasi, disclosure dipertahankan).
+6. **P2-8** → ditunda tanpa batas waktu; **jangan angkat lagi pekerjaan apa pun yang butuh waktu Bapak** sampai beliau menyatakan longgar.
+
+**Rationale:** Bapak sedang sibuk — semua yang bisa jalan tanpa beliau (lit-pass, konversi Word, blind copy) jalan terus; semua yang butuh beliau (email, acknowledgements, P2-8) diparkir eksplisit supaya tidak jadi nagging berulang.
+
+**See also:** HANDOFF blok SESI 11, STRATEGY.md §13, memory `author-credential-facts`, paper v8 changelog baris F3.
+
+---
+
 ## Open decisions
 
 - **D-OPEN-1:** HKI batch placement di tridarma tracker UBHINUS — tunggu input user.
