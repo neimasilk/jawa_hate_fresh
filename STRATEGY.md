@@ -299,7 +299,7 @@ Kerja sesi 9 (reframe v5, STRATEGY.md, E7, E1-instrumen, lit-pass) + sesi 10 (ha
 2. Email author → ditunda ke pra-submission (keputusan Bapak: "ntar saja").
 3. Acknowledgements → ditunda ke pra-submission ("ntar saja").
 4. Rilis artefak → **repo dibuka publik SETELAH submit** (keputusan Bapak; klaim "released" di paper = janji rilis yang valid).
-5. Rasio referensi → **"sesuaikan"**: lit-pass ke-3 dijalankan (tambah referensi jurnal recent terverifikasi di titik natural, persempit gap; kepatuhan literal 80% tetap mustahil tanpa membuang fondasi — disclosure dipertahankan).
+5. Rasio referensi → **"sesuaikan"**: **SELESAI** — lit-pass ke-3 dijalankan, +7 referensi jurnal 2023–2025 ([32]–[38], semua diverifikasi Crossref API, dipasang di klaim spesifik §1/§2.4/§3.1). Referensi 31→38; rasio keduanya (jurnal AND ≤5 tahun) 8/31 (26%) → 15/38 (39%); recency 21/31→28/38 (74%); jurnal 11/31→18/38 (47%). Kepatuhan literal 80% tetap mustahil tanpa membuang fondasi — disclosure dipertahankan, angka di-update.
 6. P2-8 → **ditunda tanpa batas waktu** — Bapak sibuk; jangan angkat lagi pekerjaan yang butuh waktu Bapak sampai beliau bilang longgar.
 Sisa kerja non-Bapak: Word template JINITA + renumber P2-9 + versi blind — sesi konversi berikutnya (instruksi detail di HANDOFF sesi 11).
 
