@@ -1,6 +1,20 @@
 # HANDOFF - Ujaran Kebencian Jawa
 
-**Last updated:** 2026-07-09 (sesi 11) — **✅ Review Fable kedua atas v7 + fix ke v8: 2 error faktual diperbaiki (§4.4 komposisi 9 sel, §4.6 register hate), 2 sub-item P1-5 bocor dilengkapi (abstract multi-rater, §3.3 instrumen), Table 1 diverifikasi 100%, refs [30]/[31] baru.** Sebelumnya: Publish-readiness review + P1 SELESAI (sesi 10), Audit Fable P0 (§4.5 direframe 5/9 subset SARA).
+**Last updated:** 2026-07-09 (sesi 12) — **✅ PIVOT VENUE: JINITA → JUTIF (keputusan Bapak). Manuskrip JUTIF jadi: `paper/JUTIF_Amien_Kanthi_Sijabat_2026.docx`.**
+
+**🆕 SESI 12 (2026-07-09) — Konversi ke template JUTIF (Fable orkestrasi + 3 agen Sonnet):**
+
+- **Keputusan Bapak (sesi sama):** submit ke **JUTIF** (Jurnal Teknik Informatika, Unsoed), BUKAN JINITA. Template resmi: `paper/JUTIF-Template.docx` (bukan folder jinita_guidelines).
+- **Aturan JUTIF yang mengubah paper (dari guideline di dalam template + submission check-list wajib):** body ≥4.000 kata; ≥25 referensi journal/conference ≤5 thn; **80% referensi harus journal/conference**; nama jurnal TIDAK disingkat; penulis ≤7 ditulis SEMUA (>7 → 6 pertama + et al. — kebalikan gaya et-al JINITA); maks 2 level section; struktur INTRODUCTION→METHOD→RESULT→DISCUSSION→CONCLUSION→CONFLICT OF INTEREST→ACK→REFERENCES; persamaan wajib equation editor (bukan gambar) bernomor + disitasi; semua tabel/gambar bernomor + disitasi by number; check-list wajib disertakan di file artikel (sudah diisi 42×X).
+- **Konten:** `paper/draft_jutif_submission.md` (turunan `draft_jinita_submission.md` yang isinya identik v8; TIDAK ada angka/klaim baru). Restruktur: taksonomi (§2 lama) masuk METHOD; RESULTS AND DISCUSSION dipecah RESULT (3.1–3.5) vs DISCUSSION (4.1–4.6); §4.7 lama dibelah: angka/tabel → 3.5, diagnosis → 4.3; subsection baru 4.4 "Comparison with prior work" (kewajiban JUTIF). Tabel niche §2.3 (dulu tanpa nomor) jadi **Table 2** → total 7 tabel konten (renumber). **2 persamaan OMML baru:** (1) Krippendorff's α, (2) detection rate — keduanya disitasi di teks. **Figure 3 baru** (`fig3_validator_bars.png`, 300dpi, palet dataviz tervalidasi): bar authenticity generator×validator.
+- **Referensi 38→45** (+7 BARU, semua conference 2021+ diverifikasi Crossref API sebelum ditulis: ToxiGen ACL'22, Latent Hatred EMNLP'21, Multilingual HateCheck WOAH'22, Wullach Findings-EMNLP'21, NusaX EACL'23, Plaza-del-Arco WOAH'23, Nozza ACL'21) — dipasang di klaim spesifik, bukan padding. Rasio JUTIF terpenuhi PERSIS: journal/conf **36/45 = 80,0%**; recent journal/conf 26 ≥ 25; buku 2/45; self-citation 1. Nama jurnal di-expand penuh; author list penuh di-fetch (IndoNLU 11 penulis, Aji 12, NusaCrowd 48 → 6+et al.; Pamungkas-multimodal 7, SEAHateCheck 4, Alfina 4, Winata-CALCS 6 → ditulis semua). **Koreksi faktual bonus:** halaman Alfina ICACSIS 233–237 → **233–238** (per Crossref/IEEE).
+- **Build:** `scripts/build_jutif_docx.py` mengisi template asli in-place (style bawaan: JUDUL/AUTHOR/INSTANSI/BODY PARAGRAP/SUB JUDUL/JUDUL TABEL/GAMBAR; heading auto-number numId=4 — teks heading TANPA nomor literal; tabel gaya formal top/bottom-border seperti sampel template; caption tabel di atas & gambar di bawah, center). QA build lolos semua (9 tabel, 3 gambar, 2 oMath, 45 ref, 42 X checklist, 0 artefak markdown, font TNR).
+- **Placeholder yang diisi Bapak sebelum submit:** Phone Number (footer korespondensi), tanggal Received/Revised (editor), Acknowledgement. Versi blind: JUTIF submit via OJS — cek apakah perlu file anonim terpisah.
+- **File JINITA tetap ada** (`draft_jinita_submission.md`, `JINITA_Amien_Kanthi_Sijabat_2026.docx`, `build_jinita_docx.py`) sebagai arsip — jangan hapus, tapi arah aktif = JUTIF.
+
+---
+
+**Sebelumnya (sesi 11):** — **✅ Review Fable kedua atas v7 + fix ke v8: 2 error faktual diperbaiki (§4.4 komposisi 9 sel, §4.6 register hate), 2 sub-item P1-5 bocor dilengkapi (abstract multi-rater, §3.3 instrumen), Table 1 diverifikasi 100%, refs [30]/[31] baru.** Sebelumnya: Publish-readiness review + P1 SELESAI (sesi 10), Audit Fable P0 (§4.5 direframe 5/9 subset SARA).
 
 **🆕 SESI 11 (2026-07-09) — Review Fable kedua + fix v8:**
 

@@ -130,7 +130,66 @@ def fig2_heatmap():
     plt.close(fig)
 
 
+def fig3_validator_bars():
+    generators = ["DeepSeek", "Gemma3-27B", "Qwen3-14B"]
+    validators = ["Mukhlis", "Yekti", "Daniel"]
+    data = {
+        "Mukhlis": [97, 56, 11],
+        "Yekti": [100, 97, 75],
+        "Daniel": [97, 39, 0],
+    }
+    colors = {
+        "Mukhlis": "#2a78d6",
+        "Yekti": "#1baf7a",
+        "Daniel": "#eda100",
+    }
+
+    fig, ax = plt.subplots(figsize=(6.4, 2.8), dpi=300)
+
+    n_series = len(validators)
+    bar_w = 0.24
+    group_gap = 0.12  # extra space between the 3-bar clusters
+    x = np.arange(len(generators)) * (n_series * bar_w + group_gap)
+
+    ax.set_axisbelow(True)
+    ax.yaxis.grid(True, color=GRID, linewidth=0.9, zorder=0)
+    ax.xaxis.grid(False)
+
+    for i, v in enumerate(validators):
+        offset = (i - (n_series - 1) / 2) * bar_w
+        vals = data[v]
+        bars = ax.bar(x + offset, vals, width=bar_w * 0.92, color=colors[v],
+                       edgecolor="white", linewidth=0.8, label=v, zorder=3)
+        for rect, val in zip(bars, vals):
+            y = val if val > 0 else 0
+            va = "bottom"
+            y_label = y + 2
+            ax.text(rect.get_x() + rect.get_width() / 2, y_label, f"{val}%",
+                     ha="center", va=va, fontsize=7, color=INK)
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(generators, fontsize=8, color=INK, rotation=0)
+    ax.set_ylim(0, 105)
+    ax.set_yticks([0, 25, 50, 75, 100])
+    ax.set_yticklabels(["0%", "25%", "50%", "75%", "100%"], fontsize=8, color=INK)
+    ax.tick_params(length=0)
+
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["left"].set_color(MUTED)
+    ax.spines["bottom"].set_color(MUTED)
+
+    ax.legend(fontsize=7.5, frameon=False, loc="upper right",
+              bbox_to_anchor=(1.0, 1.02), ncol=1, handlelength=1.2, handletextpad=0.5)
+
+    fig.tight_layout()
+    fig.savefig("paper/figures/fig3_validator_bars.png", bbox_inches="tight", facecolor="white")
+    plt.close(fig)
+
+
 if __name__ == "__main__":
     fig1_taxonomy()
     fig2_heatmap()
-    print("Wrote paper/figures/fig1_taxonomy.png and fig2_detection_heatmap.png")
+    fig3_validator_bars()
+    print("Wrote paper/figures/fig1_taxonomy.png, fig2_detection_heatmap.png, "
+          "and fig3_validator_bars.png")
