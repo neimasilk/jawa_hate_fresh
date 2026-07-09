@@ -1,6 +1,6 @@
 # Wiki Index — Ujaran Kebencian Jawa
 
-_Last touched: 2026-07-06 sesi 9 (**D20: reframe paper generator→diagnostic-suite, venue=JINITA saja** — strategic review Fable 5 → eksekusi Sonnet; lihat `STRATEGY.md` + `wiki/decisions.md` D20). Sebelumnya sesi 8: demo webapp `webapp/` commit `5b4e5a0`._
+_Last touched: 2026-07-09 sesi 11 (**Paper v7→v8: review Fable kedua atas publish-readiness — 2 error faktual §4.4/§4.6 diperbaiki (recompute terverifikasi), P1-5 sub-item bocor dilengkapi (abstract multi-rater, §3.3 instrumen), Table 1 diverifikasi 100% + snapshot `paper/external/`, "25.4%" ditelusuri (catatan reproducibility, paper dibiarkan), 2 referensi baru [30]/[31] diverifikasi live arXiv API.** Lihat `STRATEGY.md` §13 + `wiki/log.md` 2026-07-09). Sebelumnya sesi 9: D20 reframe paper generator→diagnostic-suite, venue=JINITA saja._
 
 Catalog dari semua knowledge proyek. **Bapak baca dari sini — agent maintain seluruh konten.**
 
@@ -39,7 +39,8 @@ Catalog dari semua knowledge proyek. **Bapak baca dari sini — agent maintain s
 | [`prompts/cultural_classification_v2.md`](../prompts/cultural_classification_v2.md) | Prompt kerja produksi (pemenang Pilot #3, α ds+grok 0.763) |
 | [`data/labeled/bulk_v2_consensus.jsonl`](../data/labeled/) | Dataset Pilot #6b (**728 teks**, 158 hate; diperbesar dari 331 Pilot #5; gitignored → rilis HF/Zenodo) |
 | [`codebook/CODEBOOK.md`](../codebook/CODEBOOK.md) | **Codebook v1.0** taksonomi 4-dimensi (grounded di 728, 7 boundary cases, distribusi, limitasi). Deliverable HKI + supplementary paper |
-| [`paper/draft_jinita.md`](../paper/draft_jinita.md) | **Draft paper JINITA** (Inggris, conform template: IMRaD bernomor, IEEE refs, Gen AI disclosure) |
+| [`paper/draft_jinita.md`](../paper/draft_jinita.md) | **Draft paper JINITA v8** (Inggris, conform template: IMRaD bernomor, IEEE refs 31 total, Gen AI disclosure). Changelog lengkap semua versi di appendix file sendiri |
+| [`paper/external/`](../paper/external/) | **Snapshot Table 1** (`dvi_table1_snapshot.csv` + README provenance) — reproducibility copy dari `D:\documents\twitter\datasets\dvi_scores.csv` (sister project), dipakai dengan izin (D20) |
 | [`paper/jinita_guidelines/SUMMARY.md`](../paper/jinita_guidelines/SUMMARY.md) | Ringkasan petunjuk JINITA + checklist kepatuhan + sisa TODO (referensi anchor, Word template) |
 | [`paper/AUDIT_RESPONSE.md`](../paper/AUDIT_RESPONSE.md) | **Audit adversarial 2026-06-23**: verdict jujur + action list 18 temuan (status) + 5 keputusan Bapak (A-E). Wajib baca sebelum lanjut paper |
 | [`experiments/audit_external/audit.py`](../experiments/audit_external/audit.py) | **Single source of truth angka** (reproducible): α/AC1/McNemar/confusion vs orig_label/dedup/per-kategori. Ganti hitungan ad-hoc |

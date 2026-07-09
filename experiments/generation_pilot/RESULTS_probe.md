@@ -53,7 +53,7 @@ is wrong in an important way:**
 
 ### Cells that evaded ALL 5 detectors (0/5)
 
-9 of 36 cells were missed by every detector — **7 of the 8 krama_sarcastic cells** plus
+9 of 36 cells were missed by every detector — **7 of the 9 krama_sarcastic cells** (corrected 2026-07-09: the matrix has 9 krama_sarcastic cells — cf. '1/9' rates above; '8' was a typo) plus
 `krama_report × politik_kolektif` and `krama_cold_contempt × politik_kolektif`. (The two
 political-collective misses align with the QC panel's note that politik_kolektif is the
 softest "identity" category — polite political derogation reads as ordinary criticism.)

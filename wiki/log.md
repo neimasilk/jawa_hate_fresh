@@ -140,6 +140,21 @@ Format: `YYYY-MM-DD | OP | sumber/trigger | entities-touched | summary`
 
 ---
 
+## 2026-07-09 (sesi 11 — review Fable kedua + fix v8)
+
+| Time | OP | Trigger | Touched | Summary |
+|------|----|---------|---------|---------|
+| session-start | QUERY | Bapak minta paket perbaikan hasil review Fable atas v7 dieksekusi | CLAUDE.md, PRD.md, HANDOFF.md, STATE.md, wiki/*, STRATEGY.md, experiments/generation_pilot/*, data/labeled/, `D:\documents\twitter` (read) | Pickup: v7 sudah publish-readiness pass, tapi Fable review kedua diminta sebelum Word template. Setiap edit diverifikasi terhadap artefak ter-commit dulu (recompute langsung), bukan dieksekusi mentah dari daftar instruksi. |
+| **fact-fix** | **INGEST** | Recompute §4.4 (disagreement_analysis.md P0-3(d)) + §4.6 (majority-of-3 register atas bulk_v2_consensus.jsonl) | **paper/draft_jinita.md** | 2 error faktual ditemukan+diperbaiki: §4.4 "seven of the eight krama-sarcastic" salah (matriks 9 sel, bukan 8) + salah label sel kedua (krama_report vs krama_cold_contempt); §4.6 "single krama instance" salah (recompute: 158 hate = 157 ngoko+1 campur_kasar, 0 krama; 2 krama-majority ADA tapi non-hate target tidak_ada). |
+| **p1-5-complete** | **INGEST** | Cek spesifikasi P1-5 sesi 10 vs eksekusi aktual | **paper/draft_jinita.md** (abstract, §3.3) | 2 sub-item ternyata bocor (dicatat selesai, belum dieksekusi): abstract belum multi-rater range → ditambah; §3.3 belum deskripsi instrumen validator ke-2/3 → paragraf baru ditambah di akhir §3.3. |
+| **table1-verify** | **LINT** | Verifikasi Table 1 vs sumber `D:\documents\twitter\datasets\dvi_scores.csv` | **paper/external/dvi_table1_snapshot.csv, paper/external/README.md** (baru) | Semua 10 baris cocok persis vs sumber + total corpus 1.419.641 cross-check independen. Table 1 paper tidak diubah. Snapshot reproducibility dibuat dengan provenance lengkap. |
+| **cascade-254-investigate** | **LINT** | Telusuri "25.4%" §3.1 (grep + git log -S + recompute jsonl+timestamp) | **experiments/pilot06_local_models/cascade_confirm_rate_note.md** (baru) | Angka reproduksi persis sebagai confirm-rate batch pre-outage xAI-403 (99/389=25.4%), bukan angka cascade penuh (403/1687=23.9%). Paper §3.1 dibiarkan (ketemu perhitungan yang mereproduksi, sesuai kriteria tugas); ambiguitas dicatat untuk sesi depan. |
+| **refs-verify** | **INGEST** | Verifikasi live arXiv API ([30] Gemma3, [31] GPT-OSS) + Crossref API (DOI [10] PNAS, [21] NAACL) | **paper/draft_jinita.md** (References) | 2 referensi baru ditambah setelah verifikasi live (bukan dari training data). DOI ditambah ke [10]/[21]. Format >3-penulis → et al. untuk [1][17][20][27][29]. Referensi 29→31. |
+| **typo-fix** | **INGEST** | Fix "7 of the 8" → "7 of the 9" | **experiments/generation_pilot/RESULTS_probe.md** | Konsisten dengan §4.4 paper fix; catatan koreksi ditambah inline. Statistik "(7/8)" formulaic-opener terpisah dibiarkan. |
+| ingest-docs | INGEST | Sync docs | **STATE.md (C15 + Stage/Last update), HANDOFF.md (blok SESI 11), wiki/index.md, wiki/log.md (ini), STRATEGY.md (§13)** | Paper v7→v8. Changelog lengkap ada di appendix paper sendiri. **Next: item Bapak (kredensial §3.3, email author, Acknowledgements, rencana rilis artefak, keputusan rasio referensi) → lihat HANDOFF sesi 11 → lalu Word template JINITA.** |
+
+---
+
 ## Convention
 
 - **INGEST:** Source baru di-process ke wiki. Touched = entity pages yang di-update.
