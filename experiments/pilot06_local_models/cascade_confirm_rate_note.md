@@ -33,6 +33,6 @@ The paper's cited **25.4%** reproduces **exactly** — but as the confirm rate o
 
 This matches the "pool sempat mentok 431" note already in `STATE.md`/`wiki/decisions.md` (332 starting pool + 99 pre-outage confirms = 431) and the commit message of `eccc3f4` ("confirm-rate 25.4% -> +304 keeps", which conflated the pre-outage batch's rate with the post-resume batch's keep-count in one sentence — the likely origin of the ambiguity).
 
-**Disposition:** per task instructions, since a reproducing computation was found, the paper text is left unchanged. Whoever revisits §3.1 wording later should decide whether "25.4%" (accurate for the pre-outage batch specifically) or "23.9%" (accurate for the whole cascade, arguably the more natural reading of "the cascade's... confirmation rate") is the intended claim, and word the sentence to disambiguate which batch it refers to.
+**Disposition (updated same day, Fable review):** paper §3.1 now cites the full-cascade rate, **23.9% (403 of 1,687 pre-screen survivors)** — the sentence describes "the cascade's cloud confirmation rate" as a whole, and quoting the pre-outage batch's 25.4% for that claim was the same error class as the P0-1 denominator bug (a batch rate quoted as a whole-run rate). This note remains the provenance record for both figures.
 
 Recompute script used: ad-hoc, not committed (pure aggregation over the two jsonl files above using each record's `source_id` and `ts` fields; no offensive text loaded or printed, only counts).

@@ -289,7 +289,7 @@ Kerja sesi 9 (reframe v5, STRATEGY.md, E7, E1-instrumen, lit-pass) + sesi 10 (ha
 | 4 | P1-5 sub-item bocor: §3.3 (Method) belum deskripsi instrumen validator ke-2/3 | ✅ Fixed — paragraf baru ditambah akhir §3.3 |
 | 5 | Denominator §1 "74/8,269" (raw, termasuk duplikat) vs laporan dedup 7.823 | ✅ Fixed → "74 of 7,823 deduplicated tweets" |
 | 6 | Table 1 tidak reproducible dari repo ini (sumber di sister project) | ✅ Diverifikasi 100% cocok vs sumber; snapshot dibuat `paper/external/`; Table 1 paper tidak berubah |
-| 7 | "Cloud confirmation rate of 25.4%" (§3.1) provenance tidak jelas | ✅ Ditelusuri — reproduksi persis sebagai batch pre-outage (99/389), bukan cascade penuh (403/1687=23.9%); dicatat, paper dibiarkan (sesuai kriteria: ketemu perhitungan yang mereproduksi) |
+| 7 | "Cloud confirmation rate of 25.4%" (§3.1) provenance tidak jelas | ✅ Ditelusuri — reproduksi persis sebagai batch pre-outage (99/389), bukan cascade penuh (403/1687=23.9%); **follow-up Fable sesi sama: paper §3.1 dikoreksi ke 23.9%** (kalimat mendeskripsikan seluruh kaskade — kelas error sama dgn P0-1); provenance di `cascade_confirm_rate_note.md` |
 | 8 | Cross-ref stale §2.3 "(§4.5)" seharusnya "(§4.6)"; SARA/LLM first-use tak dijabarkan; referensi format (>3 penulis, DOI, tahun) | ✅ Semua fixed (wording/format, bukan temuan substantif) |
 | 9 | 2 referensi baru relevan (Gemma3, GPT-OSS) belum ada sitasi eksplisit meski model-nya sudah dipakai di Table 2/4 | ✅ Ditambah [30]/[31] setelah verifikasi live arXiv API |
 | 10 | Urutan sitasi IEEE tidak strict-appearance-order di beberapa titik | ⏳ Ditunda ke P2-9 (Word template) — sudah diketahui sejak v5→v6, bukan bug baru |
@@ -299,7 +299,7 @@ Kerja sesi 9 (reframe v5, STRATEGY.md, E7, E1-instrumen, lit-pass) + sesi 10 (ha
 2. Email author di front matter — perlu konfirmasi masih aktif/benar.
 3. Acknowledgements — masih placeholder, perlu isi institusi/grant/compute yang benar.
 4. Rencana rilis artefak publik (dataset HF/Zenodo, codebook, stimulus set restricted-license) — belum ada timeline konkret.
-5. Keputusan strategi rasio referensi — gap literal JINITA "≥80% jurnal ≤5 tahun" (denominator kini 31 setelah [30]/[31], rasio belum dihitung ulang di catatan header referensi) — trade beberapa referensi fondasional atau terima gap dengan disclosure?
+5. Keputusan strategi rasio referensi — gap literal JINITA "≥80% jurnal ≤5 tahun" (rasio sudah dihitung ulang di header referensi: 21/31 recent, 11/31 jurnal, 8/31 keduanya ≈ 26% vs aturan 80%) — trade beberapa referensi fondasional untuk padanan jurnal recent, atau terima gap dengan disclosure yang sudah ada?
 6. Item lama: Word template JINITA, renumber referensi P2-9, versi blind (anonim) — semua ditunda ke sesi konversi berikutnya.
 
 **Detail lengkap semua edit:** appendix paper sendiri ("Paper v7 → v8 change log"), `STATE.md` C15, `HANDOFF.md` blok SESI 11.
