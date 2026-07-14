@@ -1,6 +1,20 @@
 # HANDOFF - Ujaran Kebencian Jawa
 
-**Last updated:** 2026-07-09 (sesi 12) — **✅ PIVOT VENUE: JINITA → JUTIF (keputusan Bapak). Manuskrip JUTIF jadi: `paper/JUTIF_Amien_Kanthi_Sijabat_2026.docx`.**
+**Last updated:** 2026-07-14 (sesi 13) — **✅✅ SUBMITTED TO JUTIF.** `paper/JUTIF_Amien_Kanthi_Sijabat_2026 fixed.docx` (versi fix Bapak) di-submit via OJS JUTIF, **submission #6393**, section "Articles", status: awaiting editor review. Email konfirmasi terkirim. Author dashboard: https://jutif.if.unsoed.ac.id/index.php/jurnal/authorDashboard/submission/6393
+
+**🆕 SESI 13 (2026-07-14) — Submit ke JUTIF via Playwright/OJS:**
+
+- **Login:** Bapak login sendiri ke OJS (akun `neimasilk`). Agent drive wizard submission via Playwright MCP browser.
+- **Blind review — DIPUTUSKAN TIDAK PERLU versi blind:** dicek langsung — JUTIF Submission Preparation Checklist TIDAK punya item anonimisasi; template JUTIF + checklist item 6 ("please add an author with international affiliation") justru mengharuskan nama penulis ADA di manuskrip. "All submissions are double-blind" di About = ditangani editorial. **Jadi submit versi bernama (fixed.docx) apa adanya.** Ini mengoreksi kekhawatiran "cek versi blind" di HANDOFF sesi 12 (poin next #4) — untuk JUTIF tidak berlaku.
+- **File:** `paper/JUTIF_Amien_Kanthi_Sijabat_2026 fixed.docx` (2.6 MB, versi fix manual Bapak hari itu) → di-tag genre "Article Manuscript".
+- **Metadata dimasukkan:** Title "Diagnosing a Register-Pragmatic Blind Spot in Javanese Hate Speech Detection"; Abstract penuh (dari `draft_jutif_submission.md`); 5 keywords (detection blind spot; hate speech detection; Javanese; large language model; register); 3 authors — Mukhlis Amien (amien@ubhinus.ac.id, **primary contact**), Yekti Asmoro Kanthi (yektiasmoro@ubhinus.ac.id), Daniel Rudiaman Sijabat (daniel223@ubhinus.ac.id), semua Universitas Bhinneka Nusantara, Malang, Indonesia. References box dikosongkan (referensi ada di body manuskrip; JUTIF tidak mewajibkan).
+- **⚠️ GOTCHA saat entry (kalau submit lagi):** fill TinyMCE Abstract via ref paragraph malah masuk ke field Title (title jadi title+abstract). Diperbaiki: title di-refill, abstract di-set via `window.tinymce` API (`setContent`+`save`+fire change). Lesson: untuk rich-text OJS, set via TinyMCE API, jangan andalkan `fill` pada ref paragraph di dalam iframe.
+- **"Finish Submission" diklik Bapak sendiri** → halaman "Submission complete", email konfirmasi terkirim. Selesai.
+- **⏭️ NEXT:** (1) **Eksekusi janji rilis artefak publik** (keputusan D22 item 4 — repo dibuka publik SETELAH submit; sekarang sudah submit). (2) **Git push masih tertunggak** (token GitHub invalid sejak sesi 12) — perlu Bapak `gh auth login` lalu `git push` (HARD RULE #6). (3) Pantau email / author dashboard untuk keputusan editor JUTIF.
+
+---
+
+**Sebelumnya (sesi 12):** **✅ PIVOT VENUE: JINITA → JUTIF (keputusan Bapak). Manuskrip JUTIF jadi: `paper/JUTIF_Amien_Kanthi_Sijabat_2026.docx`.**
 
 **🆕 SESI 12 (2026-07-09) — Konversi ke template JUTIF (Fable orkestrasi + 3 agen Sonnet):**
 
