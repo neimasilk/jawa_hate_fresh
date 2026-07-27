@@ -26,8 +26,8 @@
 - **🔑 TEMUAN: syarat "author internasional" dari editor kemungkinan besar salah paham metadata, BUKAN kurang penulis.** Naskah sudah punya penulis ke-4 dari Jeonbuk sejak submission. Tapi email editor menyapa **hanya 3 nama** — sapaan itu dibangkitkan OJS dari **metadata submission**, dan di sesi 13 memang cuma 3 penulis yang didaftarkan di metadata. **Aksi: tambahkan Roby sebagai contributor di metadata OJS #6393**, bukan cari penulis baru. Analisis + langkah: `paper/coauthor_invitation.md`.
 - **⏭️ NEXT — blocker dari Bapak:**
   1. **Tambah Roby ke metadata OJS** #6393 (butuh email + ORCID beliau).
-  2. **DOI Zenodo** untuk ref [28] (DVI). Paket deposit siap di `paper/external/zenodo/`. Naskah masih berisi penanda `DOI_PENDING_INSERT_BEFORE_UPLOAD` — **wajib diganti sebelum upload**.
-  3. **Turnitin** via UBHINUS (maks 20%) + isi Acknowledgement.
+  2. ✅ **DOI Zenodo SELESAI (2026-07-27).** Dataset DVI terbit: <https://doi.org/10.5281/zenodo.21616875> (versi 1.0.0; concept DOI `...21616874`). Ref [28] sudah pakai DOI versi, penanda `DOI_PENDING` hilang, docx sudah rebuild+verifikasi. Sekaligus mengeksekusi janji rilis artefak publik D22 item 4. **Gotcha Zenodo:** field Description = TinyMCE dalam React → `setContent()` API TIDAK tersimpan (hilang setelah reload); yang berhasil = toolbar **Source code** → isi textarea dialog → Save. Radio DOI juga **reset ke default tiap reload**, harus di-set ulang tepat sebelum Publish.
+  3. **Turnitin** via UBHINUS (maks 20%).
 - **✅ `git push` BERES** — tunggakan sejak sesi 12 (token invalid) sudah lunas. Commit `590e55f` mendarat di remote; `c0a6251..590e55f` ter-push. HARD RULE #6 tidak lagi tertunggak.
 
 ---

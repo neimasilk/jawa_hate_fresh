@@ -392,7 +392,7 @@ The authors gratefully acknowledge the financial support provided by the Direkto
 
 [27] haipradana (Pradana Yahya Abdillah), "indonesian-twitter-hate-speech-cleaned," Hugging Face Datasets, 2025. [Online]. Available: https://huggingface.co/datasets/haipradana/indonesian-twitter-hate-speech-cleaned
 
-[28] ==M. Amien, "Digital Vitality Index for Indonesian regional languages on Twitter: a lexicon-based confirmed-tweet measurement across 32 cities," dataset, Zenodo, 2026, doi: 10.5281/zenodo.DOI_PENDING_INSERT_BEFORE_UPLOAD. Companion measurement by the first author, deposited as an open dataset so that the comparative figures in Table 1 are publicly verifiable; it is not part of the present study's dataset.==
+[28] ==M. Amien, "Digital Vitality Index for Indonesian regional languages on Twitter: a lexicon-based confirmed-tweet measurement across 32 cities," dataset, Zenodo, 2026, doi: 10.5281/zenodo.21616875. Companion measurement by the first author, deposited as an open dataset so that the comparative figures in Table 1 are publicly verifiable; it is not part of the present study's dataset.==
 
 [29] M. Ravindranath and A. C. Cohn, "Can a language with millions of speakers be endangered?," *Journal of the Southeast Asian Linguistics Society*, vol. 7, pp. 64–75, 2014.
 

@@ -1,4 +1,21 @@
-# Zenodo deposit — langkah untuk Bapak
+# Zenodo deposit — ✅ SELESAI 2026-07-27
+
+> **Sudah terbit.** Record: <https://zenodo.org/records/21616875>
+> **DOI versi 1.0.0 (dipakai di paper):** `10.5281/zenodo.21616875`
+> **Concept DOI (selalu ke versi terbaru):** `10.5281/zenodo.21616874`
+>
+> Referensi [28] di naskah sudah memakai DOI versi. Dokumen di bawah disimpan sebagai
+> catatan prosedur, kalau nanti perlu deposit versi baru.
+>
+> **Gotcha yang ditemukan saat pengisian:** field Description Zenodo memakai TinyMCE di
+> dalam React — `setContent()` lewat API **tidak tersimpan** (hilang setelah reload).
+> Yang berhasil: buka toolbar **Source code**, isi textarea dialognya, lalu Save. Radio
+> DOI juga **reset ke "Yes, I already have one" setiap reload halaman**, jadi harus
+> di-set ulang tepat sebelum Publish.
+
+---
+
+## Prosedur asli (arsip)
 
 **Kenapa ini perlu:** Reviewer A (komentar 9) dan Reviewer B (komentar 21) sama-sama
 menandai referensi DVI sebagai *"unpublished data"* — red flag SINTA 2, apalagi karena

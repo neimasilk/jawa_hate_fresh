@@ -1,17 +1,81 @@
-# Provenance: `dvi_table1_snapshot.csv`
+# Digital Vitality Index for Indonesian Regional Languages on Twitter
 
-**Source file:** `D:\documents\twitter\datasets\dvi_scores.csv` (sister project, first author's own data — not part of this project's repository).
-**Snapshot date:** 2026-07-09.
-**Why this snapshot exists:** `paper/draft_jinita.md` Table 1 cites this sister-project dataset ([8] in the reference list), but the source lives outside this repo, which made Table 1 non-reproducible from `jawa_hate_fresh` alone. This file is a minimal, committed copy of the 10 rows/4 columns Table 1 actually uses, so the paper's numbers are checkable without access to `D:\documents\twitter`.
+Confirmed-tweet counts and rates for ten Indonesian regional languages, measured over a
+general-topic Indonesian Twitter corpus spanning 32 cities.
 
-**Method (one sentence):** For each of 10 Indonesian regional languages, a tweet from a general-topic (non-hate-filtered), 32-city Indonesian Twitter corpus of 1,419,641 cleaned, deduplicated tweets (collected 2017–2020) is counted as "confirmed" for that language if it contains 2 or more lexically distinctive words/particles from a curated per-language lexicon (words also common in standard/informal Indonesian excluded); `detection_rate_pct` = 100 × confirmed_tweets / 1,419,641.
+This dataset is deposited as the citable record for a comparative claim in the paper
+"Diagnosing a Register-Pragmatic Blind Spot in Javanese Hate Speech Detection via
+LLM-Generated Register-Stratified Stimuli" (Amien, Kanthi, Sijabat & Yusuf), where it
+appears as Table 1. It is a companion measurement: the paper's primary evidence comes
+from its own labeling run, and this measurement corroborates that evidence from an
+independent direction.
 
-**Verification performed (2026-07-09):** every value in `dvi_table1_snapshot.csv` was compared directly against `D:\documents\twitter\datasets\dvi_scores.csv` (columns `language`, `speakers_M`, `confirmed_tweets`, `detection_rate`) and against the computation script `D:\documents\twitter\experiments\ideas\compute_dvi.py`. All 10 rows matched exactly (speakers, confirmed tweets, and confirmed rate for Javanese and all 9 comparison languages); the corpus total of 1,419,641 text-containing tweets was independently cross-checked against `D:\documents\twitter\experiments\active\EXP-A2_english_penetration\PAPER_FULL_DRAFT.md` ("The dataset comprises 1,419,641 text-containing tweets from 32 Indonesian provincial capital cities..."), a separate paper draft in the same sister project describing the same underlying corpus. No mismatches found — Table 1 in `paper/draft_jinita.md` was left unchanged.
+## Contents
 
-**Columns:**
-- `language` — regional language name (lowercase, matches source).
-- `speakers_M` — estimated speaker population, millions.
-- `confirmed_tweets` — count of tweets meeting the ≥2-distinctive-word threshold.
-- `detection_rate_pct` — confirmed_tweets as a percentage of the 1,419,641-tweet corpus (e.g., `0.0931` = 0.0931%, i.e. 1,321/1,419,641). This is the source CSV's `detection_rate` column, renamed here for clarity; it already stores a percentage value, not a 0–1 fraction.
+| File | Description |
+|---|---|
+| `dvi_table1_snapshot.csv` | Ten rows, four columns — the full dataset. |
+| `README.md` | This file. |
 
-**Permission:** this data belongs to the first author (Mukhlis Amien) as part of an unpublished companion measurement from the `D:\documents\twitter` project. Its use here as reference [8] — an independent scarcity anchor for `jawa_hate_fresh` — was confirmed with the author's permission (decision D20, 2026-07-06; see `STRATEGY.md` §9 Q5 and `wiki/decisions.md`). Only the 10-row/4-column slice needed for Table 1 is copied here; no other part of the sister project's data or unpublished paper drafts is included or referenced.
+## Columns
+
+- `language` — regional language name.
+- `speakers_M` — estimated speaker population, in millions.
+- `confirmed_tweets` — number of tweets meeting the detection threshold (see Method).
+- `detection_rate_pct` — `confirmed_tweets` as a percentage of the corpus. Stored as a
+  percentage, not a 0–1 fraction: `0.0931` means 0.0931%, i.e. 1,321 of 1,419,641.
+
+## Corpus
+
+General-topic (not hate-filtered) Indonesian Twitter data collected from 32 Indonesian
+provincial capital cities, 2017–2020. After cleaning and deduplication the corpus contains
+**1,419,641 text-containing tweets**. Language measurement was performed over this full set.
+
+## Method
+
+For each of the ten languages, a tweet is counted as *confirmed* for that language if it
+contains **two or more** lexically distinctive words or particles drawn from a curated
+per-language lexicon. Words that are also common in standard or informal Indonesian are
+excluded from every lexicon, so that shared slang and widely borrowed vocabulary do not
+generate false positives. The two-marker threshold is deliberately conservative: a single
+shared token is not treated as evidence.
+
+The detection rate is computed as:
+
+```
+detection_rate_pct = 100 * confirmed_tweets / 1,419,641
+```
+
+## Interpretation and limitations
+
+- These are **lower-bound presence estimates**, not speaker or usage statistics. A
+  conservative lexicon threshold and the exclusion of Indonesian-shared vocabulary both
+  push counts down; short tweets carrying only one distinctive marker are not counted.
+- The measure captures *written, public* language use on one platform in one period. It
+  should not be read as a measure of a language's overall vitality, which depends on
+  spoken and domestic domains this corpus cannot observe.
+- The cross-language comparison is meaningful because the same corpus, threshold, and
+  procedure were applied to all ten languages; the absolute rates are specific to this
+  corpus and this period.
+- Lexicon size and coverage differ between languages, which affects sensitivity. A
+  language with a smaller curated lexicon is more likely to be undercounted.
+
+## Ethics and scope
+
+This deposit contains **aggregate per-language counts only**. It contains no tweet text,
+no usernames, no user identifiers, no geographic coordinates, and no personally
+identifiable information of any kind. No individual is identifiable from these ten rows.
+
+## Citation
+
+If you use this dataset, please cite it via its Zenodo DOI, and where relevant also cite
+the associated paper.
+
+## Licence
+
+Creative Commons Attribution 4.0 International (CC BY 4.0).
+
+## Contact
+
+Mukhlis Amien — Informatics, Universitas Bhinneka Nusantara, Malang, Indonesia
+`amien@ubhinus.ac.id`

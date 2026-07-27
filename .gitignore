@@ -87,3 +87,6 @@ experiments/generation_pilot/_*.txt
 # unzipped working copies (the two reviewed .docx carry the full manuscript with
 # embedded figures, ~30 MB unpacked).
 raw/jutif_decision/
+
+# Playwright MCP session artifacts (page snapshots, console logs)
+.playwright-mcp/

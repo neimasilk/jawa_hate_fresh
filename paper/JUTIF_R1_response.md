@@ -42,7 +42,7 @@ Jadi naskah mendeskripsikan kode yang **bukan** kode yang memproduksi datanya. K
 | # | Item | Status |
 |---|---|---|
 | 1 | **Co-author internasional — TERNYATA SUDAH ADA.** Naskah yang disubmit sudah memuat Roby Firnando Yusuf (Jeonbuk National University, South Korea) sebagai penulis ke-4. Yang kurang: dia **belum terdaftar di metadata OJS** (sapaan email editor cuma menyebut 3 nama — dibangkitkan dari metadata). Aksi: tambahkan Roby sebagai contributor di OJS #6393. Detail: `paper/coauthor_invitation.md`. | ⚠️ perlu Bapak tambah di OJS |
-| 2 | **Akun Zenodo** untuk deposit data DVI (ref [24]) supaya dapat DOI permanen. Paket deposit saya siapkan; upload final butuh login Bapak. | ⏳ menunggu Bapak |
+| 2 | ~~Deposit Zenodo~~ — **SELESAI 2026-07-27.** DOI: `10.5281/zenodo.21616875`. Ref [28] sudah pakai DOI, bukan lagi "unpublished data". | ✅ |
 | 3 | **Turnitin** via UBHINUS — dijalankan di akhir setelah naskah final, maks 20%. | ⏳ nanti |
 | 4 | ~~Acknowledgement placeholder~~ — **SUDAH BERES.** Teks pendanaan DRTPM Kemdikbudristek + UBHINUS diambil dari versi `fixed.docx` yang Bapak submit dan sekarang jadi bagian sumber markdown, jadi tidak hilang lagi tiap rebuild. | ✅ |
 | 5 | **`git push` masih tertunggak** sejak sesi 12 (token GitHub invalid). Perlu Bapak jalankan `! gh auth login` lalu saya push. HARD RULE #6. | ⏳ menunggu Bapak |
@@ -215,7 +215,7 @@ Adopted. ISBNs have been added to both monographs in the list — Errington (978
 ## Sisa yang harus dibereskan sebelum upload (checklist Bapak)
 
 - [ ] **Tambah Roby Firnando Yusuf ke metadata OJS** #6393 (di naskah sudah ada sejak awal; metadata masih 3 nama). Butuh email + ORCID beliau. Detail: `paper/coauthor_invitation.md`.
-- [ ] **DOI Zenodo** — deposit lalu kirim DOI ke saya; referensi [28] masih berisi penanda `DOI_PENDING_INSERT_BEFORE_UPLOAD` yang **wajib** diganti. Instruksi: `paper/external/zenodo/DEPOSIT_INSTRUCTIONS.md`.
+- [x] ~~DOI Zenodo~~ — **SELESAI 2026-07-27.** Terbit: <https://doi.org/10.5281/zenodo.21616875> (versi 1.0.0; concept DOI `10.5281/zenodo.21616874`). Referensi [28] di naskah sudah memakai DOI versi, penanda `DOI_PENDING` sudah hilang, docx sudah di-rebuild dan diverifikasi.
 - [ ] **Turnitin** — jalankan via UBHINUS, maks 20%, upload bersama revisi.
 - [x] ~~Acknowledgement~~ — sudah terisi (dipulihkan dari `fixed.docx`).
 - [ ] **Cek visual di Word** — render 2 persamaan, posisi 5 gambar dan 8 tabel tidak terpotong halaman, highlight kuning tampil benar.
