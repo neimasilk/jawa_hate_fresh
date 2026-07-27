@@ -1,0 +1,90 @@
+{
+  "krama_cold_contempt": {
+    "deepseek": {
+      "hate": 7,
+      "total": 9
+    },
+    "gemma3:27b": {
+      "hate": 7,
+      "total": 9
+    },
+    "gpt-oss:20b": {
+      "hate": 7,
+      "total": 9
+    },
+    "grok": {
+      "hate": 8,
+      "total": 9
+    },
+    "qwen3:14b": {
+      "hate": 5,
+      "total": 9
+    }
+  },
+  "krama_report": {
+    "deepseek": {
+      "hate": 7,
+      "total": 9
+    },
+    "gemma3:27b": {
+      "hate": 8,
+      "total": 9
+    },
+    "gpt-oss:20b": {
+      "hate": 4,
+      "total": 9
+    },
+    "grok": {
+      "hate": 8,
+      "total": 9
+    },
+    "qwen3:14b": {
+      "hate": 4,
+      "total": 9
+    }
+  },
+  "krama_sarcastic": {
+    "deepseek": {
+      "hate": 1,
+      "total": 9
+    },
+    "gemma3:27b": {
+      "hate": 0,
+      "total": 9
+    },
+    "gpt-oss:20b": {
+      "hate": 0,
+      "total": 9
+    },
+    "grok": {
+      "hate": 1,
+      "total": 9
+    },
+    "qwen3:14b": {
+      "hate": 0,
+      "total": 9
+    }
+  },
+  "ngoko_direct": {
+    "deepseek": {
+      "hate": 9,
+      "total": 9
+    },
+    "gemma3:27b": {
+      "hate": 9,
+      "total": 9
+    },
+    "gpt-oss:20b": {
+      "hate": 9,
+      "total": 9
+    },
+    "grok": {
+      "hate": 9,
+      "total": 9
+    },
+    "qwen3:14b": {
+      "hate": 9,
+      "total": 9
+    }
+  }
+}

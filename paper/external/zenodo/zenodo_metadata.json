@@ -1,0 +1,27 @@
+{
+  "metadata": {
+    "upload_type": "dataset",
+    "title": "Digital Vitality Index for Indonesian Regional Languages on Twitter: A Lexicon-Based Confirmed-Tweet Measurement Across 32 Cities",
+    "creators": [
+      {
+        "name": "Amien, Mukhlis",
+        "affiliation": "Universitas Bhinneka Nusantara, Malang, Indonesia"
+      }
+    ],
+    "description": "<p>Per-language confirmed-tweet counts and rates for ten Indonesian regional languages, measured over a general-topic (non-hate-filtered) Indonesian Twitter corpus of 1,419,641 cleaned, deduplicated tweets collected from 32 Indonesian provincial capital cities (2017&ndash;2020).</p><p><strong>Method.</strong> A tweet is counted as &quot;confirmed&quot; for a language if it contains two or more lexically distinctive words or particles from a curated per-language lexicon. Words that are also common in standard or informal Indonesian are excluded from each lexicon, so that shared slang does not produce false positives. The confirmed rate is 100 &times; confirmed_tweets / 1,419,641.</p><p><strong>Purpose of this deposit.</strong> These figures are cited as an independent scarcity anchor in the paper &quot;Diagnosing a Register-Pragmatic Blind Spot in Javanese Hate Speech Detection via LLM-Generated Register-Stratified Stimuli&quot; (Amien, Kanthi &amp; Sijabat), submitted to Jurnal Teknik Informatika (JUTIF). This record is deposited so that the cited measurement is publicly verifiable rather than an unpublished personal communication.</p><p><strong>Contents.</strong> <code>dvi_table1_snapshot.csv</code> &mdash; ten rows, four columns: language, estimated speaker population (millions), confirmed tweet count, and confirmed rate as a percentage. <code>README.md</code> &mdash; full provenance, method statement, verification record, and column definitions.</p><p><strong>Scope note.</strong> This deposit contains aggregate per-language counts only. It contains no tweet text, no user identifiers, and no personally identifiable information.</p>",
+    "keywords": [
+      "Javanese",
+      "Indonesian regional languages",
+      "digital language vitality",
+      "low-resource languages",
+      "language identification",
+      "Twitter corpus",
+      "sociolinguistics"
+    ],
+    "license": "cc-by-4.0",
+    "access_right": "open",
+    "language": "eng",
+    "version": "1.0.0",
+    "notes": "Companion measurement to a hate-speech detection study; deposited to provide a citable, verifiable record for the comparative claim in Table 1 of the associated paper."
+  }
+}

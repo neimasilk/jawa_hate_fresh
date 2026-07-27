@@ -28,19 +28,38 @@ from docx.text.paragraph import Paragraph
 
 TEMPLATE = "paper/JUTIF-Template.docx"
 SRC_MD = "paper/draft_jutif_submission.md"
-OUT = "paper/JUTIF_Amien_Kanthi_Sijabat_2026.docx"
+# R1 revision goes to a NEW filename: the editor requires the revised file to be
+# uploaded alongside, not overwriting, the originally submitted file.
+OUT = "paper/JUTIF_Amien_Kanthi_Sijabat_2026_R1_revised.docx"
 
 TNR = "Times New Roman"
 W = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'
 
-TITLE = "Diagnosing a Register-Pragmatic Blind Spot in Javanese Hate Speech Detection"
+TITLE = ("Diagnosing a Register-Pragmatic Blind Spot in Javanese Hate Speech Detection "
+         "==via LLM-Generated Register-Stratified Stimuli==")
 
 # ---------------------------------------------------------------------------
 # Low-level run / paragraph formatting helpers
 # ---------------------------------------------------------------------------
 
 
-def set_run_font(run, size_pt=None, bold=None, italic=None, superscript=False, name=TNR):
+def set_run_highlight(run, color='yellow'):
+    """Apply a Word text highlight to a run.
+
+    Used for the JUTIF revision requirement that every revised or added sentence
+    be marked with yellow highlight. Source markup is ==...== in the markdown.
+    """
+    rPr = run._element.get_or_add_rPr()
+    hl = rPr.find(qn('w:highlight'))
+    if hl is None:
+        hl = OxmlElement('w:highlight')
+        rPr.append(hl)
+    hl.set(qn('w:val'), color)
+    return run
+
+
+def set_run_font(run, size_pt=None, bold=None, italic=None, superscript=False, name=TNR,
+                 highlight=False):
     run.font.name = name
     rPr = run._element.get_or_add_rPr()
     rFonts = rPr.find(qn('w:rFonts'))
@@ -68,34 +87,46 @@ def set_run_font(run, size_pt=None, bold=None, italic=None, superscript=False, n
         szCs.set(qn('w:val'), str(int(size_pt * 2)))
     if superscript:
         run.font.superscript = True
+    if highlight:
+        set_run_highlight(run)
     return run
 
 
-TOKEN_RE = re.compile(r'(\*\*.+?\*\*|\*.+?\*)')
+TOKEN_RE = re.compile(r'(==.+?==|\*\*.+?\*\*|\*.+?\*)')
 
 
-def add_inline_runs(paragraph, text, size_pt=None, force_bold=None, base_italic=False):
-    """Recursively parse **bold** / *italic* markdown spans into runs.
+def add_inline_runs(paragraph, text, size_pt=None, force_bold=None, base_italic=False,
+                    base_highlight=False):
+    """Recursively parse ==highlight== / **bold** / *italic* markdown spans into runs.
 
     force_bold=None means "don't touch bold" (inherit from paragraph style);
     force_bold=True/False explicitly sets it. Markdown **bold** spans force
     True for their sub-run only; everything else keeps the caller's setting.
+    ==...== marks revised text for the JUTIF resubmission and renders as a
+    yellow Word highlight; it nests with bold and italic in either order.
     """
     parts = TOKEN_RE.split(text)
     for part in parts:
         if not part:
             continue
-        if part.startswith('**') and part.endswith('**') and len(part) >= 4:
-            add_inline_runs(paragraph, part[2:-2], size_pt=size_pt, force_bold=True, base_italic=base_italic)
+        if part.startswith('==') and part.endswith('==') and len(part) >= 4:
+            add_inline_runs(paragraph, part[2:-2], size_pt=size_pt, force_bold=force_bold,
+                            base_italic=base_italic, base_highlight=True)
+        elif part.startswith('**') and part.endswith('**') and len(part) >= 4:
+            add_inline_runs(paragraph, part[2:-2], size_pt=size_pt, force_bold=True,
+                            base_italic=base_italic, base_highlight=base_highlight)
         elif part.startswith('*') and part.endswith('*') and len(part) >= 2:
-            add_inline_runs(paragraph, part[1:-1], size_pt=size_pt, force_bold=force_bold, base_italic=True)
+            add_inline_runs(paragraph, part[1:-1], size_pt=size_pt, force_bold=force_bold,
+                            base_italic=True, base_highlight=base_highlight)
         else:
             run = paragraph.add_run(part)
-            set_run_font(run, size_pt=size_pt, bold=force_bold, italic=(True if base_italic else None))
+            set_run_font(run, size_pt=size_pt, bold=force_bold,
+                         italic=(True if base_italic else None),
+                         highlight=base_highlight)
 
 
 def strip_md(text):
-    return text.replace('**', '').replace('*', '')
+    return text.replace('**', '').replace('*', '').replace('==', '')
 
 
 # ---------------------------------------------------------------------------
@@ -133,8 +164,7 @@ def add_plain_run(p, text, superscript=False, size_pt=11):
 # para 0: title (JUDUL style; keep style size/bold, just force TNR)
 p_title = orig_paras[0]
 clear_paragraph(p_title)
-r = p_title.add_run(TITLE)
-set_run_font(r)
+add_inline_runs(p_title, TITLE)
 
 # para 1: authors (AUTHOR style). Template's own filled sample overrides the
 # style's 10pt to 11pt on every run; mirrored here. "*1" superscripted as a
@@ -726,9 +756,19 @@ n_images_total = len(blip_embeds)
 n_images_content = sum(1 for rid in blip_embeds if not target_by_id.get(rid, '').endswith('image1.emf'))
 n_omath = len(qa_tree.findall(f'.//{{http://schemas.openxmlformats.org/officeDocument/2006/math}}oMath'))
 ref_paras = [p for p in qa_doc.paragraphs if re.match(r'^\[\d+\]', p.text)]
-print(f"2. tables={n_tables} (expect 9), content images={n_images_content} (expect 3; "
+print(f"2. tables={n_tables} (expect 10), content images={n_images_content} (expect 5; "
       f"total blips incl. template's own kept decorative line = {n_images_total}), "
-      f"oMath={n_omath} (expect 2), reference paragraphs={len(ref_paras)} (expect 45)")
+      f"oMath={n_omath} (expect 2), reference paragraphs={len(ref_paras)} (expect 47)")
+
+# 2b. Revision highlighting (JUTIF requires revised sentences marked yellow) and
+#     a guard that no ==...== marker leaked through as literal text.
+W_NS = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'
+hl_runs = qa_tree.findall(f'.//{{{W_NS}}}highlight')
+n_yellow = sum(1 for h in hl_runs if h.get(f'{{{W_NS}}}val') == 'yellow')
+all_text = ''.join(t.text or '' for t in qa_tree.findall(f'.//{{{W_NS}}}t'))
+leaked = all_text.count('==')
+print(f"2b. yellow-highlighted runs={n_yellow} (expect > 0), "
+      f"literal '==' markers left in text={leaked} (expect 0)")
 
 # 3. Headings
 MAIN_HEADINGS = ['INTRODUCTION', 'METHOD', 'RESULT', 'DISCUSSION', 'CONCLUSION']
@@ -802,7 +842,8 @@ title_text = qa_doc.paragraphs[0].text
 author_para = qa_doc.paragraphs[1]
 has_superscript = any(r.font.superscript for r in author_para.runs)
 instansi_count = sum(1 for p in qa_doc.paragraphs if p.style.name == 'INSTANSI')
-print(f"8. Title correct: {title_text == TITLE!r} -> {title_text == TITLE}")
+expected_title = strip_md(TITLE)
+print(f"8. Title correct: {title_text == expected_title!r} -> {title_text == expected_title}")
 print(f"   Author line has superscript run(s): {has_superscript}")
 print(f"   Remaining INSTANSI paragraphs: {instansi_count} (expect 1)")
 

@@ -1,6 +1,36 @@
 # HANDOFF - Ujaran Kebencian Jawa
 
-**Last updated:** 2026-07-14 (sesi 13) — **✅✅ SUBMITTED TO JUTIF.** `paper/JUTIF_Amien_Kanthi_Sijabat_2026 fixed.docx` (versi fix Bapak) di-submit via OJS JUTIF, **submission #6393**, section "Articles", status: awaiting editor review. Email konfirmasi terkirim. Author dashboard: https://jutif.if.unsoed.ac.id/index.php/jurnal/authorDashboard/submission/6393
+**Last updated:** 2026-07-27 (sesi 14) — **📬 KEPUTUSAN EDITOR JUTIF MASUK: "Revisions Required"** (email 2026-07-25, Lasmedi Afuan). Revisi naskah **SELESAI dikerjakan**: `paper/JUTIF_Amien_Kanthi_Sijabat_2026_R1_revised.docx`. **Belum bisa diupload** — masih tunggu 3 hal dari Bapak (co-author internasional, DOI Zenodo, Turnitin).
+
+**🆕 SESI 14 (2026-07-27) — Kerjakan revisi R1 JUTIF:**
+
+- **Lampiran review** di `raw/jutifeditordecision.zip` → diekstrak ke `raw/jutif_decision/`. Dua file docx **comment-only** (tidak ada tracked change): Reviewer A 11 komentar, Reviewer B 24 komentar = **35 total**.
+- **Temuan penting: TIDAK ADA satu pun komentar yang menggugat angka, metode, atau klaim.** Semuanya struktural/editorial; beberapa memuji ("commendable", "jarang selengkap ini"). Checkbox "No" di Overall Comment sebagian besar **boilerplate** — dicek ke naskah: Introduction sudah menyitasi 30 referensi (bukan <25), semua tabel/gambar sudah dirujuk by number, Discussion sudah ada. Beban revisi jauh lebih ringan dari kesan emailnya.
+- **⚠️ ERROR FAKTUAL DITEMUKAN di naskah yang SUDAH disubmit:** §2.6 menulis `max_tokens=8192`, padahal itu nilai scaffold pra-run (commit `acac8f0`). Run produksi yang menghasilkan data (commit `7d09765`) pakai budget bertingkat `(12000, 20000, 30000)` + retry-on-truncation — justru karena `deepseek-v4-pro` model reasoning yang bikin `content` kosong. **Naskah mendeskripsikan kode yang bukan penghasil datanya.** Kelas error sama dengan insiden "25,4%" sesi 11. Sudah diperbaiki + dijadikan jawaban permintaan reproducibility reviewer. **Pelajaran: parameter di paper harus dibaca dari commit yang menghasilkan data, bukan dari file skrip terbaru.**
+- **Yang dikerjakan:**
+  - Judul + metode: `...via LLM-Generated Register-Stratified Stimuli` (Bapak pilih pertahankan "Blind Spot").
+  - Abstract 267→**234 kata**, urutan masalah–tujuan–metode–hasil–dampak, kalimat aim eksplisit, dampak diarahkan ke informatika. Keyword +`diglossia` (6).
+  - Introduction: paragraf gap dikonsolidasi & dinaikkan; kalimat tujuan eksplisit sebelum Contributions; blok "human bottleneck" **dipindah ke Method §2.6**.
+  - **RESULT diurutkan ulang** mengikuti Method: 3.1 baseline → 3.2 generation → 3.3 niche → 3.4 multi-validator → 3.5 detection probe. Semua cross-ref direflow via skrip.
+  - **DISCUSSION §4.5 baru** "Contribution to informatics and computer science"; Limitations→4.6 (+sintesis limitasi→future work), Ethics→4.7. Klaim "shared underlying competence" di-hedge + dibantah sebagian pakai data sendiri.
+  - **Conclusion** dipecah 2 paragraf, angka berulang dipangkas, "Future research should…" eksplisit.
+  - **Statistik baru** (`experiments/generation_pilot/bootstrap_ci.py`): Wilson + bootstrap CI. **Semua kontras exclude 0** — temuan tahan uji walau n kecil. krama-sarcastic 4% CI [1.2, 14.8]; gap vs ngoko 95.6pp CI [88.9, 100]. Kontras antar-generator juga semua exclude 0.
+  - **2 gambar baru**: Fig.1 pipeline flowchart, Fig.5 grouped bars + error bar. Semua figure di-rename sesuai nomor final & **rebuild 400 dpi** (editor minta >300; sebelumnya 299,9994 — technically gagal).
+  - **Table 3 baru** = parameter inferensi per stage (jawaban B-10). Tabel lain renumber.
+  - §2.5 detail kriteria filter + **disclose 22,8% parse failure** di produksi (pilot 250-tweet 100% valid — tidak bertahan saat scale-up; ini temuan praktis sendiri).
+  - **Referensi 45→47**, renumber by first-citation order via skrip. 2 referensi baru diverifikasi Crossref (Saifullah & Dreżewski, *Applied Sciences* 2026; Ghosh & Senapati, *Natural Language Processing* 2024). ISBN ditambah ke 2 monograf. Rasio: journal/conf **38/47 = 80,9%**, recent primary **30** (≥25), preprint 5 (10,6%), Introduction menyitasi **32**.
+- **⚙️ Highlight kuning otomatis:** builder diperluas — markup `==teks==` di markdown → `w:highlight val=yellow` di docx. **118 run ter-highlight**, 0 marker bocor. Jadi syarat editor terpenuhi tanpa kerja manual.
+- **Build QA lolos semua:** 10 tabel, 5 gambar, 2 oMath, 47 referensi, body 8.196 kata (min 4.000), font TNR 100%. Output ke **nama file BARU** (editor melarang menimpa file lama).
+- **📄 `paper/JUTIF_R1_response.md`** = catatan kerja Bapak (Indonesia) + response letter point-by-point 35 komentar (Inggris) siap dikirim.
+- **⏭️ NEXT — 3 blocker dari Bapak:**
+  1. **Co-author internasional** (syarat editor). Bapak bilang sudah punya kandidat → butuh nama/institusi/negara/email. Draft undangan + rancangan kontribusi sah (bukan gift authorship): `paper/coauthor_invitation.md`.
+  2. **DOI Zenodo** untuk ref [28] (DVI). Paket deposit siap di `paper/external/zenodo/`. Naskah masih berisi penanda `DOI_PENDING_INSERT_BEFORE_UPLOAD` — **wajib diganti sebelum upload**.
+  3. **Turnitin** via UBHINUS (maks 20%) + isi Acknowledgement.
+  4. **`git push` MASIH tertunggak** sejak sesi 12 (token invalid) — Bapak jalankan `! gh auth login`.
+
+---
+
+**Sebelumnya (sesi 13):** **Last updated:** 2026-07-14 (sesi 13) — **✅✅ SUBMITTED TO JUTIF.** `paper/JUTIF_Amien_Kanthi_Sijabat_2026 fixed.docx` (versi fix Bapak) di-submit via OJS JUTIF, **submission #6393**, section "Articles", status: awaiting editor review. Email konfirmasi terkirim. Author dashboard: https://jutif.if.unsoed.ac.id/index.php/jurnal/authorDashboard/submission/6393
 
 **🆕 SESI 13 (2026-07-14) — Submit ke JUTIF via Playwright/OJS:**
 

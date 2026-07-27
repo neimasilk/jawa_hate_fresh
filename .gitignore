@@ -82,3 +82,8 @@ experiments/generation_pilot/review_report.md
 experiments/generation_pilot/detect_report.md
 experiments/generation_pilot/judge_panel.json
 experiments/generation_pilot/_*.txt
+
+# JUTIF R1 review artifacts: keep the original zip as the record, but not the
+# unzipped working copies (the two reviewed .docx carry the full manuscript with
+# embedded figures, ~30 MB unpacked).
+raw/jutif_decision/
