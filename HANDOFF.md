@@ -26,7 +26,7 @@
   1. **Co-author internasional** (syarat editor). Bapak bilang sudah punya kandidat → butuh nama/institusi/negara/email. Draft undangan + rancangan kontribusi sah (bukan gift authorship): `paper/coauthor_invitation.md`.
   2. **DOI Zenodo** untuk ref [28] (DVI). Paket deposit siap di `paper/external/zenodo/`. Naskah masih berisi penanda `DOI_PENDING_INSERT_BEFORE_UPLOAD` — **wajib diganti sebelum upload**.
   3. **Turnitin** via UBHINUS (maks 20%) + isi Acknowledgement.
-  4. **`git push` MASIH tertunggak** sejak sesi 12 (token invalid) — Bapak jalankan `! gh auth login`.
+- **✅ `git push` BERES** — tunggakan sejak sesi 12 (token invalid) sudah lunas. Commit `590e55f` mendarat di remote; `c0a6251..590e55f` ter-push. HARD RULE #6 tidak lagi tertunggak.
 
 ---
 
