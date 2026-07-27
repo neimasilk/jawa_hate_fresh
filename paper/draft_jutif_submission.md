@@ -1,8 +1,9 @@
 # Diagnosing a Register-Pragmatic Blind Spot in Javanese Hate Speech Detection ==via LLM-Generated Register-Stratified Stimuli==
 
-**Mukhlis Amien¹, Yekti Asmoro Kanthi², Daniel Rudiaman Sijabat³**
-¹,²,³ Department of Informatics, Universitas Bhinneka Nusantara, Malang, Indonesia
-email: ¹amien@ubhinus.ac.id, ²yektiasmoro@ubhinus.ac.id, ³daniel223@ubhinus.ac.id
+**Mukhlis Amien¹, Yekti Asmoro Kanthi², Daniel Rudiaman Sijabat³, Roby Firnando Yusuf⁴**
+¹,²,³ Informatics, Universitas Bhinneka Nusantara, Indonesia
+⁴ Software Engineering, Jeonbuk National University, South Korea
+email: ¹amien@ubhinus.ac.id
 
 
 ---
@@ -331,7 +332,7 @@ In accordance with the journal's generative artificial intelligence policy: larg
 
 ## ACKNOWLEDGEMENT
 
-*(To be completed: institutional support from Universitas Bhinneka Nusantara; any grant or sponsor; compute resources — RTX 4080 local inference.)*
+The authors gratefully acknowledge the financial support provided by the Direktorat Riset, Teknologi, dan Pengabdian kepada Masyarakat, Direktorat Jenderal Pendidikan Tinggi dan Riset Teknologi, Kementerian Pendidikan, Kebudayaan, Riset, dan Teknologi Republik Indonesia, as well as the institutional support from Universitas Bhinneka Nusantara.
 
 ---
 

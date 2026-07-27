@@ -177,18 +177,27 @@ add_plain_run(p_auth, ", Yekti Asmoro Kanthi")
 add_plain_run(p_auth, "2", superscript=True)
 add_plain_run(p_auth, ", Daniel Rudiaman Sijabat")
 add_plain_run(p_auth, "3", superscript=True)
+add_plain_run(p_auth, ", Roby Firnando Yusuf")
+add_plain_run(p_auth, "4", superscript=True)
 
-# para 2: single shared affiliation (INSTANSI style); delete paras 3,4,5
+# paras 2-3: two affiliations (INSTANSI style). The fourth author carries the
+# international affiliation that was already present in the submitted file;
+# preserved here so the R1 rebuild does not drop it.
 p_aff = orig_paras[2]
 clear_paragraph(p_aff)
 add_plain_run(p_aff, "1,2,3", superscript=True)
 add_plain_run(p_aff, "Informatics, Universitas Bhinneka Nusantara, Indonesia")
 
-for idx in (3, 4, 5, 6):
+p_aff2 = orig_paras[3]
+clear_paragraph(p_aff2)
+add_plain_run(p_aff2, "4", superscript=True)
+add_plain_run(p_aff2, "Software Engineering, Jeonbuk National University, South Korea")
+
+for idx in (4, 5, 6):
     el = orig_paras[idx]._element
     el.getparent().remove(el)
-# para 6 was an empty INSTANSI spacer; removed too so exactly one INSTANSI
-# paragraph (para 2) remains, per QA requirement.
+# para 6 was an empty INSTANSI spacer; removed too so exactly two INSTANSI
+# paragraphs (paras 2 and 3) remain, per QA requirement.
 
 # para 7: email (EMAIL AUTHOR style)
 p_email = orig_paras[7]
@@ -205,8 +214,19 @@ clear_paragraph(p_dates)
 r = add_plain_run(p_dates, "Received : -; Revised : -; Accepted : -; Published : -")
 set_run_font(r, size_pt=11, bold=False)
 
-# paras 9, 10, 11, 12 kept unchanged (phone number line, cellphone note,
-# "Abstract" heading, anchored horizontal-line paragraph).
+# para 9: corresponding-author phone. Filled in the submitted version; the
+# template's explanatory note (para 10) was removed there, mirrored here.
+# Not displayed in the published article -- it is for editorial contact only.
+p_phone = orig_paras[9]
+clear_paragraph(p_phone)
+r = add_plain_run(p_phone, "Phone Number : 08123300359")
+set_run_font(r, size_pt=11, bold=False)
+
+_el = orig_paras[10]._element
+_el.getparent().remove(_el)
+
+# paras 11, 12 kept unchanged ("Abstract" heading, anchored horizontal-line
+# paragraph).
 
 print("Front matter done.")
 
@@ -845,6 +865,12 @@ instansi_count = sum(1 for p in qa_doc.paragraphs if p.style.name == 'INSTANSI')
 expected_title = strip_md(TITLE)
 print(f"8. Title correct: {title_text == expected_title!r} -> {title_text == expected_title}")
 print(f"   Author line has superscript run(s): {has_superscript}")
-print(f"   Remaining INSTANSI paragraphs: {instansi_count} (expect 1)")
+print(f"   Remaining INSTANSI paragraphs: {instansi_count} (expect 2)")
+qa_author_line = qa_doc.paragraphs[1].text
+print(f"   Fourth author present: {'Roby Firnando Yusuf' in qa_author_line}")
+print(f"   International affiliation present: "
+      f"{any('Jeonbuk' in p.text for p in qa_doc.paragraphs)}")
+print(f"   Acknowledgement filled (no placeholder): "
+      f"{not any('To be completed' in p.text for p in qa_doc.paragraphs)}")
 
 print("===== QA done =====")

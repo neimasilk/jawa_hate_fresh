@@ -41,10 +41,10 @@ Jadi naskah mendeskripsikan kode yang **bukan** kode yang memproduksi datanya. K
 
 | # | Item | Status |
 |---|---|---|
-| 1 | **Nama + afiliasi co-author internasional** — editor mewajibkan. Bapak bilang sudah punya kandidat. Saya perlu nama, institusi, negara, email untuk masuk ke naskah + metadata OJS. Draft email undangan saya siapkan. | ⏳ menunggu Bapak |
+| 1 | **Co-author internasional — TERNYATA SUDAH ADA.** Naskah yang disubmit sudah memuat Roby Firnando Yusuf (Jeonbuk National University, South Korea) sebagai penulis ke-4. Yang kurang: dia **belum terdaftar di metadata OJS** (sapaan email editor cuma menyebut 3 nama — dibangkitkan dari metadata). Aksi: tambahkan Roby sebagai contributor di OJS #6393. Detail: `paper/coauthor_invitation.md`. | ⚠️ perlu Bapak tambah di OJS |
 | 2 | **Akun Zenodo** untuk deposit data DVI (ref [24]) supaya dapat DOI permanen. Paket deposit saya siapkan; upload final butuh login Bapak. | ⏳ menunggu Bapak |
 | 3 | **Turnitin** via UBHINUS — dijalankan di akhir setelah naskah final, maks 20%. | ⏳ nanti |
-| 4 | **Acknowledgement** masih placeholder di naskah. | ⏳ menunggu Bapak |
+| 4 | ~~Acknowledgement placeholder~~ — **SUDAH BERES.** Teks pendanaan DRTPM Kemdikbudristek + UBHINUS diambil dari versi `fixed.docx` yang Bapak submit dan sekarang jadi bagian sumber markdown, jadi tidak hilang lagi tiap rebuild. | ✅ |
 | 5 | **`git push` masih tertunggak** sejak sesi 12 (token GitHub invalid). Perlu Bapak jalankan `! gh auth login` lalu saya push. HARD RULE #6. | ⏳ menunggu Bapak |
 
 ## Aturan mekanis dari editor yang gampang terlewat
@@ -74,7 +74,7 @@ We also report one correction we made on our own initiative while preparing this
 | E7 | Mark revisions with yellow highlight | Every revised or added sentence is highlighted yellow in the resubmitted file. |
 | E8 | Upload Turnitin result; max 20% similarity | Turnitin report uploaded with this revision. |
 | E9 | Do not overwrite the previous revision file | Uploaded as a new file in the OJS revision section. |
-| E10 | Add an additional author with an international affiliation | *(To be completed once the invited collaborator confirms; author list and metadata will be updated accordingly.)* |
+| E10 | Add an additional author with an international affiliation | The submitted manuscript already included a fourth author with an international affiliation: Roby Firnando Yusuf, Software Engineering, Jeonbuk National University, South Korea. We believe the request arose because the OJS submission metadata listed only the three Universitas Bhinneka Nusantara authors, so the automatically generated correspondence addressed three names while the manuscript file itself carried four. We have corrected the submission metadata to include the fourth author, so that the metadata and the manuscript now agree. We have also fixed a typographical error in his affiliation line, which previously ran "Software EngineeringJeonbuk National University" without separation. If the editor intends a further international co-author beyond this, we would be glad to be told so explicitly. |
 | E11 | Minimum 25 references cited in the Introduction | The Introduction cites 32 distinct references. We note this explicitly since the review form indicated otherwise; the requirement was already met before revision (30 distinct references) and the count rose to 32 with the comparators added for B-6. |
 
 ## B. Reviewer A
@@ -214,9 +214,9 @@ Adopted. ISBNs have been added to both monographs in the list — Errington (978
 
 ## Sisa yang harus dibereskan sebelum upload (checklist Bapak)
 
-- [ ] **Co-author internasional** — nama, institusi, negara, email → masuk naskah + metadata OJS. Draft undangan: `paper/coauthor_invitation.md`.
+- [ ] **Tambah Roby Firnando Yusuf ke metadata OJS** #6393 (di naskah sudah ada sejak awal; metadata masih 3 nama). Butuh email + ORCID beliau. Detail: `paper/coauthor_invitation.md`.
 - [ ] **DOI Zenodo** — deposit lalu kirim DOI ke saya; referensi [28] masih berisi penanda `DOI_PENDING_INSERT_BEFORE_UPLOAD` yang **wajib** diganti. Instruksi: `paper/external/zenodo/DEPOSIT_INSTRUCTIONS.md`.
 - [ ] **Turnitin** — jalankan via UBHINUS, maks 20%, upload bersama revisi.
-- [ ] **Acknowledgement** — masih placeholder di naskah.
+- [x] ~~Acknowledgement~~ — sudah terisi (dipulihkan dari `fixed.docx`).
 - [ ] **Cek visual di Word** — render 2 persamaan, posisi 5 gambar dan 8 tabel tidak terpotong halaman, highlight kuning tampil benar.
 - [ ] **Upload sebagai file baru** di bagian revision OJS, jangan menimpa file lama.
