@@ -2,7 +2,27 @@
 
 **Last updated:** 2026-08-04 (sesi 15) — **🎉 ACCEPTED. LOA JUTIF TERBIT.** No. `6393/LoA/JUTIF/VII/2026` (3 Agustus 2026, ditandatangani Chief Editor Dr. Ir. Lasmedi Afuan): artikel **ACCEPTED untuk JUTIF Volume 8 Nomor 2, April 2027**. Sebelumnya di sesi yang sama: revisi R1 diupload (4 file, Turnitin 9%). **⚠️ Ada 4 selisih metadata OJS vs naskah yang diterima — sudah dimintakan koreksi ke editor, belum beres.**
 
-**🎉 SESI 15 (lanjutan, 2026-08-04) — LOA masuk + temuan metadata:**
+**TL;DR sesi 15:** revisi R1 diupload → LOA turun (accepted, April 2027) → ketahuan metadata OJS masih versi lama di 4 titik → koreksi diminta ke editor, **belum dieksekusi editor**. Satu-satunya PR yang tersisa: **pastikan metadata sudah benar sebelum artikel dijadwalkan terbit.** Tidak ada pekerjaan naskah yang tertunggak.
+
+**Kalau sesi berikutnya cuma sempat 5 menit, lakukan ini:** buka <https://jutif.if.unsoed.ac.id/index.php/jurnal/authorDashboard/submission/6393> → tab **Publication** → cek 4 hal: judul sudah ada klausa "via LLM-Generated Register-Stratified Stimuli"? abstrak 234 kata? keyword 6 (ada `diglossia`)? Contributors 4 nama (ada Roby)? Kalau masih belum, balas lagi di thread diskusi **"Metadata correction before production"** (isinya sudah lengkap tinggal ditagih). Cara cek cepat tanpa klik-klik: `fetch('/index.php/jurnal/api/v1/submissions/6393')` → lihat `publications[0].fullTitle` dan `authorsString`.
+
+**Rujukan cepat sesi 15:**
+
+| Hal | Nilai |
+|---|---|
+| Submission | JUTIF #6393, dashboard `…/authorDashboard/submission/6393`, akun `neimasilk` |
+| LOA | `6393/LoA/JUTIF/VII/2026`, 3 Agu 2026 → **Vol 8 No 2, April 2027** |
+| Turnitin | **9%** (batas 20%); 7% dari 9% itu header+checklist template, bukan isi |
+| File terupload (Revisions Round 1) | 24564 naskah · 24565+24566 Turnitin (2 bagian) · 24567 response letter |
+| Thread diskusi | "Revision 1 submitted" (02:55) · **"Metadata correction before production"** (03:19, +balasan data Roby 04:11) ← yang perlu ditagih |
+| Naskah final | `paper/JUTIF_Amien_Kanthi_Sijabat_2026_R1_revised.docx` (sumber: `paper/draft_jutif_submission.md` + `scripts/build_jutif_docx.py`) |
+| Response letter | `paper/JUTIF_R1_response_letter.docx` (build dari PART 2 `paper/JUTIF_R1_response.md` via `scripts/build_response_letter.py`) |
+| LOA | `raw/LOA+JUTIF-6393.pdf` — **gitignored**, lokal saja (tanda tangan + NIP, repo publik) |
+| Commit sesi 15 | `d47c35a` (upload R1) · `c1bb4a1` (wiki) · `c0da8f7` (LOA+metadata) · `8c33272` (data Roby) — semua sudah ter-push |
+
+---
+
+**🎉 SESI 15 — BAGIAN B (2026-08-04, sore) — LOA masuk + temuan metadata:**
 
 - **LOA** disimpan Bapak di `raw/LOA+JUTIF-6393.pdf`. **SENGAJA di-.gitignore** — memuat **tanda tangan asli + NIP** Chief Editor, sedangkan repo ini **publik** (D22 item 4); tanda tangan tidak boleh ikut terbit dan praktis tidak bisa ditarik lagi kalau sudah ter-push. File tetap ada lokal. Keputusan Bapak, 2026-08-04.
 - **Isi LOA:** 4 penulis terdaftar (termasuk Roby), judul **versi lama** (tanpa "via LLM-Generated Register-Stratified Stimuli"), terbit **Vol 8 No 2, April 2027**. Tanggal surat (3 Agu) mendahului upload revisi kita (4 Agu 02:55 waktu server) — LOA datang lewat jalur email/luar OJS; di OJS sendiri status masih "Revisions have been submitted", keputusan Accept belum tercatat di sistem.
@@ -17,9 +37,7 @@
 - **✅ Data Roby ditemukan + dikirim ke editor (2026-08-04 04:11, balasan di thread yang sama).** Dicari dari sumber akademik publik atas permintaan Bapak: **ORCID `0009-0002-9517-3053`** (4 karya; JKIIT 2026 bersama Sunoh Choi di JBNU, JAETS 2025, IEEE ICoCSETI 2025, J-INTECH 2023) dan **email tercetak di blok penulis paper JAETS 2025 `10.37385/jaets.v7i1.7167`** — di situ Roby tercantum dengan afiliasi Jeonbuk National University dan co-author dari UBHINUS, jadi identitasnya cocok kuat, bukan kebetulan nama. Alamat `@jbnu.ac.kr`-nya tidak dipublikasikan di keempat papernya. **Alamat emailnya sengaja TIDAK ditulis di repo** (repo publik, alamat pribadi) — kalau perlu lagi, ambil dari PDF JAETS DOI di atas. Bapak menyetujui pemakaian alamat itu.
 - **⏭️ NEXT:** (1) tunggu editor mengubah metadata — **cek ulang sebelum artikel dijadwalkan terbit**, karena inilah yang masuk DOI/indeks; (2) kalau sampai masuk tahap Copyediting/Production metadata masih versi lama, tanyakan lagi lewat thread yang sama.
 
----
-
-**🆕 SESI 15 (2026-08-04) — Upload revisi R1 ke OJS:**
+**🆕 SESI 15 — BAGIAN A (2026-08-04, pagi) — Upload revisi R1 ke OJS:**
 
 - **Turnitin masuk** (`raw/Laporan_..._SC-8DC345E6007B_file_1.pdf`, submit 03-Agu-2026, paper ID 123392966, 10.680 kata): **similarity index 9%** — jauh di bawah batas editor 20%. Sumber terbesar `eprints.unram.ac.id` **7% (646 kata)** = **header running + check-list template JUTIF** yang berulang di tiap halaman (skripsi orang lain yang pakai template sama), bukan kesamaan isi. Sumber lain semua <1%.
 - **Audit template SEBELUM upload** (diminta Bapak: "kalau belum sesuai jangan disubmit"). Dicek programatik vs `paper/JUTIF-Template.docx`: page setup identik (A4, margin 2,5/2,5/2,5/2,0, 1 kolom), style bawaan template (JUDUL/AUTHOR/INSTANSI/BODY PARAGRAP/SUB JUDUL/JUDUL TABEL/JUDUL GAMBAR), font **TNR 11pt** 626/629 run, urutan seksi persis template (INTRODUCTION→METHOD→RESULT→DISCUSSION→CONCLUSION→CONFLICT OF INTEREST→GENERATIVE AI DISCLOSURE→ACKNOWLEDGEMENT→REFERENCES), maks 2 level, judul 14 kata (≤20), abstract **234 kata** (150–250) + 6 keyword, body 7.788 kata (≥3.500), 47 referensi, caption tabel di ATAS + caption gambar di BAWAH (dicek posisional, bukan asumsi), 5 gambar **400 dpi**, 2 oMath, check-list 42×X ada di file. **Lolos semua.**
@@ -35,8 +53,15 @@
   | 24566 | `Turnitin_JUTIF_6393_R1_part2of2.pdf` | Turnitin Results |
   | 24567 | `Response to Reviewers (R1)` | Other |
 - **💬 Review Discussion dikirim** (atas persetujuan Bapak) ke editor Lasmedi Afuan: "Revision 1 submitted — manuscript, Turnitin report, response letter" (2026-08-04 02:55), isinya daftar file, angka Turnitin 9%, alasan laporan dipecah 2 (batas 2 MB), dan konfirmasi highlight kuning.
-- **⚙️ Catatan teknis OJS (untuk sesi depan):** server JUTIF lambat — tiap POST upload butuh **~2 menit** di 100% sebelum tombol Continue aktif; jangan dikira gagal. Tombol "Choose File" tersembunyi ketimpa dropzone → klik `.pkp_uploader_button_add` lalu pakai file chooser. Setelah klik OK di dialog diskusi, modal **tidak menutup sendiri** walau POST `update-query` 200 OK — verifikasi via reload, jangan klik OK dua kali.
-- **⏭️ NEXT:** tinggal menunggu keputusan editor putaran 2. Tidak ada pekerjaan tertunggak yang butuh Bapak.
+- **⚙️ Catatan teknis OJS (kumpulan gotcha sesi ini — hemat waktu sesi depan):**
+  - Server JUTIF **lambat**: tiap POST upload menggantung **~2 menit** di 100% sebelum tombol Continue aktif. Jangan dikira gagal, jangan diulang.
+  - Batas upload **2 MB** (`max_file_size: "2M"` di setting plupload). Pesan errornya cuma "File size error." tanpa angka.
+  - Tombol "Choose File" tertutup dropzone → klik `.pkp_uploader_button_add` lalu pakai file chooser.
+  - Setelah klik OK di dialog diskusi, modal **tidak menutup sendiri** walau POST `update-query` balas 200 OK → verifikasi lewat reload, jangan klik OK dua kali (bisa dobel kirim).
+  - Rich text (abstract/diskusi) **wajib** lewat `tinymce` API (`setContent`+`save`+fire change) — `fill` ke iframe salah sasaran (gotcha lama sesi 13, terkonfirmasi lagi).
+  - **Navigasi yang cuma beda hash TIDAK me-reload SPA** → nilai form bisa terlihat "tersimpan" padahal belum pernah dikirim ke server. Verifikasi pakai `location.reload()` atau REST API, jangan percaya tampilan.
+  - Form tab **Publication read-only untuk akun penulis** (Save disabled, tak ada Add Contributor) — perubahan metadata harus lewat editor.
+- **Login OJS:** sesi browser Bapak (`neimasilk`) masih aktif di profil Playwright; sesi ini tidak perlu login ulang.
 
 ---
 
