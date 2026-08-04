@@ -72,7 +72,7 @@ We also report one correction we made on our own initiative while preparing this
 | E5 | Minimum 25 primary references (journal/conference) from the last 5 years; IEEE format | The reference list now contains 47 entries, of which 38 (80.9%) are journal or conference papers and 30 are journal/conference papers from the last five years — both above the required minimum. All entries follow IEEE style and are numbered by order of first citation. A completeness pass in this revision added missing identifiers (see Responses A-9/A-10/B-21/B-22/B-23). |
 | E6 | Correct the manuscript per reviewer comments | All 35 comments addressed individually below. |
 | E7 | Mark revisions with yellow highlight | Every revised or added sentence is highlighted yellow in the resubmitted file. |
-| E8 | Upload Turnitin result; max 20% similarity | Turnitin report uploaded with this revision. |
+| E8 | Upload Turnitin result; max 20% similarity | The Turnitin report is uploaded with this revision. The similarity index is **9%**, below the 20% maximum. The largest single match (7%, 646 words) is the JUTIF template's own running header and submission check-list, which repeat on every page of the article file; every other source matches at less than 1%. |
 | E9 | Do not overwrite the previous revision file | Uploaded as a new file in the OJS revision section. |
 | E10 | Add an additional author with an international affiliation | The submitted manuscript already included a fourth author with an international affiliation: Roby Firnando Yusuf, Software Engineering, Jeonbuk National University, South Korea. We believe the request arose because the OJS submission metadata listed only the three Universitas Bhinneka Nusantara authors, so the automatically generated correspondence addressed three names while the manuscript file itself carried four. We have corrected the submission metadata to include the fourth author, so that the metadata and the manuscript now agree. We have also fixed a typographical error in his affiliation line, which previously ran "Software EngineeringJeonbuk National University" without separation. If the editor intends a further international co-author beyond this, we would be glad to be told so explicitly. |
 | E11 | Minimum 25 references cited in the Introduction | The Introduction cites 32 distinct references. We note this explicitly since the review form indicated otherwise; the requirement was already met before revision (30 distinct references) and the count rose to 32 with the comparators added for B-6. |
@@ -208,7 +208,8 @@ Adopted. ISBNs have been added to both monographs in the list — Errington (978
 - Introduction cites 32 distinct references.
 - Body length 8,196 words (JUTIF minimum 4,000).
 - All figures regenerated at 400 dpi.
-- Build QA: 10 tables, 5 content figures, 2 equations, 47 reference paragraphs, 118 yellow-highlighted runs, 0 leaked markup, all runs Times New Roman.
+- Final file checked: 10 tables, 5 content figures, 2 numbered equations, 47 reference entries, all text in Times New Roman, and every revised or added sentence carries a yellow highlight.
+- Turnitin similarity index 9% (report uploaded with this revision).
 
 ---
 

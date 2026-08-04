@@ -1,6 +1,29 @@
 # HANDOFF - Ujaran Kebencian Jawa
 
-**Last updated:** 2026-07-27 (sesi 14) — **📬 KEPUTUSAN EDITOR JUTIF MASUK: "Revisions Required"** (email 2026-07-25, Lasmedi Afuan). Revisi naskah **SELESAI dikerjakan**: `paper/JUTIF_Amien_Kanthi_Sijabat_2026_R1_revised.docx`. **Belum bisa diupload** — masih tunggu 3 hal dari Bapak (co-author internasional, DOI Zenodo, Turnitin).
+**Last updated:** 2026-08-04 (sesi 15) — **✅✅ REVISI R1 SUDAH DIUPLOAD KE OJS JUTIF.** Submission #6393, bagian Revisions berisi 4 file baru (tidak ada yang ditimpa). Turnitin **9%** (batas 20%). Status: menunggu keputusan editor putaran 2.
+
+**🆕 SESI 15 (2026-08-04) — Upload revisi R1 ke OJS:**
+
+- **Turnitin masuk** (`raw/Laporan_..._SC-8DC345E6007B_file_1.pdf`, submit 03-Agu-2026, paper ID 123392966, 10.680 kata): **similarity index 9%** — jauh di bawah batas editor 20%. Sumber terbesar `eprints.unram.ac.id` **7% (646 kata)** = **header running + check-list template JUTIF** yang berulang di tiap halaman (skripsi orang lain yang pakai template sama), bukan kesamaan isi. Sumber lain semua <1%.
+- **Audit template SEBELUM upload** (diminta Bapak: "kalau belum sesuai jangan disubmit"). Dicek programatik vs `paper/JUTIF-Template.docx`: page setup identik (A4, margin 2,5/2,5/2,5/2,0, 1 kolom), style bawaan template (JUDUL/AUTHOR/INSTANSI/BODY PARAGRAP/SUB JUDUL/JUDUL TABEL/JUDUL GAMBAR), font **TNR 11pt** 626/629 run, urutan seksi persis template (INTRODUCTION→METHOD→RESULT→DISCUSSION→CONCLUSION→CONFLICT OF INTEREST→GENERATIVE AI DISCLOSURE→ACKNOWLEDGEMENT→REFERENCES), maks 2 level, judul 14 kata (≤20), abstract **234 kata** (150–250) + 6 keyword, body 7.788 kata (≥3.500), 47 referensi, caption tabel di ATAS + caption gambar di BAWAH (dicek posisional, bukan asumsi), 5 gambar **400 dpi**, 2 oMath, check-list 42×X ada di file. **Lolos semua.**
+- **❓ Soal "kuning-kuning" yang Bapak lihat di docx:** itu **wajib**, bukan bug. Instruksi editor butir 7 (dicek verbatim di email OJS): *"Please give mark the revised results on the revised manuscript sent with YELLOW HIGHLIGHTS to the corrected sentence or sentences added"*. 32 paragraf/104+ run ter-highlight = kalimat hasil revisi. Warna lain di PDF Turnitin (pink/cyan/ungu bernomor) itu penanda match Turnitin, beda hal.
+- **Temuan kecil (bukan masalah):** `word/media/image2.png` di docx = **grafik contoh bawaan template** ("Performance Comparison Between Baseline and GCLR Models") yang tertinggal di paket zip. Dicek via peta relationship: **orphan, tidak dirujuk `document.xml`** → tidak tampil di Word/PDF. Dibiarkan (mengedit zip mentah menjelang submit lebih berisiko daripada manfaatnya).
+- **⚠️ GOTCHA BARU — batas upload OJS JUTIF = 2 MB** (dibaca dari setting plupload `max_file_size: "2M"`, bukan tebakan; pesan errornya cuma "File size error." tanpa angka). PDF Turnitin asli **5,97 MB** → ditolak. Halaman naskah di laporan itu **raster 1075×1521**; dicoba JPEG q72 (malah 6,4 MB — teks jadi lebih besar), palet 8/6 warna (2,65/2,44 MB), threshold putih (2,51 MB), rasterisasi ulang 100 dpi (2,73 MB) — semua masih >2 MB. **Solusi: palet 32 warna (kualitas visual utuh, dicek render) lalu dipecah 2 file** → `paper/Turnitin_JUTIF_6393_R1_part1of2.pdf` (hal 1–13, 1,81 MB) + `part2of2.pdf` (hal 14–25, 1,74 MB). Skrip ad-hoc pakai PyMuPDF+Pillow.
+- **📄 Response letter jadi file sendiri:** `scripts/build_response_letter.py` (baru) mem-build `paper/JUTIF_R1_response_letter.docx` dari **PART 2** `JUTIF_R1_response.md` saja — PART 1 (catatan Bahasa Indonesia untuk Bapak) + checklist internal **tidak ikut** (diverifikasi: 0 baris bocor). Isi: 11 syarat editor + 35 jawaban reviewer + change log. E8 diupdate dengan angka Turnitin nyata (9%) + penjelasan sumber 7% itu header template.
+- **✅ UPLOAD SELESAI** di bagian *Revisions* Round 1 (semua **file baru**, sesuai larangan editor menimpa file lama):
+  | ID | File | Component |
+  |---|---|---|
+  | 24564 | `JUTIF_Amien_Kanthi_Sijabat_2026_R1_revised.docx` | Article Manuscript |
+  | 24565 | `Turnitin_JUTIF_6393_R1_part1of2.pdf` | Turnitin Results |
+  | 24566 | `Turnitin_JUTIF_6393_R1_part2of2.pdf` | Turnitin Results |
+  | 24567 | `Response to Reviewers (R1)` | Other |
+- **💬 Review Discussion dikirim** (atas persetujuan Bapak) ke editor Lasmedi Afuan: "Revision 1 submitted — manuscript, Turnitin report, response letter" (2026-08-04 02:55), isinya daftar file, angka Turnitin 9%, alasan laporan dipecah 2 (batas 2 MB), dan konfirmasi highlight kuning.
+- **⚙️ Catatan teknis OJS (untuk sesi depan):** server JUTIF lambat — tiap POST upload butuh **~2 menit** di 100% sebelum tombol Continue aktif; jangan dikira gagal. Tombol "Choose File" tersembunyi ketimpa dropzone → klik `.pkp_uploader_button_add` lalu pakai file chooser. Setelah klik OK di dialog diskusi, modal **tidak menutup sendiri** walau POST `update-query` 200 OK — verifikasi via reload, jangan klik OK dua kali.
+- **⏭️ NEXT:** tinggal menunggu keputusan editor putaran 2. Tidak ada pekerjaan tertunggak yang butuh Bapak.
+
+---
+
+**Sebelumnya (sesi 14):** **Last updated:** 2026-07-27 (sesi 14) — **📬 KEPUTUSAN EDITOR JUTIF MASUK: "Revisions Required"** (email 2026-07-25, Lasmedi Afuan). Revisi naskah **SELESAI dikerjakan**: `paper/JUTIF_Amien_Kanthi_Sijabat_2026_R1_revised.docx`. **Belum bisa diupload** — masih tunggu 3 hal dari Bapak (co-author internasional, DOI Zenodo, Turnitin).
 
 **🆕 SESI 14 (2026-07-27) — Kerjakan revisi R1 JUTIF:**
 
