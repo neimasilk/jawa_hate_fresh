@@ -172,6 +172,20 @@ Format: `YYYY-MM-DD | OP | sumber/trigger | entities-touched | summary`
 
 ---
 
+## 2026-08-04 (sesi 15 — upload revisi R1 ke OJS JUTIF)
+
+| Time | OP | Trigger | Touched | Summary |
+|------|----|---------|---------|---------|
+| session-start | INGEST | Hasil Turnitin dari UBHINUS di-paste Bapak ke `raw/` | `raw/Laporan_..._SC-8DC345E6007B_file_1.pdf` | **Similarity index 9%** (batas editor 20%), 25 halaman, paper ID 123392966, submit 03-Agu-2026. Sumber terbesar `eprints.unram.ac.id` **7% (646 kata)** = header running + check-list **template JUTIF** yang berulang tiap halaman (dokumen lain pakai template sama), bukan kesamaan isi; sumber lain semua <1%. |
+| **template-audit** | **LINT** | Bapak: "pastikan semua sudah sesuai template, kalau belum sesuai jangan disubmit" | (verifikasi saja; tidak ada file naskah diubah) | Dicek programatik vs `paper/JUTIF-Template.docx`: page setup identik, style bawaan template, **TNR 11pt** (626/629 run), urutan seksi persis template, maks 2 level, judul 14 kata, abstract **234 kata** + 6 keyword, body 7.788 kata, caption tabel di ATAS & gambar di BAWAH (dicek posisional lewat urutan elemen body, bukan asumsi), 5 gambar **400 dpi**, 2 oMath, check-list 42×X. **Lolos semua.** Temuan sampingan: `word/media/image2.png` = grafik contoh bawaan template yang tertinggal, tapi **orphan** (tidak dirujuk `document.xml`) → tidak tampil, dibiarkan. |
+| **yellow-highlight** | **QUERY** | Bapak lihat "kuning-kuning" di docx dan bertanya itu apa | (verifikasi ke email keputusan di OJS) | Highlight kuning = **syarat editor butir 7 verbatim**: *"give mark the revised results ... with YELLOW HIGHLIGHTS"*. 32 paragraf/104+ run = kalimat hasil revisi. Warna lain di PDF Turnitin (pink/cyan/ungu bernomor) = penanda match Turnitin, beda hal. |
+| **upload-limit** | **INGEST** | Upload Turnitin ditolak "File size error." tanpa angka | `paper/Turnitin_JUTIF_6393_R1_part1of2.pdf`, `part2of2.pdf` (baru) | **Batas upload OJS JUTIF = 2 MB**, dibaca dari setting plupload (`max_file_size: "2M"`) bukan ditebak. PDF asli 5,97 MB (halaman naskah = raster 1075×1521). Dicoba JPEG q72 (6,4 MB — teks justru membengkak), palet 8/6 warna, threshold putih, rasterisasi 100 dpi — semua masih >2 MB. **Solusi: palet 32 warna (kualitas visual utuh, dicek render) + pecah 2 file** (1,81 + 1,74 MB). |
+| **response-letter** | **INGEST** | Butuh response letter sebagai file terpisah untuk OJS | **scripts/build_response_letter.py**, `paper/JUTIF_R1_response_letter.docx` (baru) | Build dari **PART 2** `JUTIF_R1_response.md` saja; PART 1 (catatan Bahasa Indonesia untuk Bapak) + checklist internal dijamin tidak ikut (guard di QA: 0 baris bocor). E8 diupdate dengan angka Turnitin nyata. |
+| **ojs-upload** | **INGEST** | Instruksi Bapak: submit revisi | OJS #6393 bagian *Revisions* Round 1 | 4 file BARU (tidak menimpa): 24564 manuskrip (Article Manuscript), 24565+24566 Turnitin (Turnitin Results), 24567 Response to Reviewers (Other). **Gotcha OJS:** server lambat — POST upload butuh ~2 menit di 100% sebelum Continue aktif; tombol Choose File tertutup dropzone (klik `.pkp_uploader_button_add`); setelah OK di dialog diskusi modal tidak menutup sendiri walau POST 200 OK — verifikasi via reload, jangan klik dua kali. |
+| ingest-docs | INGEST | Sync docs akhir sesi | **STATE.md, HANDOFF.md (blok SESI 15), wiki/log.md (ini)** | Review Discussion "Revision 1 submitted" dikirim ke editor Lasmedi Afuan (isi: daftar file, Turnitin 9%, alasan laporan dipecah 2, konfirmasi highlight kuning). Commit `d47c35a` + push beres. **Tidak ada pekerjaan tertunggak** — tinggal menunggu keputusan editor putaran 2. |
+
+---
+
 ## Convention
 
 - **INGEST:** Source baru di-process ke wiki. Touched = entity pages yang di-update.
