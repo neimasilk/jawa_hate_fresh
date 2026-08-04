@@ -90,3 +90,8 @@ raw/jutif_decision/
 
 # Playwright MCP session artifacts (page snapshots, console logs)
 .playwright-mcp/
+
+# Letter of Acceptance JUTIF — memuat tanda tangan asli + NIP Chief Editor.
+# Repo ini publik; tanda tangan tidak boleh ikut terbit. File tetap disimpan
+# lokal di raw/. Fakta penerimaan dicatat di STATE.md / HANDOFF.md / wiki.
+raw/LOA+JUTIF-6393.pdf

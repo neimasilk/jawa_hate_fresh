@@ -1,6 +1,22 @@
 # HANDOFF - Ujaran Kebencian Jawa
 
-**Last updated:** 2026-08-04 (sesi 15) — **✅✅ REVISI R1 SUDAH DIUPLOAD KE OJS JUTIF.** Submission #6393, bagian Revisions berisi 4 file baru (tidak ada yang ditimpa). Turnitin **9%** (batas 20%). Status: menunggu keputusan editor putaran 2.
+**Last updated:** 2026-08-04 (sesi 15) — **🎉 ACCEPTED. LOA JUTIF TERBIT.** No. `6393/LoA/JUTIF/VII/2026` (3 Agustus 2026, ditandatangani Chief Editor Dr. Ir. Lasmedi Afuan): artikel **ACCEPTED untuk JUTIF Volume 8 Nomor 2, April 2027**. Sebelumnya di sesi yang sama: revisi R1 diupload (4 file, Turnitin 9%). **⚠️ Ada 4 selisih metadata OJS vs naskah yang diterima — sudah dimintakan koreksi ke editor, belum beres.**
+
+**🎉 SESI 15 (lanjutan, 2026-08-04) — LOA masuk + temuan metadata:**
+
+- **LOA** disimpan Bapak di `raw/LOA+JUTIF-6393.pdf`. **SENGAJA di-.gitignore** — memuat **tanda tangan asli + NIP** Chief Editor, sedangkan repo ini **publik** (D22 item 4); tanda tangan tidak boleh ikut terbit dan praktis tidak bisa ditarik lagi kalau sudah ter-push. File tetap ada lokal. Keputusan Bapak, 2026-08-04.
+- **Isi LOA:** 4 penulis terdaftar (termasuk Roby), judul **versi lama** (tanpa "via LLM-Generated Register-Stratified Stimuli"), terbit **Vol 8 No 2, April 2027**. Tanggal surat (3 Agu) mendahului upload revisi kita (4 Agu 02:55 waktu server) — LOA datang lewat jalur email/luar OJS; di OJS sendiri status masih "Revisions have been submitted", keputusan Accept belum tercatat di sistem.
+- **⚠️ 4 SELISIH METADATA OJS vs naskah yang diterima** (metadata inilah, bukan file docx, yang jadi sumber judul/abstrak/penulis saat artikel terbit + registrasi DOI):
+  1. **Judul** masih versi lama — kurang "via LLM-Generated Register-Stratified Stimuli" (justru perubahan yang diminta Reviewer A-0/B-0).
+  2. **Abstrak** masih versi 267 kata, bukan 234 kata.
+  3. **Keywords** 5, belum ada `diglossia` (permintaan A-2/B-5).
+  4. **Contributors cuma 3 penulis — Roby Firnando Yusuf TIDAK ADA di metadata.**
+- **⚠️⚠️ KOREKSI CATATAN SESI 14:** HANDOFF/STATE/response letter sesi 14 mencatat "Roby sudah ditambahkan ke metadata OJS (Bapak, 2026-07-27) — blocker TUTUP". **Itu tidak benar.** Diverifikasi dua jalur: daftar Contributors di tab Publication (3 baris) dan REST API `/api/v1/submissions/6393` (`authorsString` = 3 nama, 1 versi publikasi). Akibatnya butir **E10 di response letter yang sudah dikirim** ("we have corrected the submission metadata to include the fourth author") **tidak akurat saat dikirim** — sudah diralat terbuka ke editor di diskusi baru. **Pelajaran: status yang dilaporkan selesai (oleh siapa pun, termasuk Bapak) harus dicek ke sistem sumbernya sebelum dinyatakan di dokumen yang dikirim keluar — kelas error yang sama dengan `max_tokens=8192` dan "25,4%".**
+- **Metadata TIDAK BISA diperbaiki sendiri:** tombol Save di ketiga form tab Publication **disabled** untuk akun penulis (dicek setelah hard reload, bukan asumsi — sempat terlihat "tersimpan" padahal itu cuma state SPA karena navigasi hash tidak me-reload halaman). Tidak ada tombol *Add Contributor*.
+- **💬 Diskusi kedua dikirim ke editor** (2026-08-04 03:19): "Metadata correction before production — final title, abstract, keywords, fourth author" — memuat judul final, teks abstrak 234 kata lengkap siap tempel, 6 keyword, data Roby (posisi ke-4, Software Engineering, Jeonbuk National University, South Korea; email/ORCID siap dikirim kalau diminta), ralat butir E10, catatan typo afiliasi di LOA, dan permintaan opsional LOA versi judul final.
+- **⏭️ NEXT:** (1) tunggu editor mengubah metadata — **cek ulang sebelum artikel dijadwalkan terbit**, karena inilah yang masuk DOI/indeks; (2) siapkan **email + ORCID Roby** (belum ada di repo) kalau editor meminta; (3) kalau sampai masuk tahap Copyediting/Production metadata masih lama, tanyakan lagi.
+
+---
 
 **🆕 SESI 15 (2026-08-04) — Upload revisi R1 ke OJS:**
 

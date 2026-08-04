@@ -41,7 +41,7 @@ Jadi naskah mendeskripsikan kode yang **bukan** kode yang memproduksi datanya. K
 
 | # | Item | Status |
 |---|---|---|
-| 1 | ~~Co-author internasional~~ — **SELESAI.** Naskah memang sudah memuat Roby Firnando Yusuf (Jeonbuk National University, South Korea) sejak submission; yang kurang cuma pendaftarannya di metadata OJS. Bapak sudah menambahkan (2026-07-27). | ✅ |
+| 1 | ~~Co-author internasional~~ — Naskah memang sudah memuat Roby Firnando Yusuf (Jeonbuk National University, South Korea) sejak submission. **⚠️ KOREKSI 2026-08-04:** pendaftarannya di metadata OJS ternyata **BELUM masuk** — dicek langsung ke daftar Contributors dan ke REST API (`/api/v1/submissions/6393`): masih 3 penulis, satu versi publikasi. Catatan "sudah ditambahkan Bapak (2026-07-27)" tidak terverifikasi di sistem, dan klaim di butir E10 response letter ("we have corrected the submission metadata") karena itu tidak akurat saat dikirim. Form metadata **terkunci untuk akun penulis**, jadi tidak bisa diperbaiki sendiri → permintaan koreksi resmi dikirim ke editor lewat Review Discussion "Metadata correction before production" (2026-08-04), sekaligus meralat pernyataan di E10. | ⏳ menunggu editor |
 | 2 | ~~Deposit Zenodo~~ — **SELESAI 2026-07-27.** DOI: `10.5281/zenodo.21616875`. Ref [28] sudah pakai DOI, bukan lagi "unpublished data". | ✅ |
 | 3 | **Turnitin** via UBHINUS — dijalankan di akhir setelah naskah final, maks 20%. | ⏳ nanti |
 | 4 | ~~Acknowledgement placeholder~~ — **SUDAH BERES.** Teks pendanaan DRTPM Kemdikbudristek + UBHINUS diambil dari versi `fixed.docx` yang Bapak submit dan sekarang jadi bagian sumber markdown, jadi tidak hilang lagi tiap rebuild. | ✅ |
